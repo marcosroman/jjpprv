@@ -1,2 +1,4 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<h1>ja-japo-porave</h1>
+<h2>(jjpprv)</h2>
+<h3>Glasstex</h3>
+<p>gestion de mejora continua</p>
