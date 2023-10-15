@@ -1,15 +1,31 @@
 <script>
 	export let data;
-	/*
-  import { DateInput } from 'date-picker-svelte'
-  let date = new Date()
-	*/
 
-	let isCorrectiveActionRequired;
+	let isCorrectiveActionRequired=false; //set to false later
+	let countCorrectiveActions = Number(isCorrectiveActionRequired);
+	let correctiveActionsArray = [{solution: "", commitmentDate: ""}];
+
+	function addNewCorrectiveAction() {
+		correctiveActionsArray = [
+			...correctiveActionsArray,
+			{solution: "", commitmentDate: ""}];
+		countCorrectiveActions++;
+	}
+	function deleteCorrectiveAction(id) {
+		correctiveActionsArray.splice(id,1);
+		correctiveActionsArray=correctiveActionsArray;
+		countCorrectiveActions--;
+	}
+	function updateCountCorrectiveActions() {
+		if (isCorrectiveActionRequired && countCorrectiveActions==0) {
+			countCorrectiveActions++;
+			countCorrectiveActions=countCorrectiveActions;
+		}
+	}
 </script>
 
 {#if data.capa?.response}
-	<p>There's a response already</p>
+	<p>There's a response already.</p>
 {:else}
 	<form method="POST">
 		<input type="hidden" name="id" value={data.capa._id}>
@@ -26,37 +42,53 @@
 		</label>
 
 		<label>Requiere Accion Correctiva?
-		<input type="checkbox" name="is-ca-required" bind:checked={isCorrectiveActionRequired}>
+			<input
+				type="checkbox"
+				name="is-ca-required"
+				bind:checked={isCorrectiveActionRequired}
+				on:change={updateCountCorrectiveActions}>
 		</label>
 
+		<p>(DEBUG) corrective action count = {countCorrectiveActions}</p>
 		{#if isCorrectiveActionRequired}
 			<label>Causas posibles:
 				<textarea name="possible-root-causes" required></textarea>
 			</label>
 
-			<p>(pendiente aca agregar un array de estas... por ahora solo una, para probar lo basico)</p>
-			<label>Solucion:
-				<input type="text" name="solution">
-			</label>
+			<input type="hidden" name="count-corrective-actions" value={countCorrectiveActions}>
+			<table>
+				<tr>
+					<th>Solucion</th>
+					<th>Fecha de compromiso</th>
+				</tr>
 
-			<label>Fecha de compromiso:
-				<input
-					type="date"
-					name="commitment-date"
-					required>
-			</label>
-
-			<p>evidence component tambien aca...(porque eso voy a usar varias veces, tengo que disenar bien)</p>
-
-
-
+				{#each correctiveActionsArray as correctiveAction, i}
+					<tr>
+						<td>
+							<input
+								type="text"
+								name={"solution-"+i}
+								bind:value={correctiveAction.solution} 
+								placeholder={i}
+								required>
+						</td>
+						<td>
+							<input
+								type="date"
+								name={"commitment-date-"+i}
+								bind:value={correctiveAction.commitmentDate}
+								required>
+						</td>
+						{#if countCorrectiveActions>1}
+						<td>
+							<button name={"delete-"+i} on:click|preventDefault={() => deleteCorrectiveAction(i)}>Eliminar</button>
+						</td>
+						{/if}
+					</tr>
+				{/each}
+			</table>
+			<button on:click|preventDefault={addNewCorrectiveAction}>Agregar otra</button>
 		{/if}
-
-		<!--
-		(por el momento saco esto...)
-		</label>
-		<DateInput format="yyyy-MM-dd" bind:value={date} on:select={() => {alert(date.toISOString());}}/>
-		-->
 
 		<input type="submit" value="Guardar">
 	</form>
