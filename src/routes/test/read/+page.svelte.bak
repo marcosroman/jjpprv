@@ -1,0 +1,15 @@
+<script>
+	import { onMount } from 'svelte';
+
+	let fileData;
+
+	onMount(async () => {
+		const response = await fetch('/test/api',{
+      method: "POST"});
+		fileData = await response.json();
+	});
+</script>
+
+<pre>
+<img src={JSON.stringify(fileData)} alt='x'/>
+</pre>
