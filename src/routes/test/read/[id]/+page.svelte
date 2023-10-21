@@ -16,10 +16,7 @@
 	}
 </script>
 
-<p>capa_id={data.evidence.capaId}, DESC= {data.evidence.description}, TYPE={data.evidence.fileType}</p>
+<p>capa_id={data.evidence.capaId}, name={data.evidence.fileName}, DESC= {data.evidence.description}, TYPE={data.evidence.fileType}</p>
 <iframe src={data.evidence.fileData} title="desc" alt='pdf'></iframe>
-<!--
-<a href={window.open(URL.createObjectURL(new Blob([atob(data.evidence.fileData)],{type:'application/octet-stream'})),'_blank')}>Abrir</a>
--->
 <button on:click={openWindow}>Ver</button>
 

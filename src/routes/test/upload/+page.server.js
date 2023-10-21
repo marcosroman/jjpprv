@@ -6,13 +6,15 @@ export const actions = {
 		const formData = await event.request.formData();
 		const uploadedFile = formData.get('uploaded-file');
 
-		const result = await evidences.insertOne({
-			capa_id: formData.get('capa-id'), //new ObjectId()
-			fileBinary: new Binary(await uploadedFile.arrayBuffer()),
-			fileType: await uploadedFile.type,
-			description: formData.get('description')
-		});
-
-		console.log(result);
+		try {
+			await evidences.insertOne({
+				capa_id: formData.get('capa-id'), //new ObjectId()
+				fileBinary: new Binary(await uploadedFile.arrayBuffer()),
+				fileType: await uploadedFile.type,
+				description: formData.get('description')
+			});
+		} catch(error) {
+			console.log(error);
+		}
 	}
 }
