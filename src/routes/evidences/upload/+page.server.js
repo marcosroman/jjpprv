@@ -10,6 +10,7 @@ export const actions = {
 			await evidences.insertOne({
 				capa_id: formData.get('capa-id'), //new ObjectId()
 				fileBinary: new Binary(await uploadedFile.arrayBuffer()),
+				fileName: formData.get('file-name'),
 				fileType: await uploadedFile.type,
 				description: formData.get('description')
 			});
