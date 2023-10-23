@@ -6,7 +6,7 @@
 	<ul>
 		{#each data.response_pending_capas as capa}
 			<li>
-				<a href="/capa/respond/{capa._id}">{capa.issue?.description ?? "(sin descripcion)"}</a>
+				<a href="/capa/{capa._id}/respond">{capa.issue?.description ?? "(sin descripcion)"}</a>
 			</li>
 		{/each}
 	</ul>
