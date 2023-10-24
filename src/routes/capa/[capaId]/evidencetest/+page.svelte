@@ -4,4 +4,4 @@
 	let capaId = data.capaId;
 </script>
 
-<EvidenceList capaId={capaId} section="issue" isEditMode={false}/>
+<EvidenceList capaId={capaId} section="issue" isEditMode={true}/>
