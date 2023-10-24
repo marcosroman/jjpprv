@@ -9,9 +9,9 @@ export async function GET({params}) {
 
 	if (section === ("issue" || "response")) {
 		const cursor = getEvidenceCursorWithoutFileBinary(capaId, evidenceFieldName);
-		const evidence = (await cursor.next())
+		const evidenceArray = (await cursor.next())
 			?.[section]?.evidence;
 
-		return json({evidence});
+		return json({evidenceArray});
 	}
 }

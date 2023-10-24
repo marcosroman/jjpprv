@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { getEvidenceData } from './getEvidenceData.js';
+	import { getEvidenceDataFromCAPA } from './getEvidenceData.js';
 
 	export let capaId; 
 	export let section;
@@ -9,7 +9,7 @@
 
 	let evidenceDataArray = [];
 	onMount(async () => {
-		evidenceDataArray = await getEvidenceData(capaId, section, correctiveActionIndex);
+		evidenceDataArray = await getEvidenceDataFromCAPA(capaId, section, correctiveActionIndex);
 	});
 </script>
 

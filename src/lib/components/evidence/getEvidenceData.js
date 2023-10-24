@@ -4,7 +4,7 @@
  section could be: issue, response or correctiveaction (ca);
  in case section == correctiveaction, the correctiveActionIndex is also needed
 */
-export async function getEvidenceData(capaId, section, correctiveActionIndex) {
+export async function getEvidenceDataFromCAPA(capaId, section, correctiveActionIndex) {
 	let apiURL = `/api/capa/${capaId}`;
 	if  (section === "correctiveactions") {
 		apiURL += `/ca/${correctiveActionIndex}/evidence`;
@@ -16,9 +16,18 @@ export async function getEvidenceData(capaId, section, correctiveActionIndex) {
 	const response = await fetch(apiURL);
 	const body = await response.json();
 
-	return body.evidence;
+	return body.evidenceArray;
 }
 
-export async function getEvidenceData() {
 
+/*
+ get evidence data (including file binaries)
+ for a given evidenceId and a section of the capa document.
+*/
+export async function getEvidenceDataFromEvidence(evidenceId) {
+	const apiURL = `/api/evidence/${evidenceId}`
+	const response = await fetch(apiURL);
+	const body = await response.json();
+
+	return body;
 }
