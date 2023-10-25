@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { getEvidenceDataFromCAPA } from './getEvidenceData.js';
+	import EvidenceUpload from '$lib/components/evidence/EvidenceUpload.svelte';
 
 	export let capaId; 
 	export let section;
@@ -14,6 +15,12 @@
 	onMount(async () => {
 		evidenceDataArray = await getEvidenceDataFromCAPA(capaId, section, correctiveActionIndex);
 	});
+
+
+	let isEvidenceUploadActive=false;
+	function addEvidence() {
+		isEvidenceUploadActive=true;
+	}
 </script>
 
 {#if evidenceDataArray}
@@ -29,7 +36,7 @@
 				<td>{evidenceData.description}</td>
 				<td>{evidenceData.fileType}</td>
 				{#if isEditMode}
-					<button>Eliminar</button>
+					<button on:click|preventDefault={()=>alert(evidenceData._id)}>Eliminar</button>
 				{/if}
 			</tr>
 		{/each}
@@ -38,7 +45,11 @@
 	<p>No evidence found</p>
 {/if}
 {#if isEditMode}
-	<button>Agregar evidencia</button>
+	<button on:click|preventDefault={addEvidence}>Agregar evidencia</button>
 {/if}
 
 
+{#if isEvidenceUploadActive===true}
+	<p>upload evidence...</p>
+	<EvidenceUpload/>	
+{/if}
