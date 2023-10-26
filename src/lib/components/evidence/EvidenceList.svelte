@@ -1,26 +1,45 @@
 <script>
 	import { onMount } from 'svelte';
-	import { getEvidenceDataFromCAPA } from './getEvidenceData.js';
+	import { getEvidenceDataFromCAPA, updateAndGetEvidenceDataFromCAPA }
+		from './getEvidenceData.js';
+	import { deleteEvidenceDataFromCAPA, deleteEvidenceDataFromEvidence }
+		from './deleteEvidenceData.js';
 	import EvidenceUpload from '$lib/components/evidence/EvidenceUpload.svelte';
 
+	export let isEditMode = false; // true shows 'add evidence'/'delete' buttons
 	export let capaId; 
 	export let section;
-	export let isEditMode = false;
-	// when isEditMode===true, we have and add evidence button and a delete evidence button for each of them...
-	// when false, we only see a list
-
 	export let correctiveActionIndex = null;
 
 	let evidenceDataArray = [];
-	onMount(async () => {
-		evidenceDataArray = await getEvidenceDataFromCAPA(capaId, section, correctiveActionIndex);
-	});
+	let newEvidenceId = null;
+	let isEvidenceUploadActive = false;
 
-
-	let isEvidenceUploadActive=false;
-	function addEvidence() {
-		isEvidenceUploadActive=true;
+	function showAddEvidence() { isEvidenceUploadActive = true; }
+	function hideAddEvidence() { isEvidenceUploadActive = false; }
+	
+	// prop to EvidenceUpload component when isEditMmode === true :
+	async function setNewEvidenceId(insertedEvidenceId) {
+		newEvidenceId = insertedEvidenceId;
+		evidenceDataArray = await updateAndGetEvidenceDataFromCAPA(
+			//capaId, section, correctiveActionIndex, newEvidenceId);
+			capaId, section, newEvidenceId);
+		hideAddEvidence();
 	}
+
+	// when isEditMode === true
+	async function deleteEvidence(evidenceId) {
+		await deleteEvidenceDataFromEvidence(evidenceId);
+
+		const evidenceIds = evidenceDataArray.map(e => e._id); // (needed below)
+		evidenceDataArray = await deleteEvidenceDataFromCAPA(
+			capaId, section, evidenceId, evidenceIds);
+	}
+
+	onMount(async () => {
+		evidenceDataArray = await getEvidenceDataFromCAPA(
+			capaId, section, correctiveActionIndex);
+	});
 </script>
 
 {#if evidenceDataArray}
@@ -36,20 +55,20 @@
 				<td>{evidenceData.description}</td>
 				<td>{evidenceData.fileType}</td>
 				{#if isEditMode}
-					<button on:click|preventDefault={()=>alert(evidenceData._id)}>Eliminar</button>
+					<button on:click|preventDefault={() =>
+						deleteEvidence(evidenceData._id)}>Eliminar</button>
 				{/if}
 			</tr>
 		{/each}
 	</table>
 {:else}
-	<p>No evidence found</p>
+	<p>No evidence uploaded until now.</p>
 {/if}
+
 {#if isEditMode}
-	<button on:click|preventDefault={addEvidence}>Agregar evidencia</button>
+	<button on:click|preventDefault={showAddEvidence}>Agregar evidencia</button>
 {/if}
 
-
-{#if isEvidenceUploadActive===true}
-	<p>upload evidence...</p>
-	<EvidenceUpload/>	
+{#if isEvidenceUploadActive === true}
+	<EvidenceUpload setNewEvidenceId={setNewEvidenceId}/>	
 {/if}
