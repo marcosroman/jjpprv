@@ -1,15 +1,19 @@
-import { getEvidenceDataFromCAPA } from 'getEvidenceData.js';
-
+import { getEvidenceDataFromCAPA } from './getEvidenceData.js';
 
 /*
  delete evidence data
  for a given capaId and a section of the capa document
 */
 export async function deleteEvidenceDataFromCAPA(capaId, section, evidenceIdToDelete, evidenceIds) {
-	const apiURL = `/api/capa/${capaId}/${section}/evidence/${evidenceIdToDelete}/delete`
+	const apiURL = `/api/capa/${capaId}/${section}/evidence/${evidenceIdToDelete}/delete`;
 
-	const response = await fetch(apiURL);
-	const body = await response.json();
+	const response = await fetch(apiURL, {
+		method: 'DELETE',
+		//mode:
+		headers: {"Content-Type": "application/json"},
+		body: JSON.stringify({evidenceIds})
+	});
+	//const body = await response.json();
 
 	//return body.evidenceArray;
 	return getEvidenceDataFromCAPA(capaId, section);
@@ -21,9 +25,14 @@ export async function deleteEvidenceDataFromCAPA(capaId, section, evidenceIdToDe
  from evidences collection
 */
 export async function deleteEvidenceDataFromEvidence(evidenceId) {
-	const apiURL = `/api/evidence/${evidenceId}/delete`
-	const response = await fetch(apiURL);
+	const apiURL = `/api/evidence/${evidenceId}/delete`;
+	const response = await fetch(apiURL, {
+		method: 'DELETE',
+		//mode:
+		//headers: {"Content-Type": "application/json"},
+		//body: JSON.stringify({evidenceIds})
+	});
 	const body = await response.json();
 
-	return body;
+	return await body;
 }

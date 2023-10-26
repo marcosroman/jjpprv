@@ -14,8 +14,15 @@
 		let file = files[0]; 
 		fileName = file.name; fileType = file.type;
 		file.arrayBuffer().then((arrayBuffer) => {
-			fileBuffer = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+			fileBuffer = btoa(String.fromCharCode(...(new Uint8Array(arrayBuffer))));
 		});
+	}
+
+	function submitEvidence() {
+		if (files && description) {
+			postData = { fileName, fileType, fileBuffer, description };
+			sendDataToServer().then(()=>{console.log('submitted!');});
+		} // else inform about missing fields
 	}
 
 	async function sendDataToServer() {
@@ -34,17 +41,8 @@
 				setNewEvidenceId(await data.insertedId);
         console.log('Server response:', data);
       } else { console.error('Failed to send data to the server'); }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    } catch (error) { console.error('Error:', error); }
   }
-
-	function submitEvidence() {
-		if (files && description) {
-			postData = { fileName, fileType, fileBuffer, description };
-			sendDataToServer().then(()=>{alert('submitted!');});
-		} // else inform about missing fields
-	}
 </script>
 
 <input bind:files type="file" accept=".pdf, image/*, video/*" name="uploaded-file" required>

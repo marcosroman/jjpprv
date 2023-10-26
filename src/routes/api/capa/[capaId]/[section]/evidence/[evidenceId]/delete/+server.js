@@ -6,7 +6,13 @@ export async function DELETE({request, params}) {
 	const capaId = params.capaId;
 	const section = params.section;
 	const evidenceIdToDelete = params.evidenceId; // or is it request data?
-	const evidenceIds = request.evidenceIdArray;
+	const requestData = await request.json();
+	const evidenceIds = await requestData.evidenceIds;
+
+	//console.log('request.json() is');
+	//console.log(request);
+	//console.log('evidenceIds is');
+	//console.log(evidenceIds);
 
 	const remainingEvidenceIds = evidenceIds.filter((id) => id != evidenceIdToDelete);
 

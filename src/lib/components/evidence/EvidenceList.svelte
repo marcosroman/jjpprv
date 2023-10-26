@@ -9,7 +9,7 @@
 	export let isEditMode = false; // true shows 'add evidence'/'delete' buttons
 	export let capaId; 
 	export let section;
-	export let correctiveActionIndex = null;
+	//export let correctiveActionIndex = null;
 
 	let evidenceDataArray = [];
 	let newEvidenceId = null;
@@ -27,9 +27,19 @@
 		hideAddEvidence();
 	}
 
+	/*
+	function deleteEvidence(evidenceId) {
+		alert(evidenceId);
+	}
+	*/
+
 	// when isEditMode === true
 	async function deleteEvidence(evidenceId) {
-		await deleteEvidenceDataFromEvidence(evidenceId);
+		/*
+		try {
+			const res = await deleteEvidenceDataFromEvidence(evidenceId);
+		} catch (error) {console.error(error);}
+		*/
 
 		const evidenceIds = evidenceDataArray.map(e => e._id); // (needed below)
 		evidenceDataArray = await deleteEvidenceDataFromCAPA(
@@ -38,7 +48,8 @@
 
 	onMount(async () => {
 		evidenceDataArray = await getEvidenceDataFromCAPA(
-			capaId, section, correctiveActionIndex);
+			//capaId, section, correctiveActionIndex);
+			capaId, section);
 	});
 </script>
 

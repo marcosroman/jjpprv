@@ -1,17 +1,10 @@
 /*
  get evidence data (except for file binaries)
  for a given capaId and a section of the capa document.
- section could be: issue, response or correctiveaction (ca);
- in case section == correctiveaction, the correctiveActionIndex is also needed
+ section could be: issue, response or ca.index
 */
-export async function getEvidenceDataFromCAPA(capaId, section, correctiveActionIndex) {
-	let apiURL = `/api/capa/${capaId}`;
-	if (section === "correctiveactions") {
-		apiURL += `/ca/${correctiveActionIndex}/evidence`;
-	}
-	else if (section === ("issue" || "response")) {
-		apiURL += `/${section}/evidence`
-	}
+export async function getEvidenceDataFromCAPA(capaId, section) {
+	let apiURL = `/api/capa/${capaId}/${section}/evidence`
 
 	const response = await fetch(apiURL);
 	const body = await response.json();
@@ -35,23 +28,16 @@ export async function getEvidenceDataFromEvidence(evidenceId) {
 
 /*
  put new evidence id (newEvidenceId) in evidence id array
- in a given capa document with
- capaid, section and corectiveActionIndex (if section==="ca")
+ in a given capa document with capaid, section
 */
-export async function	updateAndGetEvidenceDataFromCAPA(capaId, section, correctiveActionIndex, newEvidenceId) {
+export async function	updateAndGetEvidenceDataFromCAPA(capaId, section, newEvidenceId) {
 	// (should use PUT method here, should be idempotent)
 	// (and if there's no evidence, it shoud create the array!)
 	
 	// so first we update... then if that works fine, we get the data
-	let apiURL = `/api/capa/${capaId}/${section}`;
-	if (section === "correctiveactions") {
-		apiURL += `/${correctiveActionIndex}/evidence/update`;
-	}
-	else if (section === ("issue" || "response")) {
-		apiURL += `/evidence/update`;
-	}
+	let apiURL = `/api/capa/${capaId}/${section}/evidence/update`;
 
-	const putData = { capaId, section, correctiveActionIndex, newEvidenceId };
+	const putData = { capaId, section, newEvidenceId };
 
 	try {
 		const response = await fetch(apiURL, {
@@ -61,11 +47,7 @@ export async function	updateAndGetEvidenceDataFromCAPA(capaId, section, correcti
 
 		if (response.ok) {
 			//const data = await response.json();
-			return getEvidenceDataFromCAPA(capaId, section, correctiveActionIndex);
+			return getEvidenceDataFromCAPA(capaId, section);
 		} else { console.error('Failed to send data to the server'); }
-	} catch(error) {
-		console.error('error');
-	}
-
+	} catch(error) { console.error('error'); }
 }
-
