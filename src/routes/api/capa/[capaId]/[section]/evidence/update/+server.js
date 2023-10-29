@@ -24,21 +24,27 @@ export async function PUT({request,params}) {
 		sectionData = sectionData?.[documentSection];
 	}
 
-	const evidenceArray = (await sectionData)?.evidence;
+	try {
+		const evidenceArray = (await sectionData)?.evidence;
 
-	if ( !(evidenceArray
-			   && evidenceArray.map(o => o.toHexString())
-			                   .includes(newEvidenceId)) ) {
-		try {
-			// put into evidence array using push
-			const pushResponse = await capas.updateOne(
-				{ _id: new ObjectId(capaId) },
-				{ $push: { [`${documentSection}.evidence`]: newEvidenceObjectId }}
-			);
-			return json({pushResponse}, {status: 201}); // created
-		} catch (error) {
-			console.error(error);
+		if ( !(evidenceArray
+					 && evidenceArray.map(o => o.toHexString())
+													 .includes(newEvidenceId)) ) {
+			try {
+				// put into evidence array using push
+				const pushResponse = await capas.updateOne(
+					{ _id: new ObjectId(capaId) },
+					{ $push: { [`${documentSection}.evidence`]: newEvidenceObjectId }}
+				);
+				return json({pushResponse}, {status: 201}); // created
+			} catch (error) {
+				console.error(error);
+				return json(error, {status: 400});
+			}
+		} else {
 			return json({}, {status: 400});
 		}
+	} catch(error) {
+		return json(error, {status: 400});
 	}
 }

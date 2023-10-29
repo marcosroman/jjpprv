@@ -3,8 +3,9 @@ import { Binary } from 'mongodb';
 import evidences from '$lib/db/evidences';
 
 export async function POST({request}) {
-	const uploadData = await request.json();
-	//try {
+	try {
+		const uploadData = await request.json();
+
 		const result = await evidences.insertOne({
 			fileName: uploadData.fileName,
 			fileBinary: new Binary(Buffer.from(uploadData.fileBuffer, 'base64')),
@@ -14,7 +15,8 @@ export async function POST({request}) {
 		})
 
 		return json({insertedId: result.insertedId}, {status:201});
-	//} catch(error) {
-	//	console.log(error);
+	} catch (error) {
+		return json(error, {status: 400});
+	}
 }
 
