@@ -1,17 +1,17 @@
 import capas from '$lib/db/capas';
 
 export const load = async () => {
-	// get all capas without a response
-	const cursor = capas.find({"response": {"$exists": false}});
+	// get all capas without a evidence for their response
+	const cursor = capas.find(
+		{"response": {"$exists": true},
+		"response.evidence": {"$exists": false}});
 	
-	const response_pending_capas = await cursor.toArray();
+	const evidenceToResponsePendingCAPAs = await cursor.toArray();
 	await cursor.close();
 
-	return {response_pending_capas:
-		JSON.parse(JSON.stringify(response_pending_capas))}
+	return {evidenceToResponsePendingCAPAs:
+		JSON.parse(JSON.stringify(evidenceToResponsePendingCAPAs))}
 }
-
-
 
 
 
