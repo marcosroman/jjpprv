@@ -1,7 +1,10 @@
 <script>
+	import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
 	import CorrectiveActionsSubForm from './CorrectiveActionsSubForm.svelte';
 
 	export let data;
+
+	let capaId = data.capa._id;
 
 	let isCorrectiveActionRequired = false; //set to false later
 	let countCorrectiveActions = Number(isCorrectiveActionRequired);
@@ -23,9 +26,7 @@
 		<label>Acciones inmediatas:
 			<textarea name="immediate-actions" required placeholder="Acciones Inmediatas"></textarea>
 		</label>
-		
-		<p>evidencia...?</p>
-		
+	
 		<label>Consecuencias:
 			<textarea name="consequences" required placeholder="Consecuencias (blabla)"></textarea>
 		</label>

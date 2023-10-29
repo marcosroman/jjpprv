@@ -1,15 +1,13 @@
 <script>
 	import { onMount } from 'svelte';
-	import { getEvidenceDataFromCAPA, updateAndGetEvidenceDataFromCAPA }
-		from './getEvidenceData.js';
-	import { deleteEvidenceDataFromCAPA, deleteEvidenceDataFromEvidence }
-		from './deleteEvidenceData.js';
-	import EvidenceUpload from '$lib/components/evidence/EvidenceUpload.svelte';
+	import EvidenceUpload from './EvidenceUpload.svelte';
+	import { getEvidenceDataFromCAPA, updateAndGetEvidenceDataFromCAPA,
+		       deleteEvidenceDataFromCAPA, deleteEvidenceDataFromEvidence }
+		from './handleEvidenceData.js';
 
 	export let isEditMode = false; // true shows 'add evidence'/'delete' buttons
 	export let capaId; 
-	export let section;
-	//export let correctiveActionIndex = null;
+	export let documentSection;
 
 	let evidenceDataArray = [];
 	let newEvidenceId = null;
@@ -21,45 +19,33 @@
 	// prop to EvidenceUpload component when isEditMmode === true :
 	async function setNewEvidenceId(insertedEvidenceId) {
 		newEvidenceId = insertedEvidenceId;
-		evidenceDataArray = await updateAndGetEvidenceDataFromCAPA(
-			//capaId, section, correctiveActionIndex, newEvidenceId);
-			capaId, section, newEvidenceId);
-		hideAddEvidence();
+		try {
+			evidenceDataArray = await updateAndGetEvidenceDataFromCAPA(
+				capaId, documentSection, newEvidenceId);
+			hideAddEvidence();
+		} catch(error) {
+			alert(error);
+		}
 	}
-
-	/*
-	function deleteEvidence(evidenceId) {
-		alert(evidenceId);
-	}
-	*/
 
 	// when isEditMode === true
 	async function deleteEvidence(evidenceId) {
-		/*
 		try {
-			const res = await deleteEvidenceDataFromEvidence(evidenceId);
-		} catch (error) {console.error(error);}
-		*/
-
-		const evidenceIds = evidenceDataArray.map(e => e._id); // (needed below)
-		evidenceDataArray = await deleteEvidenceDataFromCAPA(
-			capaId, section, evidenceId, evidenceIds);
+			await deleteEvidenceDataFromEvidence(evidenceId);
+			const evidenceIds = evidenceDataArray.map(e => e._id); // (needed below)
+			evidenceDataArray = await deleteEvidenceDataFromCAPA(
+				capaId, documentSection, evidenceId, evidenceIds);
+		} catch (error) { console.error(error); }
 	}
 
 	onMount(async () => {
-		evidenceDataArray = await getEvidenceDataFromCAPA(
-			//capaId, section, correctiveActionIndex);
-			capaId, section);
+		evidenceDataArray = await getEvidenceDataFromCAPA(capaId, documentSection);
 	});
 </script>
 
-{#if evidenceDataArray}
+{#if evidenceDataArray && evidenceDataArray.length > 0}
 	<table>
-		<tr>
-			<th>Nombre</th>
-			<th>Descripcion</th>
-			<th>Tipo</th>
-		</tr>
+		<tr><th>Nombre</th><th>Descripcion</th><th>Tipo</th></tr>
 		{#each evidenceDataArray as evidenceData}
 			<tr>
 				<td>{evidenceData.fileName}</td>
@@ -73,13 +59,13 @@
 		{/each}
 	</table>
 {:else}
-	<p>No evidence uploaded until now.</p>
+	<p>No evidence found.</p>
 {/if}
 
 {#if isEditMode}
 	<button on:click|preventDefault={showAddEvidence}>Agregar evidencia</button>
 {/if}
 
-{#if isEvidenceUploadActive === true}
+{#if isEvidenceUploadActive}
 	<EvidenceUpload setNewEvidenceId={setNewEvidenceId}/>	
 {/if}

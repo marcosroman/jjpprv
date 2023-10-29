@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { getEvidenceDataFromEvidence } from './getEvidenceData.js';
+	import { getEvidenceDataFromEvidence } from './handleEvidenceData.js';
 
 	export let evidenceId;
 	let evidenceData;

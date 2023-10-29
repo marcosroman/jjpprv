@@ -6,12 +6,19 @@ export async function GET({params}) {
 	const capaId = params.capaId;
 	const section = params.section;
 	const evidenceFieldName = `${section}.evidence`;
+	const cursor = getEvidenceCursorWithoutFileBinary(capaId, evidenceFieldName);
+	
+	try {
+		const evidenceArray = (await cursor.next());
 
-	if (section === ("issue" || "response")) {
-		const cursor = getEvidenceCursorWithoutFileBinary(capaId, evidenceFieldName);
-		const evidenceArray = (await cursor.next())
-			?.[section]?.evidence;
-
-		return json({evidenceArray});
+		const evidence = evidenceArray?.evidence;//.correctiveActions)[0]?.evidence;//((await cursor.next())
+		console.log(evidence);
+			//?.[section.replace('.','?.')]?.evidence;
+		//console.log('XXXXXXXXXXXXXXXXXXXXXXXX')
+		//console.log(evidenceArray);
+		return json({evidence}, {status: 200});
+		//return json({evidenceArray},{status: 200});
+	} catch(error) {
+		return json({error},{status: 400});
 	}
 }

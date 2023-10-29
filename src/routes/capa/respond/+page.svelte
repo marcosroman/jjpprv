@@ -2,6 +2,8 @@
 	export let data;
 </script>
 
+<p>(get all capas without response)</p>
+
 {#if data.response_pending_capas.length > 0}
 	<ul>
 		{#each data.response_pending_capas as capa}

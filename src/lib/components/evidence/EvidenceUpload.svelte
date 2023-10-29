@@ -12,16 +12,21 @@
 
 	$: if (files) {
 		let file = files[0]; 
-		fileName = file.name; fileType = file.type;
+		fileName = file.name;
+		fileType = file.type;
 		file.arrayBuffer().then((arrayBuffer) => {
-			fileBuffer = btoa(String.fromCharCode(...(new Uint8Array(arrayBuffer))));
+			const uArray = new Uint8Array(arrayBuffer); // to binary
+			fileBuffer = btoa(uArray.reduce( // to base64 string
+				(data, byte) => data + String.fromCharCode(byte), ''));
 		});
 	}
 
 	function submitEvidence() {
 		if (files && description) {
 			postData = { fileName, fileType, fileBuffer, description };
-			sendDataToServer().then(()=>{console.log('submitted!');});
+			sendDataToServer().then(() => {
+				console.log('submitted!');
+			});
 		} // else inform about missing fields
 	}
 
@@ -34,7 +39,6 @@
 
       if (response.ok) {
         const data = await response.json();
-				alert (data);
 				/* set the value in the parent component, 
 				   so that the capa document section containing
 				   the evidence ids array can be updated */

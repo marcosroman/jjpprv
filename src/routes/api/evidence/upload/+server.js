@@ -9,7 +9,8 @@ export async function POST({request}) {
 			fileName: uploadData.fileName,
 			fileBinary: new Binary(Buffer.from(uploadData.fileBuffer, 'base64')),
 			fileType: uploadData.fileType,
-			description: uploadData.description
+			description: uploadData.description,
+			uploadDate: new Date()
 		})
 
 		return json({insertedId: result.insertedId}, {status:201});
