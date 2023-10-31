@@ -1,15 +1,18 @@
 <script>
 	export let data;
+	let isNC;
 </script>
 
 <form method="POST">
 	<label>Registro de:
-		<select name="is-non-conformity">
+		<select bind:value={isNC} name="is-non-conformity">
+			<option selected disabled></option>
 			<option value="true">NC (No-Conformidad)</option>
 			<option value="false">OM (Oportunidad de Mejora)</option>
 		</select>
 	</label>
 
+	{#if isNC}
 	<label>Detectado durante:
 		<select name="detected-during">
 			<option value='pr'>Proceso</option>
@@ -26,7 +29,10 @@
 		</select>
 	</label>
 
+	<label>Descripcion de la {isNC === "true" ? "No-Conformidad" : "Oportunidad de Mejora"}:
 	<textarea name="issue-description" required></textarea>
+	</label>
+	{/if}
 
 	<input type="submit" value="Guardar">
 </form>

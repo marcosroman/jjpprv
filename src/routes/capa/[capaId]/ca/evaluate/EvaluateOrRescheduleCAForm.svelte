@@ -1,4 +1,6 @@
 <script>
+	import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
+
 	export let capaId;
 	export let correctiveActionData = {};
 	export let correctiveActionIndex;
@@ -19,7 +21,8 @@
 			<input type="date" name="reschedule-date">
 		</label>
 	{:else}
-		<p>EVIDENCIA</p>
+		<p>EVIDENCIA:</p>
+		<EvidenceList {capaId} documentSection={`correctiveActions.${correctiveActionIndex}`}/>
 
 		<label>Comentarios:
 			<textarea name="comments"></textarea>

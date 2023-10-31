@@ -3,9 +3,15 @@ import {ObjectId} from 'mongodb';
 //import {redirect} from '@sveltejs/kit';
 
 export const load = async ({params}) => {
-	const capa = await capas.findOne({_id: new ObjectId(params.id)});
+	const capaId = params.capaId;
 
-	return {capa: JSON.parse(JSON.stringify(capa))};
+	try {
+		const capa = await capas.findOne({_id: new ObjectId(capaId)});
+
+		return {capa: JSON.parse(JSON.stringify(capa))};
+	} catch (error) {
+		console.error(error);
+	}
 } 
 
 export const actions = {

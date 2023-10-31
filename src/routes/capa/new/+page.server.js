@@ -27,10 +27,10 @@ export const actions = {
 			}
 		}
 
-		console.log("docToInsert = ", JSON.stringify(docToInsert))
+		//console.log("docToInsert = ", JSON.stringify(docToInsert))
 		try {
 			const result = await capas.insertOne(docToInsert);
-			console.log(`A document was inserted with the _id: ${result.insertedId}`);
+			//console.log(`A document was inserted with the _id: ${result.insertedId}`);
 		} catch(error) {
 			console.log(error);
 			// TODO: push error to the frontend
