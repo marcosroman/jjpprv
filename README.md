@@ -1,3 +1,69 @@
+# schema
+```js
+capa = {
+	_id //objectid
+	version //int
+	issue: {
+		creationDate //date
+		issuerId //objectid(user)
+		isNonConformity //bool
+		detectedDuring_id //string('pr'||'ia'||'ea')
+		detectedInSector_id //objectid(sectors)
+		description //string
+		evidence //array[objectid(evidences)}]
+	}
+	response: {
+		responseDate //date
+		responderId //objectid(user)
+		immediateActions //string
+		evidence //array[objectid(evidences)]	
+		consequences //string
+	}
+	correctiveActions: {
+		isRequired //bool
+		requirementDate //date
+		requirerId //objectid(user)
+		response: {
+			responseDate //date
+			possibleRootCauses //string
+			actions: [
+				{
+					solution: //string
+					commitmentDate //date
+					assignedResponsible_id //objectid(user)
+					isAcceptedByAssignedResponsible //bool
+                    acceptanceDate //date
+					evidence array[objectid(evidence)]
+					commentsByResponsibleUser string
+					evaluation: {
+						evaluator_id // qms person
+						comments //string
+						?rescheduleDate //date
+						isAccomplished //bool
+					}
+				}//,...more of those maybe...
+			]
+		}
+	}
+	evaluation: {
+		assignationDate //date
+		evaluationDate date //assigned by qm
+		evaluatorId //assigned by qm (not qm nor issued ppl nor issuer, right?)
+		commentsByEvaluator //string
+		isClosedEffectively bool
+	}
+	closure: {
+		isRisksUpdateRequired //bool
+		isChangingQMSRequired //bool
+		comments //string
+		isClosedEffectively bool
+		additionalCAPA objectid(capas)
+	}
+}
+
+```
+
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
