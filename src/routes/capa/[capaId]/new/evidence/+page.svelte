@@ -5,8 +5,7 @@
 
 	const isEditMode = true;
 	const capaId = data.capaId;
-	const caIndex = data.caIndex;
-	const documentSection = `correctiveActions.response.actions.${caIndex}`;
+	const documentSection = "issue";
 </script>
 
 <p>{capaId}</p>

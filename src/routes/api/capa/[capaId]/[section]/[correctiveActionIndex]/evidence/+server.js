@@ -5,7 +5,7 @@ import { json } from '@sveltejs/kit';
 export async function GET({params}) {
 	const capaId = params.capaId;
 	const correctiveActionIndex = params.correctiveActionIndex;
-	const evidenceFieldName = `correctiveActions.${correctiveActionIndex}.evidence`;
+	const evidenceFieldName = `correctiveActions.response.actions.${correctiveActionIndex}.evidence`;
 
 	const cursor = getEvidenceCursorWithoutFileBinary(capaId, evidenceFieldName);
 	try {

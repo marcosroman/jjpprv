@@ -1,12 +1,13 @@
 /*
  get evidence data (except for file binaries)
  for a given capaId and a section of the capa document (documentSection)
- documentSection could be: 'issue', 'response' or `correctiveActions.${caIndex}`
+ documentSection could be: 'issue', 'response' or `correctiveActions.response.actions.${caIndex}`
 */
 export async function getEvidenceDataFromCAPA(capaId, documentSection) {
 	let sectionSubURL = documentSection;
 	if (documentSection.includes('correctiveActions')) {
-		const caIndex = documentSection.split('.')[1];
+		// documentSection === correctiveActions.response.actions.{caIndex}
+		const caIndex = documentSection.split('.')[3];
 		sectionSubURL = `ca/${caIndex}`;
 	}
 	const apiURL = `/api/capa/${capaId}/${sectionSubURL}/evidence`;
@@ -21,6 +22,7 @@ export async function getEvidenceDataFromCAPA(capaId, documentSection) {
 		return {};
 	}
 }
+
 
 /*
  get evidence data (including file binaries)
@@ -76,14 +78,16 @@ export async function	updateAndGetEvidenceDataFromCAPA(capaId, documentSection, 
 	}
 }
 
+
 /*
  delete evidence data
  for a given capaId and a documentSection of the capa document
 */
-export async function deleteEvidenceDataFromCAPA(capaId, documentSection, evidenceIdToDelete, evidenceIds) {
+export async function deleteEvidenceDataFromCAPA(
+	capaId, documentSection, evidenceIdToDelete, evidenceIds) {
 	let sectionSubURL = documentSection;
 	if (documentSection.includes('correctiveActions')) {
-		const caIndex = documentSection.split('.')[1]
+		const caIndex = documentSection.split('.')[3]
 		sectionSubURL = `ca/${caIndex}`;
 	}
 	const apiURL = `/api/capa/${capaId}/${sectionSubURL}/evidence/${evidenceIdToDelete}/delete`;
@@ -94,9 +98,11 @@ export async function deleteEvidenceDataFromCAPA(capaId, documentSection, eviden
 		body: JSON.stringify({evidenceIds})
 	});
 
-	// TODO: FIX THIS, i don't like it... should do something with the response...
-	//return body.evidenceArray;
-	return getEvidenceDataFromCAPA(capaId, documentSection);
+	if (response.ok) {
+		return getEvidenceDataFromCAPA(capaId, documentSection);
+	} else {
+		console.error('error deleting evidence');
+	}
 }
 
 

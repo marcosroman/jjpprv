@@ -1,12 +1,13 @@
 <script>
 	export let data;
+	let capas = data.capasPendingResponse;
 </script>
 
 <p>(get all capas without response)</p>
 
-{#if data.response_pending_capas.length > 0}
+{#if capas}
 	<ul>
-		{#each data.response_pending_capas as capa}
+		{#each capas as capa}
 			<li>
 				<a href="/capa/{capa._id}/respond">{capa.issue?.description ?? "(sin descripcion)"}</a>
 			</li>

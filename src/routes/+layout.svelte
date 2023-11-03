@@ -13,8 +13,8 @@
 	<a href="/capa/new/evidence">Agregar evidencia a Nueva NC/OM (opcional?)</a>
 	<a href="/capa/respond">Responder a NC/OM</a>
 	<a href="/capa/respond/evidence">Agregar Evidencia en Respuesta a NC/OM</a>
-	<a href="/capa/respond/ca/decide">Decidir si requiere ACs (CSGC)</a>
-	<a href="/capa/respond/ca">Responder a NC con ACs</a>
+	<a href="/capa/ca/decide">Decidir si requiere ACs (CSGC)</a>
+	<a href="/capa/ca/respond">Responder a NC con ACs</a>
 	<a href="/capa/ca/respond/evidence">Agregar Evidencia a ACs</a>
 	<a href="/capa/ca/evaluate">Evaluar Acciones Correctivas (CSGC)</a>
 	<a href="/capa/evaluate/decide">Decidir Evaluador para NC/OM (CSGC)</a>

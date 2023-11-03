@@ -7,7 +7,7 @@ export async function DELETE({request, params}) {
 	const correctiveActionIndex = params.correctiveActionIndex;
 	const evidenceIdToDelete = params.evidenceId;
 
-	const documentSection = `correctiveActions.${correctiveActionIndex}`;
+	const documentSection = `correctiveActions.response.actions.${correctiveActionIndex}`;
 	try {
 		const requestData = await request.json();
 		const evidenceIds = await requestData.evidenceIds;
@@ -20,7 +20,7 @@ export async function DELETE({request, params}) {
 				{[`${documentSection}.evidence`]:
 					remainingEvidenceIds.map((id) => new ObjectId(id))}});
 
-		return json(result, {status: 204});
+		return json({status: 204});
 	} catch(error) {
 		return json(error, {status: 400});
 	}

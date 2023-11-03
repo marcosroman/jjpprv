@@ -32,7 +32,8 @@
 	async function deleteEvidence(evidenceId) {
 		try {
 			await deleteEvidenceDataFromEvidence(evidenceId);
-			const evidenceIds = evidenceDataArray.map(e => e._id); // (needed below)
+			const evidenceIds = evidenceDataArray.map(e => e._id);
+
 			evidenceDataArray = await deleteEvidenceDataFromCAPA(
 				capaId, documentSection, evidenceId, evidenceIds);
 		} catch (error) { console.error(error); }

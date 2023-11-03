@@ -1,7 +1,10 @@
 <script>
-	export let isCorrectiveActionRequired;
-	export let countCorrectiveActions = Number(isCorrectiveActionRequired);
-	export let correctiveActionsArray = [{solution: "", commitmentDate: ""}];
+	//export let isCorrectiveActionRequired;
+	//export let countCorrectiveActions = Number(isCorrectiveActionRequired);
+	//export let correctiveActionsArray = [{solution: "", commitmentDate: ""}];
+
+	let countCorrectiveActions = 1;
+	let correctiveActionsArray = [ {solution: "", commitmentDate: ""} ];
 
 	function addNewCorrectiveAction() {
 		correctiveActionsArray = [
@@ -16,11 +19,7 @@
 	}
 </script>
 
-	<p>(DEBUG) corrective action count = {countCorrectiveActions}</p>
-
-<label>Causas posibles:
-	<textarea name="possible-root-causes" required></textarea>
-</label>
+<p>(DEBUG) corrective action count = {countCorrectiveActions}</p>
 
 <input type="hidden" name="count-corrective-actions" value={countCorrectiveActions}>
 
@@ -48,9 +47,9 @@
 					required>
 			</td>
 			{#if countCorrectiveActions>1}
-			<td>
-				<button name={"delete-"+i} on:click|preventDefault={() => deleteCorrectiveAction(i)}>Eliminar</button>
-			</td>
+				<td>
+					<button name={"delete-"+i} on:click|preventDefault={() => deleteCorrectiveAction(i)}>Eliminar</button>
+				</td>
 			{/if}
 		</tr>
 	{/each}

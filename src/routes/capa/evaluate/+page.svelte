@@ -1,6 +1,6 @@
 <script>
 	export let data;
-	const CAPAs = data.capas;
+	const capas = data.capasWithoutEvaluation;
 </script>
 
 <p>(Evaluar capas que: o no tienen acciones correctivas O tienen y todas ya tienen el campo isAccomplished (cumplida si/no))</p>
@@ -16,9 +16,9 @@ evaluation:
 
 <p>(y no le agrego un campo de 'aceptado' (o no) porque eso ya esta en el cierre, hecho por calidad exclusivamente (qms))</p>
 
-{#each CAPAs as CAPA}
-	<a href={`/capa/${CAPA._id}/evaluate`}>
-		{JSON.stringify(CAPA)}
+{#each capas as capa}
+	<a href={`/capa/${capa._id}/evaluate`}>
+		{JSON.stringify(capa)}
 	</a>
 {/each}
 

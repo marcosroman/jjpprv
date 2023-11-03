@@ -1,14 +1,14 @@
 <script>
 	export let data;
-	let CAPAs = data.evidenceToCorrectiveActionsPendingCAPAs;
+	let capas = data.capasPendingEvidenceToCorrectiveActions;
 </script>
 
 <p>(agregar evidencia a capas que ya tienen acciones correctivas pero todavia no evidencia)</p>
 
-{#if CAPAs}
+{#if capas}
 <ul>
-	{#each CAPAs as CAPA}
-		<li><a href="/capa/{CAPA._id}/ca/respond/evidence">{CAPA._id}: {CAPA.issue.description}</a></li>
+	{#each capas as capa}
+		<li><a href="/capa/{capa._id}/ca/respond/evidence">{capa._id}: {capa.issue.description}</a></li>
 	{/each}
 </ul>
 {:else}
