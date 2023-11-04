@@ -7,43 +7,50 @@ capa = {
 		creationDate //date
 		issuerId //objectid(user)
 		isNonConformity //bool
-		detectedDuring_id //string('pr'||'ia'||'ea')
-		detectedInSector_id //objectid(sectors)
+		detectedDuringId //string('pr'(process)||'ia'(internal audit)||'ea'(external audit))
+		detectedInSectorId //objectid(sectors)
 		description //string
-		evidence //array[objectid(evidences)}]
+		evidence //array[objectid(evidences)]
 	}
 	response: {
 		responseDate //date
 		responderId //objectid(user)
-		immediateActions //string
-		evidence //array[objectid(evidences)]	
-		consequences //string
+        immediate: {
+            //immediateActions //string
+            solution
+            evidence //array[objectid(evidences)]	
+        }
+		possibleConsequences //string
+        possibleRootCauses //string (only needed if correctiveActions.isRequired)
+        actions: [
+            {
+                creationDate //date,
+                creatorId //objectid(user)
+                solution //string
+                commitmentDate //date
+                assignedResponsibleId //objectid(user)
+                isAcceptedByAssignedResponsible //bool
+                acceptanceDate //date
+                evidence array[objectid(evidence)]
+                commentsByResponsibleUser string
+                evaluation: {
+                    evaluator_id // qms person
+                    comments //string
+                    ?rescheduleDate //date
+                    isAccomplished //bool
+                }
+            }//,...more of those maybe...
+        ]
 	}
 	correctiveActions: {
 		isRequired //bool
 		requirementDate //date
 		requirerId //objectid(user)
+        /*
 		response: {
 			responseDate //date
 			possibleRootCauses //string
-			actions: [
-				{
-					solution: //string
-					commitmentDate //date
-					assignedResponsible_id //objectid(user)
-					isAcceptedByAssignedResponsible //bool
-                    acceptanceDate //date
-					evidence array[objectid(evidence)]
-					commentsByResponsibleUser string
-					evaluation: {
-						evaluator_id // qms person
-						comments //string
-						?rescheduleDate //date
-						isAccomplished //bool
-					}
-				}//,...more of those maybe...
-			]
-		}
+		}*/
 	}
 	evaluation: {
 		assignationDate //date
