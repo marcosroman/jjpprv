@@ -7,16 +7,20 @@ capa = {
 		creationDate //date
 		issuerId //objectid(user)
 		isNonConformity //bool
-		detectedDuringId //string('pr'(process)||'ia'(internal audit)||'ea'(external audit))
+		detectedDuring //string('pr'(process)||'ia'(internal audit)||'ea'(external audit))
 		detectedInSectorId //objectid(sectors)
 		description //string
 		evidence //array[objectid(evidences)]
 	}
+    correctiveActions: {
+		isRequired //bool
+		requirementDate //date
+		requirerId //objectid(user) qms person
+	}
 	response: {
 		responseDate //date
 		responderId //objectid(user)
-        immediate: {
-            //immediateActions //string
+        immediateActions: {
             solution
             evidence //array[objectid(evidences)]	
         }
@@ -33,26 +37,16 @@ capa = {
                 acceptanceDate //date
                 evidence array[objectid(evidence)]
                 commentsByResponsibleUser string
-                evaluation: {
-                    evaluator_id // qms person
-                    comments //string
-                    ?rescheduleDate //date
-                    isAccomplished //bool
+                isAccomplished //bool
+                followUpComments //string
+                ?rescheduleDate //date
+                followUpperId // objectid(user), qms user
+                ?rescheduleAgreed (ok???)
                 }
             }//,...more of those maybe...
         ]
 	}
-	correctiveActions: {
-		isRequired //bool
-		requirementDate //date
-		requirerId //objectid(user)
-        /*
-		response: {
-			responseDate //date
-			possibleRootCauses //string
-		}*/
-	}
-	evaluation: {
+    evaluation: {
 		assignationDate //date
 		evaluationDate date //assigned by qm
 		evaluatorId //assigned by qm (not qm nor issued ppl nor issuer, right?)
