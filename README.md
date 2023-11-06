@@ -1,6 +1,6 @@
 # schema
 ```js
-capa = {
+capas = {
 	_id //objectid
 	version //int
 	issue: {
@@ -13,53 +13,68 @@ capa = {
 		evidence //array[objectid(evidences)]
 	}
     correctiveActions: {
-		isRequired //bool
 		requirementDate //date
 		requirerId //objectid(user) qms person
+		isRequired //bool
 	}
 	response: {
 		responseDate //date
 		responderId //objectid(user)
-        immediateActions: {
+        immediateActions: { // only when isNonConformity
             solution
             evidence //array[objectid(evidences)]	
         }
-		possibleConsequences //string
-        possibleRootCauses //string (only needed if correctiveActions.isRequired)
+		possibleConsequences //string // only when isNonCoformity
+        possibleRootCauses //string // only when isNonConformity
         actions: [
             {
+                // creation
                 creationDate //date,
                 creatorId //objectid(user)
-                solution //string
+                proposedSolution //string
                 commitmentDate //date
+                // assignation (could be self-assigned):
                 assignedResponsibleId //objectid(user)
                 isAcceptedByAssignedResponsible //bool
                 acceptanceDate //date
-                evidence array[objectid(evidence)]
+                // results:
+                evidence array[objectid(evidence)] // uploaded by assigned person or by creator
                 commentsByResponsibleUser string
-                isAccomplished //bool
-                followUpComments //string
-                ?rescheduleDate //date
+                // follow up:
                 followUpperId // objectid(user), qms user
-                ?rescheduleAgreed (ok???)
+                isAccomplished // bool
+                followUpComments // string
+                ?rescheduleDate // date
+                ?isRescheduleAgreed //bool (ok???)
                 }
             }//,...more of those maybe...
         ]
 	}
     evaluation: {
+		evaluatorId //assigned by qm (not qm nor issued ppl nor issuer, right?)
 		assignationDate //date
 		evaluationDate date //assigned by qm
-		evaluatorId //assigned by qm (not qm nor issued ppl nor issuer, right?)
 		commentsByEvaluator //string
 		isClosedEffectively bool
 	}
-	closure: {
+	closure: { // by QM person
+        closerId
+        closureDate
 		isRisksUpdateRequired //bool
 		isChangingQMSRequired //bool
 		comments //string
 		isClosedEffectively bool
 		additionalCAPA objectid(capas)
 	}
+}
+
+evidences = {
+}
+
+sectors = {
+}
+
+users = {
 }
 
 ```
