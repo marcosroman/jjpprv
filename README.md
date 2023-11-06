@@ -1,6 +1,6 @@
 # schema
 ```js
-capas = {
+capa = {
 	_id //objectid
 	version //int
 	issue: {
@@ -24,30 +24,40 @@ capas = {
 				proposedSolution
 				evidence //array[objectid(evidences)]	
 		}
-		possibleConsequences //string // only when isNonCoformity
-        possibleRootCauses //string // only when isNonConformity
-        actions: [
-            {
+		possibleConsequences //string // only when isNonConformity
+		possibleRootCauses //string // only when isNonConformity
+    }
+    actions: [
+        {
+            creation: {
                 // creation
                 creationDate //date,
                 creatorId //objectid(user)
                 proposedSolution //string
                 commitmentDate //date
+            },
+            assignment: {
                 // assignation (could be self-assigned):
                 assignedResponsibleId //objectid(user)
+                assignmentDate // date
                 isAcceptedByAssignedResponsible //bool
+                comments // string (?)
                 acceptanceDate //date
+            },
+            results: {
                 // results:
                 evidence array[objectid(evidence)] // uploaded by assigned person or by creator
                 commentsByResponsibleUser string
+            },
+            followUp: {
                 // follow up:
                 followUpperId // objectid(user), qms user
                 isAccomplished // bool
                 followUpComments // string
                 ?rescheduleDate // date
                 ?isRescheduleAgreed //bool (ok???)
-                }
-            }//,...more of those maybe...
+            }
+        }//,...more of those maybe...
         ]
 	}
     evaluation: {
@@ -68,13 +78,13 @@ capas = {
 	}
 }
 
-evidences = {
+evidence = {
 }
 
-sectors = {
+sector = {
 }
 
-users = {
+user = {
 }
 
 ```
