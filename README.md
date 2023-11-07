@@ -17,22 +17,22 @@ capa = {
 		requirerId //objectid(user) qms person
 		isRequired //bool
 	}
-	nonConformityResponse: {
+	responseToNonConformity: { // only when isNonConformity
 		responseDate //date
 		responderId //objectid(user)
-		immediateActions: { // only when isNonConformity
+		immediateActions: {
 				proposedSolution
 				evidence //array[objectid(evidences)]	
 		}
-		possibleConsequences //string // only when isNonConformity
-		possibleRootCauses //string // only when isNonConformity
+		possibleConsequences //string
+		possibleRootCauses //string
     }
     actions: [
         {
             proposal: {
                 // creation
-                creationDate //date,
-                creatorId //objectid(user)
+                proposalDate //date,
+                proponentId //objectid(user)
                 proposedSolution //string
                 commitmentDate //date
             },
@@ -41,7 +41,7 @@ capa = {
                 assignedResponsibleId //objectid(user)
                 assignmentDate // date
                 isAcceptedByAssignedResponsible //bool
-                comments // string (?)
+                //comments // string (?)
                 acceptanceDate //date
             },
             results: {
@@ -58,9 +58,9 @@ capa = {
                 ?isRescheduleAgreed //bool (ok???)
             }
         }//,...more of those maybe...
-        ]
-	}
+    ]
     evaluation: {
+        assignerId // qm person
 		evaluatorId //assigned by qm (not qm nor issued ppl nor issuer, right?)
 		assignationDate //date
 		evaluationDate date //assigned by qm
