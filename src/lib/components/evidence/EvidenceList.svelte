@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import EvidenceUpload from './EvidenceUpload.svelte';
+	import EvidenceDetail from './EvidenceDetail.svelte';
 	import { getEvidenceDataFromCAPA, updateAndGetEvidenceDataFromCAPA,
 		       deleteEvidenceDataFromCAPA, deleteEvidenceDataFromEvidence }
 		from './handleEvidenceData.js';
@@ -12,9 +13,13 @@
 	let evidenceDataArray = [];
 	let newEvidenceId = null;
 	let isEvidenceUploadActive = false;
+	let isEvidenceViewActive = false;
+	let evidenceIdToShow = null;
 
 	function showAddEvidence() { isEvidenceUploadActive = true; }
 	function hideAddEvidence() { isEvidenceUploadActive = false; }
+	function showViewEvidence(evidenceId) { isEvidenceViewActive = true; evidenceIdToShow = evidenceId;}
+	function hideViewEvidence(evidenceId) { isEvidenceViewActive = false; evidenceIdToShow = null;}
 	
 	// prop to EvidenceUpload component when isEditMmode === true :
 	async function setNewEvidenceId(insertedEvidenceId) {
@@ -52,6 +57,8 @@
 				<td>{evidenceData.fileName}</td>
 				<td>{evidenceData.description}</td>
 				<td>{evidenceData.fileType}</td>
+				<button on:click|preventDefault={() =>
+					showViewEvidence(evidenceData._id)}>Ver</button>
 				{#if isEditMode}
 					<button on:click|preventDefault={() =>
 						deleteEvidence(evidenceData._id)}>Eliminar</button>
@@ -60,11 +67,16 @@
 		{/each}
 	</table>
 {:else}
-	<p>No evidence found.</p>
+	<p>(Todavia no se agregó evidencia)</p>
 {/if}
 
 {#if isEditMode}
 	<button on:click|preventDefault={showAddEvidence}>Agregar evidencia</button>
+{/if}
+
+{#if isEvidenceViewActive}
+	<button on:click|preventDefault={() => hideViewEvidence()}>Cerrar</button>
+	<EvidenceDetail evidenceId={evidenceIdToShow}/>
 {/if}
 
 {#if isEvidenceUploadActive}
