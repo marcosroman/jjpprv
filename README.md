@@ -12,12 +12,12 @@ capa = {
 		description //string
 		evidence //array[objectid(evidences)]
 	}
-	correctiveActions: {
+	correctiveActionsRequirement: {
 		requirementDate //date
 		requirerId //objectid(user) qms person
 		isRequired //bool
 	}
-	response: {
+	nonConformityResponse: {
 		responseDate //date
 		responderId //objectid(user)
 		immediateActions: { // only when isNonConformity
@@ -29,7 +29,7 @@ capa = {
     }
     actions: [
         {
-            creation: {
+            proposal: {
                 // creation
                 creationDate //date,
                 creatorId //objectid(user)
