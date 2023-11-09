@@ -16,10 +16,15 @@ export const actions = {
 			await capas.updateOne(
 				{ _id: new ObjectId(formData.get('id')) },
 				{ "$set": {
-					response: {
+					responseToNonConformity: {
 						responseDate: new Date(),
-						immediateActions: formData.get('immediate-actions'),
-						consequences: formData.get('consequences')
+						responderId: null,
+						immediateActions: {
+							proposedSolution: formData.get('proposed-immediate-solution'),
+							evidence: []
+						},
+						possibleConsequences: formData.get('consequences'),
+						possibleRootCauses: formData.get('possible-root-causes')
 					}
 				}});
 		} catch (error) {

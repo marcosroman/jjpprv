@@ -1,4 +1,5 @@
 <script>
+	import CapaView from '$lib/components/capa/CapaView.svelte';
 	import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
 
 	export let data;
@@ -9,6 +10,8 @@
 {#if data.capa?.response}
 	<p>Ya tiene respuesta.</p>
 {:else}
+	<CapaView {capaId}/>
+	<hr>
 	<form method="POST">
 		<input type="hidden" name="id" value={capaId}>
 		<input type="hidden" name="responder-id" value="(responder-id)">
@@ -18,7 +21,11 @@
 		</label>
 
 		<label>Acciones inmediatas:
-			<textarea name="immediate-actions" required placeholder="Acciones Inmediatas"></textarea>
+			<textarea name="proposed-immediate-solution" required placeholder="Acciones Inmediatas"></textarea>
+		</label>
+
+		<label>Analisis de las causas (raices) de la no-conformidad:
+			<textarea name="possible-root-causes" required placeholder="Causas"></textarea>
 		</label>
 	
 		<input type="submit" value="Guardar">
