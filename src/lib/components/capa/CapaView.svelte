@@ -43,9 +43,9 @@
 		{/if}
 	{/if}
 
-	{#if capa.correctiveActions}
+	{#if capa.correctiveActionsRequirement}
 		<p>Corresponde una Accion Correctiva?</p>
-		{#if capa.correctiveActions.isRequired}
+		{#if capa.correctiveActionsRequirement.isRequired}
 			<label>Si
 				<input type="radio" name="corrective-action-required" value="yes" checked>
 			</label>
@@ -60,6 +60,7 @@
 				<input type="radio" name="corrective-action-required" value="no" checked>
 			</label>
 		{/if}
+		<p>(Decidido por XXXUSUARIO el {capa.correctiveActionsRequirement.requirementDate})</p>
 	{/if}
 
 	{#if capa.issue.isNonConformity}
