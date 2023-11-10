@@ -47,14 +47,14 @@
 		<p>Corresponde una Accion Correctiva?</p>
 		{#if capa.correctiveActionsRequirement.isRequired}
 			<label>Si
-				<input type="radio" name="corrective-action-required" value="yes" checked>
+				<input type="radio" name="corrective-action-required" value="yes" checked disabled>
 			</label>
 			<label>No
 				<input type="radio" name="corrective-action-required" value="no" disabled>
 			</label>
 		{:else}
 			<label>Si
-				<input type="radio" name="corrective-action-required" value="yes" disabled>
+				<input type="radio" name="corrective-action-required" value="yes" checked disabled>
 			</label>
 			<label>No
 				<input type="radio" name="corrective-action-required" value="no" checked>
@@ -79,16 +79,21 @@
 	{#if capa.actions}
 		{#if capa.actions.length>0}
 			<table>
-				{#each capa.actions as action, index}	
 					<tr>
 						<th>Nro.</th>
 						<th>Acciones a tomar para {capa.issue.isNonConformity ? "eliminar las causas" : "adoptar la Oportunidad de Mejora"}</th>
 						<th>Fecha limite de compromiso</th>
 						<th>Responsable</th>
-						<th>Firmado?</th>
+						<th>Aceptado?</th>
 					</tr>
-
-					{action}
+				{#each capa.actions as action, index}	
+					<tr>
+						<td>{index}</td>
+						<td>{action.proposal.proposedSolution}</td>
+						<td>{action.proposal.commitmentDate}</td>
+						<td>XXXPENDIENTE</td>
+						<td>XXXPENDIENTE</td>
+					</tr>
 				{/each}
 			</table>
 		{/if}
