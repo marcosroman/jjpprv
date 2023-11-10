@@ -30,32 +30,40 @@ capa = {
     actions: [
         {
             proposal: {
-                // creation
                 proposalDate //date,
                 proponentId //objectid(user)
                 proposedSolution //string
                 commitmentDate //date
+                assignment: {
+                    assignedResponsibleId //objectid(user)// assignation (could be self-assigned):
+                    assignmentDate // date
+                    isAcceptedByAssignedResponsible //bool
+                    acceptanceDate //date
+                    //comments // string (?)
+                }
             },
-            assignment: {
-                // assignation (could be self-assigned):
-                assignedResponsibleId //objectid(user)
-                assignmentDate // date
-                isAcceptedByAssignedResponsible //bool
-                //comments // string (?)
-                acceptanceDate //date
-            },
+            ?reschedule: {
+                rescheduleDate //date
+                reschedulerId // objectid(user), qms person (?)
+                rescheduledCommitmentDate // date
+                assignment: {
+                    assignedResponsibleId //objectid(user)// assignation (could be self-assigned):
+                    assignmentDate // date
+                    isAcceptedByAssignedResponsible //bool
+                    acceptanceDate //date
+                    //comments // string (?)
+                }
+            }
             results: {
-                // results:
                 evidence array[objectid(evidence)] // uploaded by assigned person or by creator
+                commentsByAssignedUser string (?)
                 commentsByResponsibleUser string
             },
-            followUp: {
-                // follow up:
-                followUpperId // objectid(user), qms user
+            review: { // (follow up):
+                reviewerId // objectid(user), qms user
+                reviewComments // string
+                isRescheduled // bool, default=false
                 isAccomplished // bool
-                followUpComments // string
-                ?rescheduleDate // date
-                ?isRescheduleAgreed //bool (ok???)
             }
         }//,...more of those maybe...
     ]
