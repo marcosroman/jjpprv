@@ -17,12 +17,12 @@ export const actions = {
 		const data = await event.request.formData();
 
 		let docToInsert = {
-			documentVersion: 2,
+			version: 1,
 			issue: {
 				creationDate: new Date(),
 				isNonConformity: data.get('is-non-conformity') === "true" ? true : false,
-				detectedInSector_id: new ObjectId(data.get('detected-in-sector')),
 				detectedDuring: data.get('detected-during'),
+				detectedInSectorId: new ObjectId(data.get('detected-in-sector')),
 				description: data.get('issue-description')
 			}
 		}
