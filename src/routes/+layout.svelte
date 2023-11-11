@@ -20,7 +20,7 @@
 	<a class="done" href="/capa/decide-ca">Decidir si requiere Acciones Correctivas (CSGC)</a>
 	<a class="done" href="/capa/act/propose">Proponer Acciones ante NC/OM (para NC solo si requiere ACs)</a>
 	<a class="done" href="/capa/act/assign">Asignar Responsable ante NC/OM (para NC solo si requiere ACs)</a>
-	<a href="/capa/act/accept">Aceptar Responsabilidad ante NC/OM (para NC solo si requiere ACs)</a>
+	<a class="done" href="/capa/act/accept">Aceptar Responsabilidad ante NC/OM (para NC solo si requiere ACs)</a>
 	<a href="/capa/act/result">Subir evidencia de acciones ante NC/OM (para NC solo si requiere ACs)</a>
 	<a href="/capa/act/review">Hacer seguimiento de Acciones (CSGC)</a>
 	<a href="/capa/evaluate/assign">Decidir Evaluador para NC/OM (CSGC)</a>
