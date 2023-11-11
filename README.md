@@ -34,36 +34,42 @@ capa = {
                 proponentId //objectid(user)
                 proposedSolution //string
                 commitmentDate //date
-                assignment: {
-                    assignedResponsibleId //objectid(user)// assignation (could be self-assigned):
+                assignment: { //completed by proposer
+                    responsibleId //objectid(user)// assignation (could be self-assigned):
                     assignmentDate // date
-                    isAcceptedByAssignedResponsible //bool
-                    acceptanceDate //date
-                    //comments // string (?)
-                }
+                    comments // string
+                    acceptance: { //completed by assignee
+                        isAccepted //bool // by assigned responsible
+                        acceptanceDate //date
+                        comments // string 
+                    }
+                },
             },
             ?reschedule: {
                 rescheduleDate //date
                 reschedulerId // objectid(user), qms person (?)
                 rescheduledCommitmentDate // date
                 assignment: {
-                    assignedResponsibleId //objectid(user)// assignation (could be self-assigned):
+                    responsibleId //objectid(user)// -- should be the original proposer now, to make sure and avoid blaming someone else!
                     assignmentDate // date
-                    isAcceptedByAssignedResponsible //bool
-                    acceptanceDate //date
-                    //comments // string (?)
+                    comments
+                    acceptance: {
+                        isAccepted //bool
+                        acceptanceDate //date
+                        comments // string (?)
+                    }
                 }
             }
-            results: {
+            result: {
                 evidence array[objectid(evidence)] // uploaded by assigned person or by creator
                 commentsByAssignedUser string (?)
                 commentsByResponsibleUser string
             },
             review: { // (follow up):
                 reviewerId // objectid(user), qms user
-                reviewComments // string
                 isRescheduled // bool, default=false
                 isAccomplished // bool
+                comments // string
             }
         }//,...more of those maybe...
     ]
