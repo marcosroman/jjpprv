@@ -60,11 +60,7 @@ capa = {
                     }
                 }
             }
-            result: {
-                evidence array[objectid(evidence)] // uploaded by assigned person or by creator
-                commentsByAssignedUser string (?)
-                commentsByResponsibleUser string
-            },
+            evidence array[objectid(evidence)] // uploaded by assigned person or by creator
             review: { // (follow up):
                 reviewerId // objectid(user), qms user
                 isRescheduled // bool, default=false
