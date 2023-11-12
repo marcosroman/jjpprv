@@ -8,28 +8,34 @@ export const load = async ({ params }) => {
 	return {capa: JSON.parse(JSON.stringify(capa))};
 } 
 
+/*
 export const actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
 
 		try {
 			const capaId = formData.get('id');
-			const actionsCount = formData.get('actions-count');
-
-			let assignmentUpdateObject = {};
-			for (let i=0; i<actionsCount; i++) {
-				assignmentUpdateObject[`actions.${i}.proposal.assignment`] = {
-						responsibleId: formData.get(`responsible-user-${i}`),
-						assignmentDate: new Date(),
-						comments: formData.get(`comments-${i}`)
-				}
+		
+			let actions = [];
+			const countActions = formData.get('count-actions');
+			for (let i=0; i<countActions; i++) {
+				actions.push(
+					{
+						proposal: {
+							proposalDate: new Date(),
+							proponentId: null,
+							proposedSolution: formData.get('proposed-solution-'+i),
+							commitmentDate: new Date(formData.get('commitment-date-'+i))
+					}
+				});
 			}
 
-			const result = await capas.updateOne(
+			await capas.updateOne(
 				{ _id: new ObjectId(capaId) },
-				{ $set: assignmentUpdateObject }
+				{ $set: { actions }}
 			);
 
+			console.log('response saved! ', capaId);
 		} catch (error) {
 			console.log(error);
 		}
@@ -37,3 +43,4 @@ export const actions = {
 		throw redirect(303, "/");
 	}
 }
+*/

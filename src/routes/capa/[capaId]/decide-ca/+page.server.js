@@ -24,13 +24,12 @@ export const actions = {
 			const result = await capas.updateOne(
 				{ _id: new ObjectId(capaId) },
 				{ $set: {
-					correctiveActions: {
+					correctiveActionsRequirement: {
+						requirementDate: new Date(),
+						requirerId: null,
 						isRequired,
-						requirementDate: new Date()
 					}
 				}});
-
-			//console.log(result);
 		} catch(error) {
 			console.error(error);
 		}

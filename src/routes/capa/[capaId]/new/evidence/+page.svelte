@@ -1,4 +1,5 @@
 <script>
+	import CapaView from '$lib/components/capa/CapaView.svelte';
 	import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
 
 	export let data;
@@ -8,6 +9,6 @@
 	const documentSection = "issue";
 </script>
 
-<p>{capaId}</p>
-<p>{documentSection}</p>
+<CapaView {capaId}/>
+<hr>
 <EvidenceList isEditMode={isEditMode} capaId={capaId} documentSection={documentSection}/>

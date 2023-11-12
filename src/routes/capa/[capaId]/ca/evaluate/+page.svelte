@@ -2,7 +2,7 @@
 	import EvaluateOrRescheduleCAForm from './EvaluateOrRescheduleCAForm.svelte';
 	export let data;
 	let capaId = data.capa._id;
-	let correctiveActionsArray = data.capa.correctiveActions;
+	let correctiveActionsArray = data.capa.correctiveActions.response.actions;
 	let isFormShown = false;
 	let correctiveActionIndex = 0;
 	let correctiveActionData = {};

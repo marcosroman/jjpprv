@@ -91,8 +91,8 @@
 						<td>{index}</td>
 						<td>{action.proposal.proposedSolution}</td>
 						<td>{action.proposal.commitmentDate}</td>
-						<td>XXXPENDIENTE</td>
-						<td>XXXPENDIENTE</td>
+						<td>{action.proposal?.assignment?.responsibleId ?? "(pendiente)"}</td>
+						<td>{action.proposal?.assignment?.acceptance?.isAccepted ? "Si" : "No" ?? "(pendiente)"}</td>
 					</tr>
 				{/each}
 			</table>

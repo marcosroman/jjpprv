@@ -2,11 +2,12 @@ import capas from '$lib/db/capas';
 
 export async function load() {
 	const cursor = capas.find(
-		{"correctiveActions": {"$exists": false}});
+		{"issue.isNonConformity": true},
+		{"correctiveActionsRequirement": {"$exists": false}});
 
-	const capasWithoutCorrectiveActions = await cursor.toArray();
+	const capasWithoutCorrectiveActionsRequirement = await cursor.toArray();
 
-	return {capasWithoutCorrectiveActions:
-		JSON.parse(JSON.stringify(capasWithoutCorrectiveActions))};
+	return {capasWithoutCorrectiveActionsRequirement:
+		JSON.parse(JSON.stringify(capasWithoutCorrectiveActionsRequirement))};
 }
 

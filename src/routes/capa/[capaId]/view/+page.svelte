@@ -1,8 +1,10 @@
 <script>
+	import CapaView from '$lib/components/capa/CapaView.svelte';
+
 	export let data;
 
-	let capa = data.capa;
+	let capaId = data.capaId;
+	//let capaTypeDescription = capa.issue.isNonConformity ? "No-Conformidad" : "Oportunidad de mejora";
 </script>
 
-{JSON.stringify(capa)}
-
+<CapaView {capaId}/>

@@ -1,6 +1,5 @@
 import capas from '$lib/db/capas';
 import {ObjectId} from 'mongodb'; 
-//import {redirect} from '@sveltejs/kit';
 
 export const load = async ({params}) => {
 	const capaId = params.capaId;
@@ -27,7 +26,7 @@ export const actions = {
 		if (isReschedule) {
 			const rescheduleDate = new Date(formData.get('reschedule-date'));
 			try {
-				const rescheduleDateFieldName = "correctiveActions."+correctiveActionIndex+".evaluation.rescheduleDate";
+				const rescheduleDateFieldName = `correctiveActions.response.actions.${correctiveActionIndex}.evaluation.rescheduleDate`;
 				await capas.updateOne(
 					{ _id: new ObjectId(_id) },
 					{ "$set": {
@@ -42,8 +41,8 @@ export const actions = {
 			const isAccomplished = Boolean(formData.get('is-accomplished'));
 
 			try {
-				const isAccomplishedFieldName = `correctiveActions.${correctiveActionIndex}.evaluation.isAccomplished`;
-				const commentsFieldName = `correctiveActions.${correctiveActionIndex}.evaluation.comments`;
+				const isAccomplishedFieldName = `correctiveActions.response.actions.${correctiveActionIndex}.evaluation.isAccomplished`;
+				const commentsFieldName = `correctiveActions.response.actions.${correctiveActionIndex}.evaluation.comments`;
 				await capas.updateOne(
 					{ _id: new ObjectId(_id) },
 					{ "$set": {

@@ -4,7 +4,7 @@
 	let capas = data.capasAll;
 </script>
 
-{#if capas}
+{#if capas.length>0 }
 	<ul>
 		{#each capas as capa}
 			<li><a href={`/capa/${capa._id}/view`}>{capa._id} ({capa.issue.description})</a></li>
