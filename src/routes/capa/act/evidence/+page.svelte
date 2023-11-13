@@ -6,7 +6,7 @@
 
 <p>(mostrar capas que ya tienen acciones propuestas, asignadas y aceptadas pero que todavia no tienen evidencia)</p>
 
-{#if capas}
+{#if capas.length>0}
 	<ul>
 		{#each capas as capa}
 			<li>

@@ -1,21 +1,17 @@
 <script>
-
-	import CapaView from '$lib/components/capa/CapaView.svelte';
-	// show only if capa.correctiveActions.isRequired (=== true)
-	//import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
-	import ActionsSubForm from './ActionsSubForm.svelte';
-
 	export let data;
-
-	let capaId = data.capa._id;
+	const capaId = data.capa._id;
+	const capa = data.capa;
 </script>
 
-<CapaView {capaId}/>
-<hr>
-<form method="POST">
-	<input type="hidden" name="id" value={capaId}>
+<p>count = {capa?.actions.length}</p>
 
-	<ActionsSubForm />
-
-	<input type="submit" value="Guardar">
-</form>
+{#if capa.actions.length>0}
+	<ol>
+	{#each capa.actions as action, index}
+		<li>
+			<a href={`/capa/${capaId}/act/${index}/evidence`}>{action.proposal.proposedSolution}</a>
+		</li>
+	{/each}
+	</ol>
+{/if}

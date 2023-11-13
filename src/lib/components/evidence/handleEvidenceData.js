@@ -2,15 +2,15 @@
 // for doing api calls, having as input the
 // document section (issue, response to nc or action)
 function sectionSubURL(documentSection) {
-	let sectionSubURL = documentSection;
+	let subURL = documentSection;
 
 	if (documentSection.includes('actions')) {
 		// in this case, documentSection === actions.{actionIndex}
 		const actionIndex = documentSection.split('.')[1];
-		sectionSubURL = `action/${actionIndex}`;
+		subURL = `action/${actionIndex}`;
 	}
 
-	return sectionSubURL;
+	return subURL;
 }
 
 /*
@@ -20,8 +20,8 @@ function sectionSubURL(documentSection) {
  (in case the capa is a NC) or `actions.${actionIndex}`
 */
 export async function getEvidenceDataFromCAPA(capaId, documentSection) {
-	const sectionSubURL = sectionSubURL(documentSection);
-	const apiURL = `/api/capa/${capaId}/${sectionSubURL}/evidence`;
+	const subURL = sectionSubURL(documentSection);
+	const apiURL = `/api/capa/${capaId}/${subURL}/evidence`;
 
 	try {
 		const response = await fetch(apiURL);
@@ -59,8 +59,8 @@ export async function getEvidenceDataFromEvidence(evidenceId) {
  in a given capa document with capaid, documentSection
 */
 export async function	updateAndGetEvidenceDataFromCAPA(capaId, documentSection, newEvidenceId) {
-	const sectionSubURL = sectionSubURL(documentSection);
-	const apiURL = `/api/capa/${capaId}/${sectionSubURL}/evidence/update`;
+	const subURL = documentSection; // actions.actionIndex in case section is actions
+	const apiURL = `/api/capa/${capaId}/${subURL}/evidence/update`;
 
 	const putData = { capaId, documentSection, newEvidenceId };
 
@@ -91,8 +91,8 @@ export async function	updateAndGetEvidenceDataFromCAPA(capaId, documentSection, 
 */
 export async function deleteEvidenceDataFromCAPA(
 	capaId, documentSection, evidenceIdToDelete, evidenceIds) {
-	const sectionSubURL = sectionSubURL(documentSection);
-	const apiURL = `/api/capa/${capaId}/${sectionSubURL}/evidence/${evidenceIdToDelete}/delete`;
+	const subURL = sectionSubURL(documentSection);
+	const apiURL = `/api/capa/${capaId}/${subURL}/evidence/${evidenceIdToDelete}/delete`;
 
 	const response = await fetch(apiURL, {
 		method: 'DELETE',
