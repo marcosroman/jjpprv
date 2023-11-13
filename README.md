@@ -63,7 +63,7 @@ capa = {
             evidence array[objectid(evidence)] // uploaded by assigned person or by creator
             review: { // (follow up):
                 reviewerId // objectid(user), qms user
-                isRescheduled // bool, default=false
+                //isRescheduled // bool, default=false => this is unnecesary probably... i just need the 'reschedule' field to know this... if it exists, then it has been rescheduled already, no need to check here
                 isAccomplished // bool
                 comments // string
             }
