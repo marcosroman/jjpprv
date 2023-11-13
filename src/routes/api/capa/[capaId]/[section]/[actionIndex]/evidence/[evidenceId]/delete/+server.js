@@ -4,10 +4,10 @@ import capas from '$lib/db/capas';
 
 export async function DELETE({request, params}) {
 	const capaId = params.capaId;
-	const correctiveActionIndex = params.correctiveActionIndex;
+	const actionIndex = params.actionIndex;
 	const evidenceIdToDelete = params.evidenceId;
 
-	const documentSection = `correctiveActions.response.actions.${correctiveActionIndex}`;
+	const documentSection = `actions.${actionIndex}`;
 	try {
 		const requestData = await request.json();
 		const evidenceIds = await requestData.evidenceIds;

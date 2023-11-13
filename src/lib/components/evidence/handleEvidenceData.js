@@ -1,15 +1,26 @@
+// used below to return a subsection of the url
+// for doing api calls, having as input the
+// document section (issue, response to nc or action)
+function sectionSubURL(documentSection) {
+	let sectionSubURL = documentSection;
+
+	if (documentSection.includes('actions')) {
+		// in this case, documentSection === actions.{actionIndex}
+		const actionIndex = documentSection.split('.')[1];
+		sectionSubURL = `action/${actionIndex}`;
+	}
+
+	return sectionSubURL;
+}
+
 /*
  get evidence data (except for file binaries)
  for a given capaId and a section of the capa document (documentSection)
- documentSection could be: 'issue', 'response' or `correctiveActions.response.actions.${caIndex}`
+ documentSection could be: 'issue', 'responseToNonConformity'
+ (in case the capa is a NC) or `actions.${actionIndex}`
 */
 export async function getEvidenceDataFromCAPA(capaId, documentSection) {
-	let sectionSubURL = documentSection;
-	if (documentSection.includes('correctiveActions')) {
-		// documentSection === correctiveActions.response.actions.{caIndex}
-		const caIndex = documentSection.split('.')[3];
-		sectionSubURL = `ca/${caIndex}`;
-	}
+	const sectionSubURL = sectionSubURL(documentSection);
 	const apiURL = `/api/capa/${capaId}/${sectionSubURL}/evidence`;
 
 	try {
@@ -48,12 +59,7 @@ export async function getEvidenceDataFromEvidence(evidenceId) {
  in a given capa document with capaid, documentSection
 */
 export async function	updateAndGetEvidenceDataFromCAPA(capaId, documentSection, newEvidenceId) {
-	let sectionSubURL = documentSection;
-	/*
-	if (section.includes('correctiveActions')) {
-		sectionSubURL = `ca/${section.split('.')[1]}`;
-	}
-	*/
+	const sectionSubURL = sectionSubURL(documentSection);
 	const apiURL = `/api/capa/${capaId}/${sectionSubURL}/evidence/update`;
 
 	const putData = { capaId, documentSection, newEvidenceId };
@@ -85,11 +91,7 @@ export async function	updateAndGetEvidenceDataFromCAPA(capaId, documentSection, 
 */
 export async function deleteEvidenceDataFromCAPA(
 	capaId, documentSection, evidenceIdToDelete, evidenceIds) {
-	let sectionSubURL = documentSection;
-	if (documentSection.includes('correctiveActions')) {
-		const caIndex = documentSection.split('.')[3]
-		sectionSubURL = `ca/${caIndex}`;
-	}
+	const sectionSubURL = sectionSubURL(documentSection);
 	const apiURL = `/api/capa/${capaId}/${sectionSubURL}/evidence/${evidenceIdToDelete}/delete`;
 
 	const response = await fetch(apiURL, {

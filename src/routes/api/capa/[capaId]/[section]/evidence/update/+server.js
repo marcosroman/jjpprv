@@ -17,9 +17,9 @@ export async function PUT({request,params}) {
 		{ _id: new ObjectId(capaId) }, { [documentSection]: 1 }
 	))
 
-	if (documentSection.includes('correctiveActions')) {
-		const caIndex = documentSection.split('.')[1];
-		sectionData = sectionData.correctiveActions[caIndex];
+	if (documentSection.includes('actions')) {
+		const actionIndex = documentSection.split('.')[1];
+		sectionData = sectionData.actions[actionIndex];
 	} else {
 		sectionData = sectionData?.[documentSection];
 	}
