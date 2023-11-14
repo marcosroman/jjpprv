@@ -98,4 +98,11 @@
 			</table>
 		{/if}
 	{/if}
+
+	{#if capa.evaluation}
+		<h4>Evaluacion</h4>
+		{#if capa.evaluation}
+			(Asignado {capa.evaluation.assignment.evaluatorId} by {capa.evaluation.assignment.assignerId} on {capa.evaluation.assignment.assignationDate})
+		{/if}
+	{/if}
 {/if}

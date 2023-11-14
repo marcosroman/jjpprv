@@ -70,9 +70,11 @@ capa = {
         }//,...more of those maybe...
     ]
     evaluation: {
-        assignerId // qm person
-		evaluatorId //assigned by qm (not qm nor issued ppl nor issuer, right?)
-		assignationDate //date
+        assignment: {
+            assignerId // qm person
+            evaluatorId //assigned by qm (not qm nor issued ppl nor issuer, right?)
+            assignationDate //date
+        }
 		evaluationDate date //assigned by qm
 		commentsByEvaluator //string
 		isClosedEffectively bool
