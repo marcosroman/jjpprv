@@ -17,7 +17,7 @@
 </script>
 
 {#if capa}
-	<pre>{JSON.stringify(capa)}</pre>
+	<p>{JSON.stringify(capa)}</p>
 
 	<table>
 		<tr><th>Registro de</th><td>{capaTypeDescription}</td></tr>
@@ -99,10 +99,17 @@
 		{/if}
 	{/if}
 
-	{#if capa.evaluation}
+	{#if capa?.evaluation}
 		<h4>Evaluacion</h4>
-		{#if capa.evaluation}
+		{#if capa.evaluation?.assignment}
 			(Asignado {capa.evaluation.assignment.evaluatorId} by {capa.evaluation.assignment.assignerId} on {capa.evaluation.assignment.assignationDate})
+		{/if}
+		{#if capa.evaluation?.evaluationDate}
+			<table>
+				<tr><th>Fecha de evaluacion</th><td>{capa.evaluation.evaluationDate}</td></tr>
+				<tr><th>Considerada efectiva?</th><td>{capa.evaluation.isEffective ? "Si" : "No"}</td></tr>
+				<tr><th>Fecha de evaluacion</th><td>{capa.evaluation.evaluationDate}</td></tr>
+			</table>
 		{/if}
 	{/if}
 {/if}

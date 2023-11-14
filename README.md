@@ -35,7 +35,7 @@ capa = {
                 proposedSolution //string
                 commitmentDate //date
                 assignment: { //completed by proposer
-                    responsibleId //objectid(user)// assignation (could be self-assigned):
+                    responsibleId //objectid(user)// assignation (could be self-assigned): [should have been 'assignee']
                     assignmentDate // date
                     comments // string
                     acceptance: { //completed by assignee
@@ -46,6 +46,7 @@ capa = {
                 },
             },
             ?reschedule: {
+                // some of the following might not be addded; in that case, it is understood that the previous values still hold; rescheduleDate is neede, so is reschedulerId and rescheduledCommitmentDate... the rest ? idk
                 rescheduleDate //date
                 reschedulerId // objectid(user), qms person (?)
                 rescheduledCommitmentDate // date
@@ -76,8 +77,8 @@ capa = {
             assignationDate //date
         }
 		evaluationDate date //assigned by qm
-		commentsByEvaluator //string
-		isClosedEffectively bool
+		comments //string
+		isEffective bool
 	}
 	closure: { // by QM person
         closerId
