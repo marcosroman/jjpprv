@@ -18,15 +18,18 @@ export const actions = {
 		const capaIdObject = new ObjectId(capaId);
 
 		let closureObject = {
+			closerId: "closerId",
+			closureDate: new Date(),
 			isRisksUpdateRequired: data.get('is-risks-update-required') ? true : false,
 			isChangingQMSRequired: data.get('is-changing-qms-required') ? true : false,
 			comments: data.get('comments'),
-			isClosedEffectively: data.get('is-closed-effectively') ? true: false
+			isClosedEffectively: data.get('is-closed-effectively')  === "true" ? true: false
 		};
 		if (!closureObject.isClosedEffectively) {
 			closureObject.additionalCAPA =  data.get('additional-capa');
 		}
 
+		//console.log(closureObject);
 		try {
 			await capas.updateOne({_id: capaIdObject},
 				{$set: {closure: closureObject}});

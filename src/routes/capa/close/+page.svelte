@@ -6,5 +6,5 @@
 <p>(mostrar capas que ya tienen una evaluacion pero todavia no un cierre)</p>
 
 {#each capas as capa}
-	<a href={`/capa/${capa._id}/close`}>{JSON.stringify(capa)}</a>
+	<a href={`/capa/${capa._id}/close`}>{capa.issue.description} ({capa._id})</a>
 {/each}

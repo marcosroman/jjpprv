@@ -5,8 +5,6 @@
 	let isClosedEffectively = true;
 </script>
 
-<p>{JSON.stringify(data.capa)}</p>
-
 <form method='POST'>
 	<input type="hidden" value={capaId} name="capa-id">
 
@@ -25,11 +23,16 @@
 		<textarea name="comments" required></textarea>
 	</label>
 
-	<label>
-		Accion cerrada eficazmente?
-		<input bind:checked={isClosedEffectively} type="checkbox" name="is-closed-effectively">
+	<p>Accion cerrada eficazmente?</p>
+	<label>Si
+		<input type="radio" name="is-closed-effectively" value="true" required>
+	</label>
+	<label>No
+		<input type="radio" name="is-closed-effectively" value="false" required>
 	</label>
 
+
+	<!--
 	<p>isClosedEffectively={isClosedEffectively}</p>
 	{#if !isClosedEffectively}
 		<label>
@@ -37,6 +40,13 @@
 			<input name="additional-capa" required>
 		</label>
 	{/if}
+	(later the user will be presented with the option for opening a new capa if the current one wasn't closed effectively)
+	-->
 
 	<input type="submit" value="Guardar">
 </form>
+
+
+
+<p>{JSON.stringify(data.capa)}</p>
+

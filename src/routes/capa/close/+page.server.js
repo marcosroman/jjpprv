@@ -2,8 +2,9 @@ import capas from '$lib/db/capas';
 
 export async function load() {
 	const cursor = capas.find({
-		closure: {
-			$exists: false}});
+		"evaluation.isEffective": {$exists: true},
+		closure: {$exists: false}}
+	);
 
 	const capasWithoutClosure = await cursor.toArray();
 	cursor.close();

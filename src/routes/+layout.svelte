@@ -25,7 +25,7 @@
 	<a class="done" href="/capa/act/review">Hacer seguimiento de Acciones (CSGC)</a>
 	<a class="done" href="/capa/evaluate/assign">Asignar Evaluador para NC/OM (CSGC)</a>
 	<a class="done" href="/capa/evaluate">Evaluar NC/OM</a>
-	<a href="/capa/close">Cerrar NC/OM (CSGC)</a>
+	<a class="done" href="/capa/close">Cerrar NC/OM (CSGC)</a>
 	<a href="/capa/view">Ver NC/OM</a>
 </nav>
 
