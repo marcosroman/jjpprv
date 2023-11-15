@@ -14,11 +14,11 @@
 
 	<table>
 		<tr>
-			<th></th>
+			<th>Nro.</th>
 			<th>Solucion</th>
 			<th>Fecha limite de compromiso</th>
-			<th>Responsable asignado<th>
-			<th>Comentarios<th>
+			<th>Responsable asignado</th>
+			<th>Comentarios</th>
 		</tr>
 		{#each capa.actions as action, index}
 			<tr>

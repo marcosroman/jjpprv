@@ -15,24 +15,23 @@
 	}
 </script>
 
-<p>(DEBUG) action count = {countActions}</p>
-
 <input type="hidden" name="count-actions" value={countActions}>
 
 <table>
 	<tr>
+		<th>Nro</th>
 		<th>Solucion</th>
 		<th>Fecha de compromiso</th>
 	</tr>
 
 	{#each actionsArray as action, i}
 		<tr>
+			<td>{i+1}</td>
 			<td>
 				<input
 					type="text"
 					name={"proposed-solution-"+i}
 					bind:value={action.solution} 
-					placeholder={i}
 					required>
 			</td>
 			<td>
