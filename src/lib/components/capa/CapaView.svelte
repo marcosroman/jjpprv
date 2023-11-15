@@ -1,6 +1,8 @@
 <script>
+	import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
 	import { onMount } from 'svelte';
 	export let capaId;
+
 
 	let capa = null;
 	let capaTypeDescription = null;
@@ -17,7 +19,35 @@
 </script>
 
 {#if capa}
-	<p>{JSON.stringify(capa)}</p>
+	<!--<p>{JSON.stringify(capa)}</p>-->
+	{#if capa.issue.isNonConformity}
+		{#if capa.responseToNonConformity}
+			<p>reponse to nonconformity OK </p>
+		{:else}
+			<p>reponse to nonconformity NOT OK </p>
+		{/if}
+		{#if capa.correctiveActionsRequirement}
+			<p>corrective action requirement OK</p>
+			{#if capa.correctiveActionsRequirement.isRequired}
+				<p>CA required</p>
+			{:else}
+				<p>CA not required</p>
+			{/if}
+		{:else}	
+			<p>corrective action requirement NOT OK</p>
+		{/if}
+	{/if}
+	{#if capa.evaluation}
+		<p>evaluation OK</p>
+	{:else}
+		<p>evaluation NOT OK</p>
+	{/if}
+	{#if capa.closure}
+		<p>closure OK</p>
+	{:else}
+		<p>closure OK</p>
+	{/if}
+
 
 	<table>
 		<tr><th>Registro de</th><td>{capaTypeDescription}</td></tr>
@@ -30,8 +60,15 @@
 		<tr><th>Descripcion de la {capaTypeDescription}</th><td>{capa.issue.description}</td></tr>
 	</table>
 
+		<!--
+		{#if capa.issue.evidence}
+			<tr><th>Evidencia</th><td>{capa.issue.evidence}</td></tr>
+		{/if}
+		-->
 	{#if capa.issue.evidence}
-		XXXEVIDENCIA DEL PROBLEMA
+		<EvidenceList isEditMode={false} capaId={capa._id} documentSection="issue"/>
+	{:else}
+		<p>(No hay evidencia para la NC/OM)</p>
 	{/if}
 
 	{#if capa.issue.isNonConformity}
@@ -69,14 +106,21 @@
 				<tr><th>Fecha de respuesta a NC:</th><td>{capa.responseToNonConformity.responseDate}</td></tr>
 				<tr><th>Responde:</th><td>{capa.responseToNonConformity.responderId}</td></tr>
 				<tr><th>Acciones inmediatas:</th><td>{capa.responseToNonConformity.immediateActions.proposedSolution}</td></tr>
-				<tr><th>Evidencia:</th><td>XXXEVIDENCIA (capa.responseToNonConformity.immediateActions.evidence)</td></tr>
+				<!--<tr><th>Evidencia:</th><td>XXXEVIDENCIA (capa.responseToNonConformity.immediateActions.evidence)</td></tr>-->
 				<tr><th>Consecuencias:</th><td>{capa.responseToNonConformity.possibleConsequences}</td></tr>
 				<tr><th>Analisis de causas:</th><td>{capa.responseToNonConformity.possibleRootCauses}</td></tr>
 			</table>
+
+			{#if capa.responseToNonConformity.evidence}
+				<EvidenceList isEditMode={false} capaId={capa._id} documentSection="responseToNonConformity"/>
+			{:else}
+				<h2>no hay evidencia de accion inmediata ante la no-conformidad</h2>
+			{/if}
 		{/if}
 	{/if}
 
 	{#if capa.actions}
+		<h2>Acciones</h2>
 		{#if capa.actions.length>0}
 			<table>
 					<tr>
@@ -88,7 +132,7 @@
 					</tr>
 				{#each capa.actions as action, index}	
 					<tr>
-						<td>{index}</td>
+						<td>{index+1}</td>
 						<td>{action.proposal.proposedSolution}</td>
 						<td>{action.proposal.commitmentDate}</td>
 						<td>{action.proposal?.assignment?.responsibleId ?? "(pendiente)"}</td>
@@ -96,6 +140,26 @@
 					</tr>
 				{/each}
 			</table>
+
+			<h3>Seguimiento de las acciones</h3>
+			<table>
+				<tr>
+					<th>Nro.</th>
+					<th>Cumplida?</th>
+					<th>Observaciones</th>
+					<th>Fecha de reprogramacion</th>
+					<th>Evaluador SGC</th>
+				</tr>
+				{#each capa.actions as action, index}	
+					<tr>
+						<td>{index+1}</td>
+						<td>{action?.review?.isAccomplished ? "Si" : "No"}</td>
+						<td>{action?.review?.comments ?? "(Sin comentarios)"}</td>
+						<td>{action?.reschedule?.rescheduleDate ?? "(Sin reprogramacion)"}</td>
+						<td>{action?.review?.reviewerId ?? "(Pendiente)"}</td>
+					</tr>
+				{/each}
+				</table>
 		{/if}
 	{/if}
 
@@ -108,8 +172,34 @@
 			<table>
 				<tr><th>Fecha de evaluacion</th><td>{capa.evaluation.evaluationDate}</td></tr>
 				<tr><th>Considerada efectiva?</th><td>{capa.evaluation.isEffective ? "Si" : "No"}</td></tr>
-				<tr><th>Fecha de evaluacion</th><td>{capa.evaluation.evaluationDate}</td></tr>
+				<tr><th>Comentarios</th><td>{capa.evaluation.comments}</td></tr>
 			</table>
 		{/if}
 	{/if}
+
+	{#if capa?.closure}
+		<h4>(Cierre)</h4>
+		<table>
+			<tr>
+				<th>Es necesario actualizar los riesgos y oportunidades determinados durante la planificación?</th>
+				<td>{capa.closure.isRisksUpdateRequired ? "Si" : "No"}</td>
+			</tr>
+			<tr>
+				<th>Es necesario hacer cambios al sistema de gestión de la calidad?</th>
+				<td>{capa.closure.isChangingQMSRequired}</td>
+			</tr>
+			<tr>
+				<th>Comentarios</th>
+				<td>{capa.closure.comments}</td>
+			</tr>
+			<tr>
+				<th>Cierre eficaz de la acción</th>
+				<td>{capa.closure.isClosedEffectively ? "Si" : "No"}</td>
+			</tr>
+		</table>
+
+			NC/OM Adicional N.° (Coord. del SGC):
+
+	{/if}
+
 {/if}

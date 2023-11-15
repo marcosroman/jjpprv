@@ -3,9 +3,7 @@ import capas from '$lib/db/capas';
 
 export async function load() {
 	const cursor = capas.find({
-		"actions": {
-			$not: { $elemMatch: { "review.isAccomplished": { $exists: false } } }
-		}
+		"evaluation.assignment": {$exists: false}
 	});
 
 	const capasWithAllActionsReviewedPendingEvaluation = await cursor.toArray();
