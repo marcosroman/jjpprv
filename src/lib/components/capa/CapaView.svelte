@@ -19,7 +19,7 @@
 </script>
 
 {#if capa}
-	<!--<p>{JSON.stringify(capa)}</p>-->
+	<!-- basic checklist: -->
 	{#if capa.issue.isNonConformity}
 		{#if capa.responseToNonConformity}
 			<p>reponse to nonconformity OK </p>
@@ -60,12 +60,8 @@
 		<tr><th>Descripcion de la {capaTypeDescription}</th><td>{capa.issue.description}</td></tr>
 	</table>
 
-		<!--
-		{#if capa.issue.evidence}
-			<tr><th>Evidencia</th><td>{capa.issue.evidence}</td></tr>
-		{/if}
-		-->
 	{#if capa.issue.evidence}
+		Evidencia:
 		<EvidenceList isEditMode={false} capaId={capa._id} documentSection="issue"/>
 	{:else}
 		<p>(No hay evidencia para la NC/OM)</p>

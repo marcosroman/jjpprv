@@ -4,11 +4,11 @@
 
 	export let data;
 
-	const isEditMode = true;
 	const capaId = data.capaId;
 	const documentSection = "issue";
 </script>
 
-<CapaView {capaId}/>
+<EvidenceList {capaId} {documentSection} isEditMode={true} />
+
 <hr>
-<EvidenceList isEditMode={isEditMode} capaId={capaId} documentSection={documentSection}/>
+<CapaView {capaId}/>
