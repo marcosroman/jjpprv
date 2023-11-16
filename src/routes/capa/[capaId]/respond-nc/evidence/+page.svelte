@@ -5,9 +5,7 @@
 
 	const isEditMode = true;
 	const capaId = data.capaId;
-	const documentSection = "response";
+	const documentSection = "responseToNonConformity";
 </script>
 
-<p>{capaId}</p>
-<p>{documentSection}</p>
-<EvidenceList isEditMode={isEditMode} capaId={capaId} documentSection={documentSection}/>
+<EvidenceList {capaId} {documentSection} isEditMode={true}/>
