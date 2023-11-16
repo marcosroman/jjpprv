@@ -1,8 +1,8 @@
 <script>
 	import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
 	import { onMount } from 'svelte';
-	export let capaId;
 
+	export let capaId;
 
 	let capa = null;
 	let capaTypeDescription = null;
@@ -178,7 +178,7 @@
 	{/if}
 
 	{#if capa?.closure}
-		<h4>(Cierre)</h4>
+		<h4>Cierre</h4>
 		<table>
 			<tr>
 				<th>Es necesario actualizar los riesgos y oportunidades determinados durante la planificación?</th>
