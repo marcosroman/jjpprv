@@ -4,8 +4,12 @@ import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ params }) => {
 	const capa = await capas.findOne({_id: new ObjectId(params.capaId)});
+	const now = new Date();
 
-	return {capa: JSON.parse(JSON.stringify(capa))};
+	return {
+		capa: JSON.parse(JSON.stringify(capa)),
+		now
+	};
 } 
 
 export const actions = {

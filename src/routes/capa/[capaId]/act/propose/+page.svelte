@@ -8,14 +8,15 @@
 	export let data;
 
 	let capaId = data.capa._id;
+	let today = data.now.toISOString().split("T")[0];
 </script>
 
-<CapaView {capaId}/>
-<hr>
 <form method="POST">
 	<input type="hidden" name="id" value={capaId}>
-
-	<ActionsSubForm />
-
+	<ActionsSubForm {today}/>
 	<input type="submit" value="Guardar">
 </form>
+
+<hr>
+<CapaView {capaId}/>
+

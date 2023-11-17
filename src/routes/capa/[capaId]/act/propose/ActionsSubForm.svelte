@@ -2,6 +2,8 @@
 	let countActions = 1;
 	let actionsArray = [ {proposedSolution: "", commitmentDate: ""} ];
 
+	export let today;
+
 	function addNewAction() {
 		actionsArray = [
 			...actionsArray,
@@ -23,27 +25,27 @@
 		<th>Solucion</th>
 		<th>Fecha de compromiso</th>
 	</tr>
-
-	{#each actionsArray as action, i}
+	{#each actionsArray as action, actionIndex}
 		<tr>
-			<td>{i+1}</td>
+			<td>{actionIndex+1}</td>
 			<td>
 				<input
 					type="text"
-					name={"proposed-solution-"+i}
+					name={"proposed-solution-"+actionIndex}
 					bind:value={action.solution} 
 					required>
 			</td>
 			<td>
 				<input
 					type="date"
-					name={"commitment-date-"+i}
+					name={"commitment-date-"+actionIndex}
 					bind:value={action.commitmentDate}
+					min={today}
 					required>
 			</td>
 			{#if countActions>1}
 				<td>
-					<button name={"delete-"+i} on:click|preventDefault={() => deleteAction(i)}>-</button>
+					<button name={"delete-"+actionIndex} on:click|preventDefault={() => deleteAction(actionIndex)}>-</button>
 				</td>
 			{/if}
 		</tr>
