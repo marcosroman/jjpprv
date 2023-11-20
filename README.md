@@ -120,7 +120,7 @@ shifts
 users
     user = {
         _id
-        userName
+        name
         firstName
         lastName
         title
@@ -130,6 +130,7 @@ users
                 shiftId // objectid,
                 isManager // bool
             }
+            ...
         ]
     }
 
