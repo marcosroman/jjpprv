@@ -1,104 +1,139 @@
 # schema
 ```js
-capa = {
-	_id //objectid
-	version //int
-	issue: {
-		creationDate //date
-		issuerId //objectid(user)
-		isNonConformity //bool
-		detectedDuring //string('pr'(process)||'ia'(internal audit)||'ea'(external audit))
-		detectedInSectorId //objectid(sectors)
-		description //string
-		evidence //array[objectid(evidences)]
-	}
-    responseToNonConformity: { // only when isNonConformity
-		responseDate //date
-		responderId //objectid(user)
-		immediateActions: {
-				proposedSolution
-				evidence //array[objectid(evidences)]	
-		}
-		possibleConsequences //string
-		possibleRootCauses //string
-    }
-    correctiveActionsRequirement: {
-		requirementDate //date
-		requirerId //objectid(user) qms person
-		isRequired //bool
-	}
-    actions: [
-        {
-            proposal: {
-                proposalDate //date,
-                proponentId //objectid(user)
-                proposedSolution //string
-                commitmentDate //date
-                assignment: { //completed by proposer
-                    responsibleId //objectid(user)// assignation (could be self-assigned): [should have been 'assignee']
-                    assignmentDate // date
-                    comments // string
-                    acceptance: { //completed by assignee
-                        isAccepted //bool // by assigned responsible
-                        acceptanceDate //date
-                        comments // string 
-                    }
+capas
+    capa = {
+        _id //objectid
+        version //int
+        issue: {
+            creationDate //date
+            issuerId //objectid(user)
+            isNonConformity //bool
+            detectedDuring //string('pr'(process)||'ia'(internal audit)||'ea'(external audit))
+            detectedInSectorId //objectid(sectors)
+            description //string
+            evidence //array[objectid(evidences)]
+        }
+        responseToNonConformity: { // only when isNonConformity
+            responseDate //date
+            responderId //objectid(user)
+            immediateActions: {
+                    proposedSolution
+                    evidence //array[objectid(evidences)]	
+            }
+            possibleConsequences //string
+            possibleRootCauses //string
+        }
+        correctiveActionsRequirement: {
+            requirementDate //date
+            requirerId //objectid(user) qms person
+            isRequired //bool
+        }
+        actions: [
+            {
+                proposal: {
+                    proposalDate //date,
+                    proponentId //objectid(user)
+                    proposedSolution //string
+                    commitmentDate //date
+                    assignment: { //completed by proposer
+                        responsibleId //objectid(user)// assignation (could be self-assigned): [should have been 'assignee']
+                        assignmentDate // date
+                        comments // string
+                        acceptance: { //completed by assignee
+                            isAccepted //bool // by assigned responsible
+                            acceptanceDate //date
+                            comments // string 
+                        }
+                    },
                 },
-            },
-            ?reschedule: {
-                // some of the following might not be addded; in that case, it is understood that the previous values still hold; rescheduleDate is neede, so is reschedulerId and rescheduledCommitmentDate... the rest ? idk
-                rescheduleDate //date
-                reschedulerId // objectid(user), qms person (?)
-                rescheduledCommitmentDate // date
-                assignment: {
-                    responsibleId //objectid(user)// -- should be the original proposer now, to make sure and avoid blaming someone else!
-                    assignmentDate // date
-                    comments
-                    acceptance: {
-                        isAccepted //bool
-                        acceptanceDate //date
-                        comments // string (?)
+                ?reschedule: {
+                    // some of the following might not be addded; in that case, it is understood that the previous values still hold; rescheduleDate is neede, so is reschedulerId and rescheduledCommitmentDate... the rest ? idk
+                    rescheduleDate //date
+                    reschedulerId // objectid(user), qms person (?)
+                    rescheduledCommitmentDate // date
+                    assignment: {
+                        responsibleId //objectid(user)// -- should be the original proposer now, to make sure and avoid blaming someone else!
+                        assignmentDate // date
+                        comments
+                        acceptance: {
+                            isAccepted //bool
+                            acceptanceDate //date
+                            comments // string (?)
+                        }
                     }
                 }
+                evidence array[objectid(evidence)] // uploaded by assigned person or by creator
+                review: { // (follow up):
+                    reviewerId // objectid(user), qms user
+                    //isRescheduled // bool, default=false => this is unnecesary probably... i just need the 'reschedule' field to know this... if it exists, then it has been rescheduled already, no need to check here
+                    isAccomplished // bool
+                    comments // string
+                }
+            }//,...more of those maybe...
+        ]
+        evaluation: {
+            assignment: {
+                assignerId // qm person
+                evaluatorId //assigned by qm (not qm nor issued ppl nor issuer, right?)
+                assignationDate //date
             }
-            evidence array[objectid(evidence)] // uploaded by assigned person or by creator
-            review: { // (follow up):
-                reviewerId // objectid(user), qms user
-                //isRescheduled // bool, default=false => this is unnecesary probably... i just need the 'reschedule' field to know this... if it exists, then it has been rescheduled already, no need to check here
-                isAccomplished // bool
-                comments // string
-            }
-        }//,...more of those maybe...
-    ]
-    evaluation: {
-        assignment: {
-            assignerId // qm person
-            evaluatorId //assigned by qm (not qm nor issued ppl nor issuer, right?)
-            assignationDate //date
+            evaluationDate date //assigned by qm
+            comments //string
+            isEffective bool
         }
-		evaluationDate date //assigned by qm
-		comments //string
-		isEffective bool
-	}
-	closure: { // by QM person
-        closerId
-        closureDate
-		isRisksUpdateRequired //bool
-		isChangingQMSRequired //bool
-		comments //string
-		isClosedEffectively bool
-		additionalCAPA objectid(capas)
-	}
-}
+        closure: { // by QM person
+            closerId
+            closureDate
+            isRisksUpdateRequired //bool
+            isChangingQMSRequired //bool
+            comments //string
+            isClosedEffectively bool
+            additionalCAPA objectid(capas)
+        }
+    }
 
-evidence = {
-}
+evidences
+    evidence = {
+        _id,
+        uploaderId //objectId(usser) PENDIN
+        uploadDate //date
+        fileName //string
+        fileBinary //string
+        fileType //string
+        description //string
+    }
 
-sector = {
-}
+sectors
+    sector = {
+        _id
+        name
+        fullName
+        sectorAboveId
+    }
 
-user = {
-}
+shifts
+    shift = {
+        name // string
+        // for now this is it
+    }
+
+users
+    user = {
+        _id
+        userName
+        firstName
+        lastName
+        title
+        positions: [
+            {
+                sectorId // objectid,
+                shiftId // objectid,
+                isManager // bool
+            }
+        ]
+    }
+
+
 
 ```
 
