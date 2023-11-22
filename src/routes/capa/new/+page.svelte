@@ -1,9 +1,15 @@
 <script>
+	import { user } from '$lib/stores/user.js';
+
 	export let data;
 	let isNC;
 </script>
 
 <form method="POST">
+	{#if $user}
+		<input type="hidden" name="issuer-id" value={$user._id}>
+	{/if}
+
 	<label>Registro de:
 		<select bind:value={isNC} name="is-non-conformity">
 			<option selected disabled></option>

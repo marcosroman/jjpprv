@@ -20,6 +20,7 @@ export const actions = {
 			version: 1,
 			issue: {
 				creationDate: new Date(),
+				issuerId: new ObjectId(data.get('issuer-id')),
 				isNonConformity: data.get('is-non-conformity') === "true" ? true : false,
 				detectedDuring: data.get('detected-during'),
 				detectedInSectorId: new ObjectId(data.get('detected-in-sector')),

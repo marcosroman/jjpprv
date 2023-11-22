@@ -6,12 +6,18 @@
 
 	let capa = null;
 	let capaTypeDescription = null;
+	let capaIssueDetectedDuring = null;
 
 	onMount(async () => {
 		try {
 			const response = await fetch(`/api/capa/${capaId}`);
 			capa = await response.json();
 			capaTypeDescription = capa.issue.isNonConformity ? "No-Conformidad" : "Oportunidad de mejora";
+			switch(capa.issue.detectedDuring) {
+				case 'pr': capaIssueDetectedDuring = 'Proceso'; break;
+				case 'ia': capaIssueDetectedDuring = 'Auditoria Interna'; break;
+				case 'ea': capaIssueDetectedDuring = 'Auditoria Externa'; break;
+			}
 		} catch(error) {
 			console.error(error);
 		}
@@ -48,15 +54,15 @@
 		<p>closure OK</p>
 	{/if}
 
-
+	<hr>
+	<p>Id: {capa._id}</p>
 	<table>
 		<tr><th>Registro de</th><td>{capaTypeDescription}</td></tr>
 		<tr><th>Version</th><td>{capa.version}</td></tr>
-		<tr><th>Id</th><td>{capa._id}</td></tr>
 		<tr><th>Fecha</th><td>{capa.issue.creationDate}</td></tr>
-		<tr><th>Creador</th><td>XXXUSUARIO</td></tr>
-		<tr><th>Area de Origen</th><td>XXXSECTOR (falta linkear con la collection de sectores)</td>
-		<tr><th>Detectado durante</th><td>XXXPR||IA||EA</td>
+		<tr><th>Creador</th><td>{`${capa.issue.issuer.title} ${capa.issue.issuer.firstName} ${capa.issue.issuer.lastName}`}</td></tr>
+		<tr><th>Sector de Origen</th><td>{capa.issue.detectedInSector.fullName}</td>
+		<tr><th>Detectado durante</th><td>{capaIssueDetectedDuring}</td>
 		<tr><th>Descripcion de la {capaTypeDescription}</th><td>{capa.issue.description}</td></tr>
 	</table>
 
@@ -102,7 +108,6 @@
 				<tr><th>Fecha de respuesta a NC:</th><td>{capa.responseToNonConformity.responseDate}</td></tr>
 				<tr><th>Responde:</th><td>{capa.responseToNonConformity.responderId}</td></tr>
 				<tr><th>Acciones inmediatas:</th><td>{capa.responseToNonConformity.immediateActions.proposedSolution}</td></tr>
-				<!--<tr><th>Evidencia:</th><td>XXXEVIDENCIA (capa.responseToNonConformity.immediateActions.evidence)</td></tr>-->
 				<tr><th>Consecuencias:</th><td>{capa.responseToNonConformity.possibleConsequences}</td></tr>
 				<tr><th>Analisis de causas:</th><td>{capa.responseToNonConformity.possibleRootCauses}</td></tr>
 			</table>
@@ -193,9 +198,6 @@
 				<td>{capa.closure.isClosedEffectively ? "Si" : "No"}</td>
 			</tr>
 		</table>
-
-			NC/OM Adicional N.° (Coord. del SGC):
-
+		NC/OM Adicional N.° (Coord. del SGC):
 	{/if}
-
 {/if}
