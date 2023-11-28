@@ -1,11 +1,22 @@
+import users from '$lib/db/users';
 import { json } from '@sveltejs/kit';
+import { sign } from 'jsonwebtoken';
+import { ObjectId } from 'mongodb';
+import { SECRET_KEY } from '$env/static/private';
 
 export async function POST({ request, cookies }) {
-	//cookies.set('usercookie', "usrcookievalue", {path:'/'});
 	const body = await request.json();
+	const userId = body.userId;
 	console.log(body);
-	cookies.set('userId', body.userId, {path:'/'});
+	console.log('-------')
+	console.log(userId);
 
-	return json({status: 200});
+	//cookies.set('userId', body.userId, {path:'/'});
+	const user = await users.findOne({_id: new ObjectId(userId)});
+	//console.log("user:", user);
+	const userToken = sign({user}, SECRET_KEY);
+	cookies.set('userToken', userToken, {path:'/'});
+
+	return json(user,{status: 200});
 }
 

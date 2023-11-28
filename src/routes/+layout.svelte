@@ -50,17 +50,19 @@
 		currentUser	= value._id;
 	}
 	*/
+
 	async function login() {
 		// this sets the userId cookie to the selected userId
 		if(selectedUserId!=null) {
-		const response = await fetch('/api/user/login', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ userId: selectedUserId })
-		});
+			const response = await fetch('/api/user/login', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ userId: selectedUserId })
+			});
 
-		currentUser = await response.json();
-		console.log("(layout.svelte) now currentUser is", currentUser)
+			currentUser = await response.json();
+			console.log("currentUser just logged in:", currentUser);
+			console.log("(layout.svelte) now currentUser is", currentUser)
 		} else {
 			logout();
 		}
