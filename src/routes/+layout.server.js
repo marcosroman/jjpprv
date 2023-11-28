@@ -1,12 +1,12 @@
-export async function load ({ cookies }) {
-	const userId = cookies.get('userId');
+import { SECRET_KEY } from '$env/static/private';
+import { verify } from 'jsonwebtoken';
 
-	return { userId };
-	/*
-	const sessionId = cookies.get('session-id');
+export async function load({ cookies }) {
+	const userToken = cookies.get('userToken');
+	const user = userToken ? verify(userToken, SECRET_KEY)?.user : null;
 
-	return {
-		user: 0
-	}
-	*/
+	console.log("(layout.server load) userToken:", userToken);
+	console.log("(layout.server load) user:", user);
+
+	return { userToken, user };
 }

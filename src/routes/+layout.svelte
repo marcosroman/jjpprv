@@ -5,63 +5,93 @@
 		text-decoration: none;
 		color: red;
 	}
-
+	
 	.done {
 		color: darkgreen;
 	}
 </style>
 
+
 <script>
 	//import { user } from '$lib/stores/user.js';
 	import { onMount } from 'svelte';
+	import { redirect } from '@sveltejs/kit';
+	import { goto } from '$app/navigation';
 
 	export let data;
+	let currentUser = data.user; // (from cookie. can be null)
+	console.log("(layout.svelte load) currentUser:", currentUser);
 
-	let userId = data.userId;
-
-	let users = null;
-	let selectedUser = null;
-	//let userRole = null;
 	let dateTime = (new Date()).toISOString().split('Z')[0];
 
+	let selectedUserId = currentUser?._id;
+	//let userRole = null;
+
+	let users = null; // will contain users list
 	onMount(async () => {
+		// get users list
 		const res = await fetch('/api/user')
 		users = await res.json();
-		//$user = users[0];
 	});
 
-	$: {
-		//if($user) {
-    //data = await response.json();
-		if(selectedUser) {
-			console.log('selected user id is', selectedUser._id)
-			console.log(JSON.stringify(selectedUser));
-			const response = fetch('/api/user/login', {
-				method: 'POST',
-      	headers: {
-        	'Content-Type': 'application/json',
-      	},
-				body: JSON.stringify({ userId: selectedUser._id })
-			});
-			userId = selectedUser._id;
+	/*
+	async function login(event) {
+		const value = JSON.parse(event.target.value);
+
+		console.log("value is (for login)", JSON.stringify(value));
+		// this sets the userId cookie to the selected userId
+		fetch('/api/user/login', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ userId: value })
+		});
+
+		// and we set the local variable
+		currentUser	= value._id;
+	}
+	*/
+	async function login() {
+		// this sets the userId cookie to the selected userId
+		if(selectedUserId!=null) {
+		const response = await fetch('/api/user/login', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ userId: selectedUserId })
+		});
+
+		currentUser = await response.json();
+		console.log("(layout.svelte) now currentUser is", currentUser)
+		} else {
+			logout();
 		}
+	}
+
+	async function logout() {
+		fetch('/api/user/logout');
+		currentUser = null;
+		selectedUserId = null;
+		goto('/');
 	}
 </script>
 
+
 <nav>
-	{#if userId}
-		<p>userId = {userId}</p>
+	{#if currentUser}
+		<p>user = {currentUser.name} ({currentUser._id})</p>
 	{/if}
 
 	<br>
 
 	{#if users}
 		<label>Usuario:
-			<select name="user" bind:value={selectedUser}>
-				{#if users && users.length>0}
+			<select name="user" bind:value={selectedUserId} on:change={login}>
+				<option value={null}></option>
+				{#if users.length>0}
 					{#each users as user}
-						<option value={user}>{user.name}</option>
+						<option value={user._id}>{user.name} ({user._id})</option>
 					{/each}
+				{:else}
+					<option disabled>No users were found</option>
 				{/if}
 			</select>
 		</label>
@@ -80,6 +110,9 @@
 			</label>
 		{/if}
 		-->
+		{#if currentUser}
+			<button on:click={()=>{logout();}}>Logout</button>
+		{/if}
 	{/if}
 
 	<label>Fecha-hora:
@@ -88,8 +121,8 @@
 	</label>
 
 
-	{#if selectedUser}
-		<p>Usuario actual: {selectedUser.name} {JSON.stringify(selectedUser)}</p>
+	{#if currentUser}
+		<p>Usuario actual: {currentUser.name} {JSON.stringify(currentUser)}</p>
 		<hr>
 			<a class="done" href="/">Inicio</a>
 			<a class="done" href="/capa/new">Nueva NC/OM</a>
