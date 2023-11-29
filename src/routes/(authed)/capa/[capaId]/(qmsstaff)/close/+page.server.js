@@ -12,13 +12,13 @@ export async function load({params}) {
 }
 
 export const actions = {
-	default: async ({request}) => {
-		const data = await request.formData();
+	default: async (event) => {
+		const data = await event.request.formData();
 		const capaId = data.get('capa-id');
 		const capaIdObject = new ObjectId(capaId);
 
 		let closureObject = {
-			closerId: "closerId",
+			closerId: new ObjectId(event.locals.user._id),
 			closureDate: new Date(),
 			isRisksUpdateRequired: data.get('is-risks-update-required') ? true : false,
 			isChangingQMSRequired: data.get('is-changing-qms-required') ? true : false,

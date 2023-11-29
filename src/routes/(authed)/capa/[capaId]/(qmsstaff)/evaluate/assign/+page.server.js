@@ -3,23 +3,15 @@ import { ObjectId } from 'mongodb';
 import { json } from '@sveltejs/kit';
 
 export async function load({params}) {
-	/*
-	const capaId = params.capaId;
-	const capaIdObject = new ObjectId(capaId);
-
-	const capa = await capas.findOne({_id: capaIdObject});
-
-	return {capa: JSON.parse(JSON.stringify(capa))};
-	*/
 	return {...params};
 }
 
 export const actions = {
-	default: async ({request}) => {
-		const data = await request.formData();
+	default: async (event) => {
+		const data = await event.request.formData();
 
 		const capaId = data.get('capa-id');
-		const assignerId = data.get('assigner-id');
+		const assignerId = new ObjectId(event.locals.user._id);
 		const evaluatorId = data.get('evaluator-id');
 
 		const capaIdObject = new ObjectId(capaId);

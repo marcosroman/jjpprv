@@ -14,7 +14,6 @@
 	<hr>
 	<form method="POST">
 		<input type="hidden" name="id" value={capaId}>
-		<input type="hidden" name="responder-id" value="(responder-id)">
 
 		<label>Consecuencias:
 			<textarea name="consequences" required placeholder="Consecuencias (blabla)"></textarea>

@@ -8,7 +8,6 @@
 
 <form method="POST">
 	<input type="hidden" name="capa-id" value={capaId}>
-	<input type="hidden" name="assigner-id" value="qms-person">
 	<label>Responsable asignado para la evaluacion:
 	<input type="text" name="evaluator-id" required>
 	</label>

@@ -11,8 +11,6 @@
 	<input type="hidden" name="capa-id" value={capaId}>
 	<input type="hidden" name="action-index" value={actionIndex}>
 
-	<input type="hidden" name="reviewer-id" value="reviewerid">
-
 	<p>Se logro?</p>
 	<label>Si
 		<input type="radio" value="true" name="is-accomplished">

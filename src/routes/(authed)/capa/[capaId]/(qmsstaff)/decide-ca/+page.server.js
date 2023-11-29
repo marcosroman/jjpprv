@@ -15,8 +15,8 @@ export async function load ({ params }) {
 }
 
 export const actions = {
-	default: async ({request}) => {
-		const data = await request.formData();
+	default: async (event) => {
+		const data = await event.request.formData();
 		const capaId = data.get('capa-id');
 		const isRequired = data.get('is-ca-required') === 'true' ? true : false;
 
@@ -26,7 +26,7 @@ export const actions = {
 				{ $set: {
 					correctiveActionsRequirement: {
 						requirementDate: new Date(),
-						requirerId: null,
+						requirerId: new ObjectId(event.locals.user._id),
 						isRequired,
 					}
 				}});

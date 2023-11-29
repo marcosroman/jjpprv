@@ -3,7 +3,7 @@ import capas from '$lib/db/capas';
 import { ObjectId } from 'mongodb';
 import { redirect } from '@sveltejs/kit';
 
-export const load = async function() {
+export async function load() {
 	const cursor = sectors.find();
 	const sectorsArray = await cursor.toArray();
 	await cursor.close();
@@ -20,7 +20,7 @@ export const actions = {
 			version: 1,
 			issue: {
 				creationDate: new Date(),
-				issuerId: new ObjectId(data.get('issuer-id')),
+				issuerId: new ObjectId(event.locals.user._id),
 				isNonConformity: data.get('is-non-conformity') === "true" ? true : false,
 				detectedDuring: data.get('detected-during'),
 				detectedInSectorId: new ObjectId(data.get('detected-in-sector')),

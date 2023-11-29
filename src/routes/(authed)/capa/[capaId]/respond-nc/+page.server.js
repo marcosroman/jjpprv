@@ -1,9 +1,10 @@
 import capas from '$lib/db/capas';
-import {ObjectId} from 'mongodb'; 
-import {redirect} from '@sveltejs/kit';
+import { ObjectId} from 'mongodb'; 
+import { redirect} from '@sveltejs/kit';
 
-export const load = async ({params}) => {
-	const capa = await capas.findOne({_id: new ObjectId(params.capaId)});
+export async function load({params}) {
+	const capaId = params.capaId;
+	const capa = await capas.findOne({_id: new ObjectId(capaId)});
 
 	return {capa: JSON.parse(JSON.stringify(capa))};
 } 
@@ -18,7 +19,7 @@ export const actions = {
 				{ "$set": {
 					responseToNonConformity: {
 						responseDate: new Date(),
-						responderId: null,
+						responderId: new ObjectId(event.locals.user._id),
 						immediateActions: {
 							proposedSolution: formData.get('proposed-immediate-solution'),
 							evidence: []

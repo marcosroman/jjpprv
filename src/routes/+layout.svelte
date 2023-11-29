@@ -13,19 +13,16 @@
 
 
 <script>
-	//import { user } from '$lib/stores/user.js';
 	import { onMount } from 'svelte';
 	import { redirect } from '@sveltejs/kit';
 	import { goto } from '$app/navigation';
 
 	export let data;
 	let currentUser = data.user; // (from cookie. can be null)
-	console.log("(layout.svelte load) currentUser:", currentUser);
 
 	let dateTime = (new Date()).toISOString().split('Z')[0];
 
 	let selectedUserId = currentUser?._id;
-	//let userRole = null;
 
 	let users = null; // will contain users list
 	onMount(async () => {
@@ -33,23 +30,6 @@
 		const res = await fetch('/api/user')
 		users = await res.json();
 	});
-
-	/*
-	async function login(event) {
-		const value = JSON.parse(event.target.value);
-
-		console.log("value is (for login)", JSON.stringify(value));
-		// this sets the userId cookie to the selected userId
-		fetch('/api/user/login', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ userId: value })
-		});
-
-		// and we set the local variable
-		currentUser	= value._id;
-	}
-	*/
 
 	async function login() {
 		// this sets the userId cookie to the selected userId
@@ -59,10 +39,7 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ userId: selectedUserId })
 			});
-
 			currentUser = await response.json();
-			console.log("currentUser just logged in:", currentUser);
-			console.log("(layout.svelte) now currentUser is", currentUser)
 		} else {
 			logout();
 		}
@@ -97,21 +74,7 @@
 				{/if}
 			</select>
 		</label>
-		<!--
-		{#if $user}
-			<label>Rol:
-				<select name="role" bind:value={userRole}>
-					{#if $user.roles.length>1}
-						{#each $user.roles as role}
-							<option value={role.sectorId}>{role.sectorId}</option>
-						{/each}
-					{:else}
-						<option value={$user.roles[0].sectorId} selected disabled>{$user.roles[0].sectorId}</option>
-					{/if}
-				</select>
-			</label>
-		{/if}
-		-->
+
 		{#if currentUser}
 			<button on:click={()=>{logout();}}>Logout</button>
 		{/if}
@@ -143,6 +106,8 @@
 			<a href="/capa/view">Ver NC/OM</a>
 		<hr>
 	{/if}
-	</nav>
+</nav>
+
+
 <slot></slot>
 

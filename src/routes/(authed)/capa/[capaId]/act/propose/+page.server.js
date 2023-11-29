@@ -26,7 +26,7 @@ export const actions = {
 					{
 						proposal: {
 							proposalDate: new Date(),
-							proponentId: null,
+							proponentId: new ObjectId(event.locals.user._id),
 							proposedSolution: formData.get('proposed-solution-'+i),
 							commitmentDate: new Date(formData.get('commitment-date-'+i))
 					}
