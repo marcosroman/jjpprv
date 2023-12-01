@@ -25,7 +25,7 @@
 				<td>{index+1}</td>
 				<td>{action.proposal.proposedSolution}</td>
 				<td>{action.proposal.commitmentDate}</td>
-				<td><input type="text" name={`responsible-user-${index}`} required></td>
+				<td><input type="text" name={`assignee-user-${index}`} required></td>
 				<td><input type="text" name={`comments-${index}`}></td>
 			</tr>
 		{/each}

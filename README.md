@@ -36,7 +36,7 @@ capas
                     proposedSolution //string
                     commitmentDate //date
                     assignment: { //completed by proposer
-                        responsibleId //objectid(user)// assignation (could be self-assigned): [should have been 'assignee']
+                        assigneeId //objectid(user) // can be self-assigned
                         assignmentDate // date
                         comments // string
                         acceptance: { //completed by assignee

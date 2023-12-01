@@ -8,6 +8,10 @@
 	let capaTypeDescription = null;
 	let capaIssueDetectedDuring = null;
 
+	function userName(userObject) {
+		return `${userObject.title} ${userObject.firstName} ${userObject.lastName}`;
+	}
+
 	onMount(async () => {
 		try {
 			const response = await fetch(`/api/capa/${capaId}`);
@@ -60,7 +64,7 @@
 		<tr><th>Registro de</th><td>{capaTypeDescription}</td></tr>
 		<tr><th>Version</th><td>{capa.version}</td></tr>
 		<tr><th>Fecha</th><td>{capa.issue.creationDate}</td></tr>
-		<tr><th>Creador</th><td>{`${capa.issue.issuer.title} ${capa.issue.issuer.firstName} ${capa.issue.issuer.lastName}`}</td></tr>
+		<tr><th>Creador</th><td>{userName(capa.issue.issuer)}</td></tr>
 		<tr><th>Sector de Origen</th><td>{capa.issue.detectedInSector.fullName}</td>
 		<tr><th>Detectado durante</th><td>{capaIssueDetectedDuring}</td>
 		<tr><th>Descripcion de la {capaTypeDescription}</th><td>{capa.issue.description}</td></tr>
@@ -99,14 +103,14 @@
 				<input type="radio" name="corrective-action-required" value="no" checked>
 			</label>
 		{/if}
-		<p>(Decidido por XXXUSUARIO el {capa.correctiveActionsRequirement.requirementDate})</p>
+		<p>(Decidido por {userName(capa.correctiveActionsRequirement.requirer)} el {capa.correctiveActionsRequirement.requirementDate})</p>
 	{/if}
 
 	{#if capa.issue.isNonConformity}
 		{#if capa.responseToNonConformity}
 			<table>
 				<tr><th>Fecha de respuesta a NC:</th><td>{capa.responseToNonConformity.responseDate}</td></tr>
-				<tr><th>Responde:</th><td>{capa.responseToNonConformity.responderId}</td></tr>
+				<tr><th>Responde:</th><td>{userName(capa.responseToNonConformity.responder)}</td></tr>
 				<tr><th>Acciones inmediatas:</th><td>{capa.responseToNonConformity.immediateActions.proposedSolution}</td></tr>
 				<tr><th>Consecuencias:</th><td>{capa.responseToNonConformity.possibleConsequences}</td></tr>
 				<tr><th>Analisis de causas:</th><td>{capa.responseToNonConformity.possibleRootCauses}</td></tr>
@@ -136,7 +140,7 @@
 						<td>{index+1}</td>
 						<td>{action.proposal.proposedSolution}</td>
 						<td>{action.proposal.commitmentDate}</td>
-						<td>{action.proposal?.assignment?.responsibleId ?? "(pendiente)"}</td>
+						<td>{action.proposal?.assignment?.assigneeId ?? "(pendiente)"}</td>
 						<td>{action.proposal?.assignment?.acceptance?.isAccepted ? "Si" : "No" ?? "(pendiente)"}</td>
 					</tr>
 				{/each}

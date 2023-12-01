@@ -19,7 +19,7 @@ export const actions = {
 			let assignmentUpdateObject = {};
 			for (let i=0; i<actionsCount; i++) {
 				assignmentUpdateObject[`actions.${i}.proposal.assignment`] = {
-						responsibleId: formData.get(`responsible-user-${i}`),
+						assigneeId: formData.get(`assignee-user-${i}`),
 						assignmentDate: new Date(),
 						comments: formData.get(`comments-${i}`)
 				}
