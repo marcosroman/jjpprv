@@ -140,7 +140,7 @@
 						<td>{index+1}</td>
 						<td>{action.proposal.proposedSolution}</td>
 						<td>{action.proposal.commitmentDate}</td>
-						<td>{action.proposal?.assignment?.assigneeId ?? "(pendiente)"}</td>
+						<td>{action.proposal?.assignment?.assigneeId ? userName(action.proposal.assignment.assignee) : "(pendiente)"}</td>
 						<td>{action.proposal?.assignment?.acceptance?.isAccepted ? "Si" : "No" ?? "(pendiente)"}</td>
 					</tr>
 				{/each}

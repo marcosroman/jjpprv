@@ -1,13 +1,27 @@
 <script>
 	import CapaView from '$lib/components/capa/CapaView.svelte';
+	import { onMount } from 'svelte';
+
 	export let data;
 
-	let capaId = data.capa._id;
 	let capa = data.capa;
+	let capaId = capa._id;
+	let capaIssueSectorId = capa.issue.detectedInSectorId;
+	let user = data.user;
+	let users = null;
+	let otherUsersInMySector = []; // this array will contain the list of users belonging to my sector (me included? as the first option)
+
+	// get user list
+	onMount(async	() => {
+		// get users list
+    const res = await fetch('/api/user');
+    users = await res.json();
+		otherUsersInMySector = users.filter(
+			(u) => u.roles.map((r) => r.sectorId).includes(capaIssueSectorId)
+				&& u._id != user._id);
+	});
 </script>
 
-<CapaView {capaId}/>
-<hr>
 <form method="POST">
 	<input type="hidden" name="id" value={capaId}>
 	<input type="hidden" name="actions-count" value={capa.actions.length}>
@@ -25,12 +39,21 @@
 				<td>{index+1}</td>
 				<td>{action.proposal.proposedSolution}</td>
 				<td>{action.proposal.commitmentDate}</td>
-				<td><input type="text" name={`assignee-user-${index}`} required></td>
-				<td><input type="text" name={`comments-${index}`}></td>
+				<td>
+					<select name={`assignee-user-${index}`} required>
+						<option value={user._id} selected>Yo</option>
+						{#each otherUsersInMySector as otherUser}
+							<option value={otherUser._id}>{otherUser.name} {otherUser.lastName}</option>
+						{/each}
+					</select>
+				</td>
 			</tr>
 		{/each}
 	</table>
 
-
 	<input type="submit" value="Guardar">
 </form>
+
+<hr>
+<CapaView {capaId}/>
+

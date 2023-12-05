@@ -2,10 +2,12 @@ import capas from '$lib/db/capas';
 import { ObjectId } from 'mongodb'; 
 import { redirect } from '@sveltejs/kit';
 
-export const load = async ({ params }) => {
+export const load = async ({ params, locals }) => {
 	const capa = await capas.findOne({_id: new ObjectId(params.capaId)});
+	const user = locals.user;
 
-	return {capa: JSON.parse(JSON.stringify(capa))};
+	return {capa: JSON.parse(JSON.stringify(capa)),
+		user};
 } 
 
 export const actions = {
@@ -19,7 +21,7 @@ export const actions = {
 			let assignmentUpdateObject = {};
 			for (let i=0; i<actionsCount; i++) {
 				assignmentUpdateObject[`actions.${i}.proposal.assignment`] = {
-						assigneeId: formData.get(`assignee-user-${i}`),
+						assigneeId: new ObjectId(formData.get(`assignee-user-${i}`)),
 						assignmentDate: new Date(),
 						comments: formData.get(`comments-${i}`)
 				}

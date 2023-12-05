@@ -37,16 +37,9 @@ export async function GET({ params }) {
 			as: "correctiveActionsRequirement.requirer"
 		}}, { $unwind: "$correctiveActionsRequirement.requirer" },
 
-		{ $unwind: "$actions" },
-		
-		{ $lookup: {
-      from: "users",
-      localField: "actions.proposal.proponentId", // Assuming the ID field in the array is named 'id'
-      foreignField: "_id",
-      as: "actions.proposal.proponent"
-		}}, { $unwind: "$actions.proposal.proponent" },
 
-		/*
+
+				/*
 		{ $addFields: {
 			"actions.proposal.assignment.assigneeId": {
 				$ifNull: ["$actions.proposal.assignment.assigneeId", null]
@@ -54,14 +47,27 @@ export async function GET({ params }) {
 		}},
 		*/
 		
+		{ $unwind: "$actions" },
+
+		{ $lookup: {
+      from: "users",
+      localField: "actions.proposal.proponentId", // Assuming the ID field in the array is named 'id'
+      foreignField: "_id",
+      as: "actions.proposal.proponent"
+		}}, { $unwind: "$actions.proposal.proponent" },
+	
 		{ $lookup: {
       from: "users",
       localField: "actions.proposal.assignment.assigneeId",
       foreignField: "_id",
       as: "actions.proposal.assignment.assignee"
       //as: "actionAssignee"
-		}},
-		{ $unwind: { path: "$actions.proposal.assignment.assignee", preserveNullAndEmptyArrays: true } },
+			}
+		},
+		{ $unwind:
+			{ path: "$actions.proposal.assignment.assignee",
+				preserveNullAndEmptyArrays: true }
+		},
 
 		{ $lookup: {
       from: "users",
