@@ -55,12 +55,6 @@
 
 
 <nav>
-	{#if currentUser}
-		<p>user = {currentUser.name} ({currentUser._id})</p>
-	{/if}
-
-	<br>
-
 	{#if users}
 		<label>Usuario:
 			<select name="user" bind:value={selectedUserId} on:change={login}>
@@ -87,7 +81,6 @@
 
 
 	{#if currentUser}
-		<p>Usuario actual: {currentUser.name} {JSON.stringify(currentUser)}</p>
 		<hr>
 			<a class="done" href="/">Inicio</a>
 			<a class="done" href="/capa/new">Nueva NC/OM</a>
