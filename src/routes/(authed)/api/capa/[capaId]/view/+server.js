@@ -14,73 +14,61 @@ export async function GET({ params }) {
 			localField: "issue.detectedInSectorId",
 			foreignField: "_id",
 			as: "issue.detectedInSector"
-		}}, { $unwind: "$issue.detectedInSector" },
+		}}, { $unwind: { path: "$issue.detectedInSector",
+			preserveNullAndEmptyArrays: true } },
 
 		{ $lookup: {
 			from: "users",
 			localField: "issue.issuerId",
 			foreignField: "_id",
 			as: "issue.issuer"
-		}}, { $unwind: "$issue.issuer" },
+		}}, { $unwind: { path: "$issue.issuer",
+				preserveNullAndEmptyArrays: true } },
 
 		{ $lookup: {
 			from: "users",
 			localField: "responseToNonConformity.responderId",
 			foreignField: "_id",
 			as: "responseToNonConformity.responder"
-		}}, { $unwind: "$responseToNonConformity.responder" },
+		}}, { $unwind: { path: "$responseToNonConformity.responder",
+				preserveNullAndEmptyArrays: true }},
 
 		{ $lookup: {
 			from: "users",
 			localField: "correctiveActionsRequirement.requirerId",
 			foreignField: "_id",
 			as: "correctiveActionsRequirement.requirer"
-		}}, { $unwind: "$correctiveActionsRequirement.requirer" },
-
-
-
-				/*
-		{ $addFields: {
-			"actions.proposal.assignment.assigneeId": {
-				$ifNull: ["$actions.proposal.assignment.assigneeId", null]
-			}
-		}},
-		*/
-		
-		{ $unwind: "$actions" },
+		}}, { $unwind: { path: "$correctiveActionsRequirement.requirer",
+				preserveNullAndEmptyArrays: true } },
+	
+		{ $unwind: 
+			{ path: "$actions",
+				preserveNullAndEmptyArrays: true } },
 
 		{ $lookup: {
       from: "users",
       localField: "actions.proposal.proponentId", // Assuming the ID field in the array is named 'id'
       foreignField: "_id",
       as: "actions.proposal.proponent"
-		}}, { $unwind: "$actions.proposal.proponent" },
+		}}, { $unwind: { path: "$actions.proposal.proponent",
+				preserveNullAndEmptyArrays: true } },
 	
 		{ $lookup: {
       from: "users",
       localField: "actions.proposal.assignment.assigneeId",
       foreignField: "_id",
       as: "actions.proposal.assignment.assignee"
-      //as: "actionAssignee"
-			}
-		},
-		{ $unwind:
-			{ path: "$actions.proposal.assignment.assignee",
-				preserveNullAndEmptyArrays: true }
-		},
+			}}, { $unwind: { path: "$actions.proposal.assignment.assignee",
+				preserveNullAndEmptyArrays: true }},
 
 		{ $lookup: {
       from: "users",
       localField: "actions.proposal.review.reviewerId",
       foreignField: "_id",
       as: "actions.proposal.review.reviewer"
-      //as: "actionAssignee"
-		}},
-		{ $unwind: { path: "$actions.proposal.review.reviewer", preserveNullAndEmptyArrays: true } },
+		}}, { $unwind: { path: "$actions.proposal.review.reviewer",
+			preserveNullAndEmptyArrays: true } },
 
-		//{ $unwind: { path: "$actionAssignee", preserveNullAndEmptyArrays: true } },
-		//{ $unwind: "$actionAssignee" },
-		//}},/* { $unwind: "$actions.proposal.assignment.assignee" },
 		{ $group: {
 				_id: "$_id",
 				version: {$first: "$version"},
@@ -93,33 +81,28 @@ export async function GET({ params }) {
 			}
 		},
 
-
-
 		{ $lookup: {
       from: "users",
       localField: "evaluation.assignment.assignerId",
       foreignField: "_id",
       as: "evaluation.assignment.assigner"
-      //as: "actionAssignee"
-		}},
-		{ $unwind: { path: "$evaluation.assignment.assigner", preserveNullAndEmptyArrays: true } },
+		}}, { $unwind: { path: "$evaluation.assignment.assigner",
+			preserveNullAndEmptyArrays: true } },
 		{ $lookup: {
       from: "users",
       localField: "evaluation.assignment.evaluatorId",
       foreignField: "_id",
       as: "evaluation.assignment.evaluator"
-      //as: "actionAssignee"
-		}},
-		{ $unwind: { path: "$evaluation.assignment.evaluator", preserveNullAndEmptyArrays: true } },
+		}}, { $unwind: { path: "$evaluation.assignment.evaluator",
+			preserveNullAndEmptyArrays: true } },
 
 		{ $lookup: {
       from: "users",
       localField: "closure.closerId",
       foreignField: "_id",
       as: "closure.closer"
-      //as: "actionAssignee"
-		}},
-		{ $unwind: { path: "$closure.closer", preserveNullAndEmptyArrays: true } },
+		}}, { $unwind: { path: "$closure.closer",
+			preserveNullAndEmptyArrays: true } },
 
 	]);
 

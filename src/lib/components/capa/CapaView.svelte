@@ -14,16 +14,21 @@
 
 	onMount(async () => {
 		try {
-			const response = await fetch(`/api/capa/${capaId}`);
+			const response = await fetch(`/api/capa/${capaId}/view`);
 			capa = await response.json();
-			capaTypeDescription = capa.issue.isNonConformity ? "No-Conformidad" : "Oportunidad de mejora";
-			switch(capa.issue.detectedDuring) {
-				case 'pr': capaIssueDetectedDuring = 'Proceso'; break;
-				case 'ia': capaIssueDetectedDuring = 'Auditoria Interna'; break;
-				case 'ea': capaIssueDetectedDuring = 'Auditoria Externa'; break;
-			}
 		} catch(error) {
 			console.error(error);
+		} finally {
+			if (capa) {
+				capaTypeDescription = capa.issue.isNonConformity ?
+					"No-Conformidad" :
+					"Oportunidad de mejora";
+				switch(capa.issue.detectedDuring) {
+					case 'pr': capaIssueDetectedDuring = 'Proceso'; break;
+					case 'ia': capaIssueDetectedDuring = 'Auditoria Interna'; break;
+					case 'ea': capaIssueDetectedDuring = 'Auditoria Externa'; break;
+				}
+			}
 		}
 	});
 </script>
