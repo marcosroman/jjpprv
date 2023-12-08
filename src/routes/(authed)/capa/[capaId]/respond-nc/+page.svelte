@@ -23,10 +23,7 @@
 			<textarea name="proposed-immediate-solution" required placeholder="Acciones Inmediatas"></textarea>
 		</label>
 
-		<label>Analisis de las causas (raices) de la no-conformidad:
-			<textarea name="possible-root-causes" required placeholder="Causas"></textarea>
-		</label>
-	
+
 		<input type="submit" value="Guardar">
 	</form>
 {/if}

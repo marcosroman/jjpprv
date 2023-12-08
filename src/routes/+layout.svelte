@@ -88,7 +88,7 @@
 			<a class="done" href="/capa/respond-nc">Responder a No-Conf [solo si NC/OM es NC]</a>
 			<a class="done" href="/capa/respond-nc/evidence">Agregar Evidencia en Respuesta a No-Conf. (solo si capa es NC)</a>
 			<a class="done" href="/capa/decide-ca">Decidir si requiere Acciones Correctivas (CSGC)</a>
-			<a class="done" href="/capa/act/propose">Proponer Acciones ante NC/OM (para NC solo si requiere ACs)</a>
+			<a class="done" href="/capa/act/propose">Analizar (si es NC) y Proponer Acciones ante NC/OM (para NC solo si requiere ACs)</a>
 			<a class="done" href="/capa/act/assign">Asignar Responsable ante NC/OM (para NC solo si requiere ACs)</a>
 			<a class="done" href="/capa/act/accept">Aceptar Responsabilidad ante NC/OM (para NC solo si requiere ACs)</a>
 			<a class="done" href="/capa/act/evidence">Subir evidencia de acciones ante NC/OM (para NC solo si requiere ACs)</a>

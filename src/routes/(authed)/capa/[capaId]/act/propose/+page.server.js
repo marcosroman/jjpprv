@@ -29,13 +29,19 @@ export const actions = {
 							proponentId: new ObjectId(event.locals.user._id),
 							proposedSolution: formData.get('proposed-solution-'+i),
 							commitmentDate: new Date(formData.get('commitment-date-'+i))
-					}
-				});
+						}
+					});
+			}
+
+			let setObject = { actions };
+			const possibleRootCauses = formData.get('possible-root-causes');
+			if (possibleRootCauses) {
+				setObject["responseToNonConformity.possibleRootCauses"] = possibleRootCauses;
 			}
 
 			await capas.updateOne(
 				{ _id: new ObjectId(capaId) },
-				{ $set: { actions }}
+				{ $set: setObject }
 			);
 
 			console.log('response saved! ', capaId);

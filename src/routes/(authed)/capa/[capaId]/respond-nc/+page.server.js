@@ -25,7 +25,6 @@ export const actions = {
 							evidence: []
 						},
 						possibleConsequences: formData.get('consequences'),
-						possibleRootCauses: formData.get('possible-root-causes')
 					}
 				}});
 		} catch (error) {
