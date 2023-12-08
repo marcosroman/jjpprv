@@ -97,6 +97,7 @@
 			<a class="done" href="/capa/evaluate">Evaluar NC/OM</a>
 			<a class="done" href="/capa/close">Cerrar NC/OM (CSGC)</a>
 			<a href="/capa/view">Ver NC/OM</a>
+			<a href="/capa/view/all">Ver todas las NC/OM (CSGC)</a>
 		<hr>
 	{/if}
 </nav>
