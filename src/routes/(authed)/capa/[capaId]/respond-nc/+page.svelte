@@ -10,8 +10,6 @@
 {#if data.capa?.response}
 	<p>Ya tiene respuesta.</p>
 {:else}
-	<CapaView {capaId}/>
-	<hr>
 	<form method="POST">
 		<input type="hidden" name="id" value={capaId}>
 
@@ -23,7 +21,10 @@
 			<textarea name="proposed-immediate-solution" required placeholder="Acciones Inmediatas"></textarea>
 		</label>
 
-
 		<input type="submit" value="Guardar">
+
+		<hr>
 	</form>
+
+	<CapaView {capaId}/>
 {/if}

@@ -2,7 +2,7 @@
 import users from '$lib/db/users';
 import { ObjectId } from 'mongodb';
 
-export async function pendingActionsForCAPA(capa) {  //, currentDate) {
+export async function pendingActionsForCAPA(capa, currentDate) {
 	let pendingActions = [];
 
 	const detectionSectorId = capa?.issue?.detectedInSectorId;
@@ -18,7 +18,7 @@ export async function pendingActionsForCAPA(capa) {  //, currentDate) {
 		const sectorManagerId = String(sectorManager._id);
 
 		const qmsManager = await users.findOne({ isQMSStaff: true });
-		const qmsManagerId = String(qmsManager._id);
+		const qmsManagerId = String(await qmsManager._id);
 		
 		const capaId = String(capa._id);
 		const baseLink = `/capa/${capaId}`;
@@ -38,7 +38,7 @@ export async function pendingActionsForCAPA(capa) {  //, currentDate) {
 			// checking existence of issue object (error if not present)
 			if (capa?.issue) {
 				// check if there's evidence for issue
-				if (!capa.issue?.evidence) {
+				if (capa.issue?.evidence === undefined) {
 					pendingActions.push({
 					  link: `${baseLink}/new/evidence`,
 						description: 'agregar evidencia a nc/om',
@@ -47,7 +47,7 @@ export async function pendingActionsForCAPA(capa) {  //, currentDate) {
 				}
 				// if it's non-conformity, check for response
 				if (capa.issue.isNonConformity) {
-					if (!capa.issue.responseToNonConformity) {
+					if (capa?.responseToNonConformity === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/respond-nc`,
 							description: 'responder a no-conformidad',
@@ -62,7 +62,7 @@ export async function pendingActionsForCAPA(capa) {  //, currentDate) {
 						});
 					}
 					// qms staff should determine if it requires corrective actions
-					if (!capa?.correctiveActionsRequirement) {
+					if (capa?.correctiveActionsRequirement === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/decide-ca`,
 							description: 'definir si requiere acciones correctivas',
@@ -152,7 +152,11 @@ export async function pendingActionsForCAPA(capa) {  //, currentDate) {
 
 		// add capaId to each pendingAction object
 		pendingActions = pendingActions.map((a) => {
-			return {capaId: String(capa._id), ...a};
+			return {
+				capa: JSON.parse(JSON.stringify(capa)),
+				capaId: String(capa._id),
+				...a
+			};
 		});
 
 		return pendingActions;
