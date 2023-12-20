@@ -69,7 +69,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 							assigneeId: qmsManagerId
 						});
 					// if they are required, check if actions already started
-					} else if(capa.correctiveActionsRequirement.isRequired && !capa?.actions) {
+					} else if(capa.correctiveActionsRequirement.isRequired && capa?.actions === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/act/propose`,
 							description: 'analizar y proponer acciones para resolver no-conformidad',
@@ -77,7 +77,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 						});
 					}
 				// if it's not a nonconformity, check if actions already started
-				} else if (!capa?.actions) {
+				} else if (!capa?.actions === undefined) {
 					pendingActions.push({
 					  link: `${baseLink}/act/propose`,
 						description: 'proponer acciones para aplicar accion de mejora',
@@ -88,7 +88,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 					for (const action of capa.actions) {
 						let actionIndex = capa.actions.indexOf(action);
 						// check if it was assigned
-						if (!action?.assignation) {
+						if (action?.proposal?.assignment === undefined) {
 							pendingActions.push({
 					  		link: `${baseLink}/act/assign`,
 								description: 'asignar responsable de accion ',
@@ -96,7 +96,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 								assigneeId: sectorManagerId
 							});
 						// check if accepted
-						} else if (!action.assignation.isAccepted) {
+						} else if (action.proposal.assignment?.isAccepted === undefined) {
 							pendingActions.push({
 					  		link: `${baseLink}/act/${actionIndex}/accept`,
 								description: 'aceptar accion asignada',
