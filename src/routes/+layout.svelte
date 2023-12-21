@@ -85,6 +85,7 @@
 		<hr>
 			<a class="done" href="/">Inicio</a>
 			<a class="done" href="/capa/new">Nueva NC/OM</a>
+			<!--
 			<a class="done" href="/capa/new/evidence">Agregar evidencia a Nueva NC/OM [opcional?]</a>
 			<a class="done" href="/capa/respond-nc">Responder a No-Conf [solo si NC/OM es NC]</a>
 			<a class="done" href="/capa/respond-nc/evidence">Agregar Evidencia en Respuesta a No-Conf. (solo si capa es NC)</a>
@@ -97,8 +98,11 @@
 			<a class="done" href="/capa/evaluate/assign">Asignar Evaluador para NC/OM (CSGC)</a>
 			<a class="done" href="/capa/evaluate">Evaluar NC/OM</a>
 			<a class="done" href="/capa/close">Cerrar NC/OM (CSGC)</a>
+			-->
 			<a href="/capa/view">Ver NC/OM</a>
-			<a href="/capa/view/all">Ver todas las NC/OM (CSGC)</a>
+			{#if currentUser.isQMSStaff}
+				<a href="/capa/view/all">Ver todas las NC/OM (CSGC)</a>
+			{/if}
 		<hr>
 	{/if}
 </nav>
