@@ -1,17 +1,12 @@
 <script>
-	import { user } from '$lib/stores/user.js';
+	import duringProcessString from '$lib/utils/during';
 
 	export let data;
+
 	let isNC;
 </script>
 
 <form method="POST">
-	<!--
-	{#if $user}
-		<input type="hidden" name="issuer-id" value={$user._id}>
-	{/if}
-	-->
-
 	<label>Registro de:
 		<select bind:value={isNC} name="is-non-conformity">
 			<option selected disabled></option>
@@ -23,9 +18,9 @@
 	{#if isNC}
 	<label>Detectado durante:
 		<select name="detected-during">
-			<option value='pr'>Proceso</option>
-			<option value='ia'>Auditoria Interna</option>
-			<option value='ea'>Auditoria Externa</option>
+			{#each ['pr', 'ia', 'ea'] as p}
+				<option value={p}>{duringProcessString(p)}</option>
+			{/each}
 		</select>
 	</label>
 

@@ -1,7 +1,8 @@
 <script>
 	import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
 	import { onMount } from 'svelte';
-	import { dateString } from '$lib/utils/date.js';
+	import { dateString } from '$lib/utils/date';
+	import duringProcessString from '$lib/utils/during';
 
 	export let capaId;
 
@@ -24,11 +25,7 @@
 				capaTypeDescription = capa.issue.isNonConformity ?
 					"No-Conformidad" :
 					"Oportunidad de mejora";
-				switch(capa.issue.detectedDuring) {
-					case 'pr': capaIssueDetectedDuring = 'Proceso'; break;
-					case 'ia': capaIssueDetectedDuring = 'Auditoria Interna'; break;
-					case 'ea': capaIssueDetectedDuring = 'Auditoria Externa'; break;
-				}
+				capaIssueDetectedDuring = duringProcessString(capa.issue.detectedDuring);
 			}
 		}
 	});
@@ -42,7 +39,7 @@
 		<tr><th>Fecha</th><td>{dateString(capa.issue.creationDate)}</td></tr>
 		<tr><th>Creador</th><td>{userName(capa.issue.issuer)}</td></tr>
 		<tr><th>Sector de Origen</th><td>{capa.issue.detectedInSector.fullName}</td>
-		<tr><th>Detectado durante</th><td>{capaIssueDetectedDuring}</td>
+		<tr><th>Detectado en</th><td>{capaIssueDetectedDuring}</td>
 		<tr><th>Descripcion de la {capaTypeDescription}</th><td>{capa.issue.description}</td></tr>
 	</table>
 

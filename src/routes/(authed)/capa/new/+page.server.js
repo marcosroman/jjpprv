@@ -8,8 +8,7 @@ export async function load() {
 	const sectorsArray = await cursor.toArray();
 	await cursor.close();
 
-	return { sectors: JSON.parse(JSON.stringify(sectorsArray)) }  // it works!
-	// needed to deal with the _id fields (otherwise it's a non-POJO! error!)
+	return { sectors: JSON.parse(JSON.stringify(sectorsArray)) }
 }
 
 export const actions = {

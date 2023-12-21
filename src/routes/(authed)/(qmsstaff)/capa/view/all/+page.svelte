@@ -1,6 +1,8 @@
 <script>
+	import { dateString } from '$lib/utils/date';
+	import duringProcessString from '$lib/utils/during';
+
 	export let data;
-	import { dateString } from '$lib/utils/date.js';
 	const capas = data.capasArray;
 </script>
 
@@ -37,7 +39,7 @@
 					<td>{"..."+(capa._id).substr(-5)}</td>
 					<td>{capa.issue.isNonConformity ? "NC" : "OM"}</td>
 					<td>{dateString(capa.issue.creationDate)}</td>
-					<td>{capa.issue.detectedDuring}</td>
+					<td>{duringProcessString(capa.issue.detectedDuring)}</td>
 					<td>{capa.issue.detectedInSectorId}</td>
 					<td>{capa.issue.description}</td>
 					<td>(fecha seguimiento...)</td>
