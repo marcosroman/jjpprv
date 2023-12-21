@@ -40,6 +40,7 @@
 				body: JSON.stringify({ userId: selectedUserId })
 			});
 			currentUser = await response.json();
+			location.reload();
 		} else {
 			logout();
 		}
