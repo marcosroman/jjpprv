@@ -7,8 +7,6 @@
 	let capaId = capa._id;
 </script>
 
-<CapaView {capaId}/>
-<hr>
 <form method='POST'>
 	<input type="hidden" name="capa-id" value={capaId}>
 
@@ -23,3 +21,6 @@
 
 	<input type="submit" value="Guardar">
 </form>
+
+<hr>
+<CapaView {capaId}/>
