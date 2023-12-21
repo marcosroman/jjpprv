@@ -101,7 +101,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 					  		link: `${baseLink}/act/${actionIndex}/accept`,
 								description: 'aceptar accion asignada',
 								actionIndex,
-								assigneeId: String(action.assignation.assigneeId)
+								assigneeId: String(action.proposal.assignment.assigneeId)
 							});
 						// check for evidence (TODO: this should appear some time around commit date)
 						} else if (!action?.evidence) {
@@ -109,7 +109,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 					  		link: `${baseLink}/act/${actionIndex}/evidence`,
 								description: 'agregar evidencia p/ accion',
 								actionIndex,
-								assigneeId: String(action.assignation.assigneeId)
+								assigneeId: String(action.proposal.assignment.assigneeId)
 							});
 						// TODO: arreglar lo de rescheduling, comparar con fecha
 						} else if (!action?.review) {
