@@ -54,7 +54,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 							assigneeId: sectorManagerId
 						});
 					// also check for evidence in response no non-conformity
-					} else if (capa.responseToNonConformity?.evidence === undefined) {
+					} else if (capa.responseToNonConformity?.immediateActions?.evidence === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/respond-nc/evidence`,
 							description: 'agregar evidencia en respuesta a no-conformidad',

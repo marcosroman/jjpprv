@@ -7,24 +7,19 @@
 	let capaId = data.capa._id;
 </script>
 
-{#if data.capa?.response}
-	<p>Ya tiene respuesta.</p>
-{:else}
-	<form method="POST">
-		<input type="hidden" name="id" value={capaId}>
+<form method="POST">
+	<input type="hidden" name="id" value={capaId}>
 
-		<label>Consecuencias:
-			<textarea name="consequences" required placeholder="Consecuencias (blabla)"></textarea>
-		</label>
+	<label>Consecuencias:
+		<textarea name="consequences" required placeholder="Consecuencias (blabla)"></textarea>
+	</label>
 
-		<label>Acciones inmediatas:
-			<textarea name="proposed-immediate-solution" required placeholder="Acciones Inmediatas"></textarea>
-		</label>
+	<label>Acciones inmediatas:
+		<textarea name="proposed-immediate-solution" required placeholder="Acciones Inmediatas"></textarea>
+	</label>
 
-		<input type="submit" value="Guardar">
+	<input type="submit" value="Guardar">
+</form>
 
-		<hr>
-	</form>
-
-	<CapaView {capaId}/>
-{/if}
+<hr>
+<CapaView {capaId}/>

@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import capas from '$lib/db/capas';
 import { ObjectId } from 'mongodb';
 
-export async function PUT({request,params}) {
+export async function PUT({ request, params }) {
 	const capaId = params.capaId;
 	const requestBody = await request.json();
 	const documentSection = await requestBody.documentSection;
@@ -12,7 +12,7 @@ export async function PUT({request,params}) {
 	// check first if document and documentSection exists...
 	// and if evidence array exists...
 	// if it doesnt, create it and add the new one
-	// if it does, add the element only if its not there already
+	// if it does, add the element only if not already present
 	let sectionData = (await capas.findOne(
 		{ _id: new ObjectId(capaId) }, { [documentSection]: 1 }
 	))

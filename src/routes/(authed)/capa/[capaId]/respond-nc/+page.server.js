@@ -21,8 +21,8 @@ export const actions = {
 						responseDate: new Date(),
 						responderId: new ObjectId(event.locals.user._id),
 						immediateActions: {
-							proposedSolution: formData.get('proposed-immediate-solution'),
-							evidence: []
+							proposedSolution: formData.get('proposed-immediate-solution')//,
+							//evidence: []
 						},
 						possibleConsequences: formData.get('consequences'),
 					}

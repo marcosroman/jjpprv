@@ -27,7 +27,7 @@
 			sendDataToServer().then(() => {
 				console.log('submitted!');
 			});
-		} // else inform about missing fields
+		} // TODO: else inform about missing fields
 	}
 
 	async function sendDataToServer() {
