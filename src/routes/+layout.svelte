@@ -16,15 +16,15 @@
 	import { onMount } from 'svelte';
 	import { redirect } from '@sveltejs/kit';
 	import { goto } from '$app/navigation';
+	import userNameString from '$lib/utils/userName';
 
 	export let data;
+
 	let currentUser = data.user; // (from cookie. can be null)
-
 	let dateTime = (new Date()).toISOString().split('Z')[0];
-
 	let selectedUserId = currentUser?._id;
-
 	let users = null; // will contain users list
+
 	onMount(async () => {
 		// get users list
 		const res = await fetch('/api/user')
@@ -62,7 +62,7 @@
 				<option value={null}></option>
 				{#if users.length>0}
 					{#each users as user}
-						<option value={user._id}>{user.name} ({user._id})</option>
+						<option value={user._id}>{userNameString(user)} ({user._id})</option>
 					{/each}
 				{:else}
 					<option disabled>No users were found</option>
@@ -85,7 +85,6 @@
 		<hr>
 			<a class="done" href="/">Inicio</a>
 			<a class="done" href="/capa/new">Nueva NC/OM</a>
-			<!--
 			<a class="done" href="/capa/new/evidence">Agregar evidencia a Nueva NC/OM [opcional?]</a>
 			<a class="done" href="/capa/respond-nc">Responder a No-Conf [solo si NC/OM es NC]</a>
 			<a class="done" href="/capa/respond-nc/evidence">Agregar Evidencia en Respuesta a No-Conf. (solo si capa es NC)</a>
@@ -94,11 +93,13 @@
 			<a class="done" href="/capa/act/assign">Asignar Responsable ante NC/OM (para NC solo si requiere ACs)</a>
 			<a class="done" href="/capa/act/accept">Aceptar Responsabilidad ante NC/OM (para NC solo si requiere ACs)</a>
 			<a class="done" href="/capa/act/evidence">Subir evidencia de acciones ante NC/OM (para NC solo si requiere ACs)</a>
+			<a href="/capa/act/reschedule">Reagendar accion (para NC solo si requiere ACs)</a>
+			<a href="/capa/act/reschedule/assign">Asignar accion reagendada (para NC solo si requiere ACs)</a>
+			<a href="/capa/act/reschedule/accept">Aceptar accion reagendada (para NC solo si requiere ACs)</a>
 			<a class="done" href="/capa/act/review">Hacer seguimiento de Acciones (CSGC)</a>
 			<a class="done" href="/capa/evaluate/assign">Asignar Evaluador para NC/OM (CSGC)</a>
 			<a class="done" href="/capa/evaluate">Evaluar NC/OM</a>
 			<a class="done" href="/capa/close">Cerrar NC/OM (CSGC)</a>
-			-->
 			<a href="/capa/view">Ver NC/OM</a>
 			{#if currentUser.isQMSStaff}
 				<a href="/capa/view/all">Ver todas las NC/OM (CSGC)</a>

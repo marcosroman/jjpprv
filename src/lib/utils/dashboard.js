@@ -87,40 +87,86 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 				if(capa?.actions) {
 					for (const action of capa.actions) {
 						let actionIndex = capa.actions.indexOf(action);
-						// check if it was assigned
-						if (action?.proposal?.assignment === undefined) {
-							pendingActions.push({
-					  		link: `${baseLink}/act/assign`,
-								description: 'asignar responsable de accion ',
-								//actionIndex,
-								assigneeId: sectorManagerId
-							});
-						// check if accepted
-						} else if (action.proposal.assignment?.isAccepted === undefined) {
-							pendingActions.push({
-					  		link: `${baseLink}/act/${actionIndex}/accept`,
-								description: 'aceptar accion asignada',
-								actionIndex,
-								assigneeId: String(action.proposal.assignment.assigneeId)
-							});
-						// check for evidence (TODO: this should appear some time around commit date)
-						} else if (!action?.evidence) {
-							pendingActions.push({
-					  		link: `${baseLink}/act/${actionIndex}/evidence`,
-								description: 'agregar evidencia p/ accion',
-								actionIndex,
-								assigneeId: String(action.proposal.assignment.assigneeId)
-							});
-						// TODO: arreglar lo de rescheduling, comparar con fecha
-						} else if (!action?.review) {
-							pendingActions.push({
-								link: '/', // TODO: fix
-								description: 'dar seguimiento a accion',
-								actionIndex,
-								assigneeId: qmsManagerId
-							});
+						
+						// check first if not reviewed already (if so, we don't need to check other stuff for actions
+						if (action?.review === undefined) {
+							// check if not rescheduled already
+							if (action?.reschedule === undefined) {
+								// compare commit date with current date
+								if (currentDate <= action.proposal.commitmentDate) {
+									console.log("(currentDate <= action.proposal.commitmentDate)");
+									// check if it was assigned
+									if (action?.proposal?.assignment === undefined) {
+										pendingActions.push({
+											link: `${baseLink}/act/assign`,
+											description: 'asignar responsable de accion',
+											//actionIndex,
+											assigneeId: sectorManagerId
+										});
+									// check if accepted
+									} else if (action.proposal.assignment?.acceptance === undefined) {
+										pendingActions.push({
+											link: `${baseLink}/act/${actionIndex}/accept`,
+											description: 'aceptar accion asignada',
+											actionIndex,
+											assigneeId: String(action.proposal.assignment.assigneeId)
+										});
+									// check for evidence
+									} else if (!action?.evidence) {
+										pendingActions.push({
+											link: `${baseLink}/act/${actionIndex}/evidence`,
+											description: 'agregar evidencia p/ accion',
+											actionIndex,
+											assigneeId: String(action.proposal.assignment.assigneeId)
+										});
+									} else { // review
+										pendingActions.push({
+											link: `${baseLink}/act/${actionIndex}/review`,
+											description: 'dar seguimiento a accion',
+											actionIndex,
+											assigneeId: qmsManagerId
+										});
+									}
+								} else {
+									// reschedule
+									pendingActions.push({
+										link: `${baseLink}/act/${actionIndex}/reschedule`,
+										description: 'reagendar accion (fecha de compromiso expirada)',
+										actionIndex,
+										assigneeId: sectorManagerId
+									});
+								} 
+							} else { // already rescheduled
+								// check if within date...
+								if (currentDate <= action.reschedule.rescheduledCommitmentDate) {
+									// if so, check acceptance and then check evidence and then review
+									if (action.reschedule.assignment?.acceptance === undefined) {
+										pendingActions.push({
+											link: `${baseLink}/act/${actionIndex}/accept`,
+											description: 'aceptar accion (reagendada) asignada',
+											actionIndex,
+											assigneeId: String(action.proposal.assignment.assigneeId)
+										});
+									// check for evidence
+									} else if (action?.evidence === undefined) {
+										pendingActions.push({
+											link: `${baseLink}/act/${actionIndex}/evidence`,
+											description: 'agregar evidencia p/ accion',
+											actionIndex,
+											assigneeId: String(action.proposal.assignment.assigneeId)
+										});
+									} else { //review
+										pendingActions.push({
+											link: `${baseLink}/act/${actionIndex}/review`,
+											description: 'dar seguimiento a accion',
+											actionIndex,
+											assigneeId: qmsManagerId
+										});
+									}
+								}
+							}
 						}
-					}
+					} 
 				}
 
 				// always possible to assign capa evaluation...
