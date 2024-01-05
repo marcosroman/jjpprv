@@ -54,13 +54,14 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 							assigneeId: sectorManagerId
 						});
 					// also check for evidence in response no non-conformity
-					} else if (!capa.issue.responseToNonConformity?.evidence) {
+					} else if (capa.responseToNonConformity?.evidence === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/respond-nc/evidence`,
 							description: 'agregar evidencia en respuesta a no-conformidad',
 							assigneeId: sectorManagerId
 						});
 					}
+
 					// qms staff should determine if it requires corrective actions
 					if (capa?.correctiveActionsRequirement === undefined) {
 						pendingActions.push({
