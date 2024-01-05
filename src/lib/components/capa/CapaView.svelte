@@ -2,6 +2,7 @@
 	import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
 	import { onMount } from 'svelte';
 	import { dateString } from '$lib/utils/date';
+	import userNameString from '$lib/utils/userName';
 	import duringProcessString from '$lib/utils/during';
 
 	export let capaId;
@@ -9,10 +10,6 @@
 	let capa = null;
 	let capaTypeDescription = null;
 	let capaIssueDetectedDuring = null;
-
-	function userName(userObject) {
-		return `${userObject.title} ${userObject.firstName} ${userObject.lastName}`;
-	}
 
 	onMount(async () => {
 		try {
@@ -37,7 +34,7 @@
 		<tr><th>Registro de</th><td>{capaTypeDescription}</td></tr>
 		<tr><th>Version</th><td>{capa.version}</td></tr>
 		<tr><th>Fecha</th><td>{dateString(capa.issue.creationDate)}</td></tr>
-		<tr><th>Creador</th><td>{userName(capa.issue.issuer)}</td></tr>
+		<tr><th>Creador</th><td>{userNameString(capa.issue.issuer)}</td></tr>
 		<tr><th>Sector de Origen</th><td>{capa.issue.detectedInSector.fullName}</td>
 		<tr><th>Detectado en</th><td>{capaIssueDetectedDuring}</td>
 		<tr><th>Descripcion de la {capaTypeDescription}</th><td>{capa.issue.description}</td></tr>
@@ -76,14 +73,14 @@
 				<input type="radio" name="corrective-action-required" value="no" checked>
 			</label>
 		{/if}
-		<p>(Decidido por {userName(capa.correctiveActionsRequirement.requirer)} el {dateString(capa.correctiveActionsRequirement.requirementDate)})</p>
+		<p>(Decidido por {userNameString(capa.correctiveActionsRequirement.requirer)} el {dateString(capa.correctiveActionsRequirement.requirementDate)})</p>
 	{/if}
 
 	{#if capa.issue.isNonConformity}
 		{#if capa.responseToNonConformity && capa.responseToNonConformity.responseDate}
 			<table>
 				<tr><th>Fecha de respuesta a NC:</th><td>{dateString(capa.responseToNonConformity.responseDate)}</td></tr>
-				<tr><th>Responde:</th><td>{userName(capa.responseToNonConformity.responder)}</td></tr>
+				<tr><th>Responde:</th><td>{userNameString(capa.responseToNonConformity.responder)}</td></tr>
 				<tr><th>Acciones inmediatas:</th><td>{capa.responseToNonConformity.immediateActions.proposedSolution}</td></tr>
 				<tr><th>Consecuencias:</th><td>{capa.responseToNonConformity.possibleConsequences}</td></tr>
 				<tr><th>Analisis de causas:</th><td>{capa.responseToNonConformity.possibleRootCauses}</td></tr>
@@ -112,7 +109,7 @@
 						<td>{index+1}</td>
 						<td>{action.proposal.proposedSolution}</td>
 						<td>{dateString(action.proposal.commitmentDate)}</td>
-						<td>{action.proposal?.assignment?.assigneeId ? userName(action.proposal.assignment.assignee) : "(pendiente)"}</td>
+						<td>{action.proposal?.assignment?.assigneeId ? userNameString(action.proposal.assignment.assignee) : "(pendiente)"}</td>
 						<td>{action.proposal?.assignment?.acceptance?.isAccepted ? "Si" : "No" ?? "(pendiente)"}</td>
 					</tr>
 				{/each}
@@ -142,11 +139,11 @@
 	{#if capa?.evaluation && capa.evaluation.evaluationDate}
 		<h4>Evaluacion</h4>
 		{#if capa.evaluation?.assignment}
-			(Asignado a {userName(capa.evaluation.assignment.evaluator)} por {userName(capa.evaluation.assignment.assigner)} el {dateString(capa.evaluation.assignment.assignationDate)})
+			(Asignado a {userNameString(capa.evaluation.assignment.evaluator)} por {userNameString(capa.evaluation.assignment.assigner)} el {dateString(capa.evaluation.assignment.assignationDate)})
 		{/if}
 		{#if capa.evaluation?.evaluationDate}
 			<table>
-				<tr><th>Fecha de evaluacion</th><td>{userName(capa.evaluation.evaluationDate)}</td></tr>
+				<tr><th>Fecha de evaluacion</th><td>{userNameString(capa.evaluation.evaluationDate)}</td></tr>
 				<tr><th>Considerada efectiva?</th><td>{capa.evaluation.isEffective ? "Si" : "No"}</td></tr>
 				<tr><th>Comentarios</th><td>{capa.evaluation.comments}</td></tr>
 			</table>
