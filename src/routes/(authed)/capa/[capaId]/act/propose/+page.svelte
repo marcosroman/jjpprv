@@ -1,8 +1,5 @@
 <script>
-
 	import CapaView from '$lib/components/capa/CapaView.svelte';
-	// show only if capa.correctiveActions.isRequired (=== true)
-	//import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
 	import ActionsSubForm from './ActionsSubForm.svelte';
 
 	export let data;
@@ -10,6 +7,7 @@
 	const capaId = data.capa._id;
 	const capa = data.capa;
 	const today = data.now.toISOString().split("T")[0];
+	const user = data.user;
 </script>
 
 <form method="POST">
@@ -21,10 +19,10 @@
 		</label>
 	{/if}
 	
-	<ActionsSubForm {today}/>
+	<ActionsSubForm {today} {user} {capa}/>
 	<input type="submit" value="Guardar">
 </form>
 
 <hr>
-<CapaView {capaId}/>
+<CapaView {capaId} {user}/>
 

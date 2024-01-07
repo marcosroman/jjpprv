@@ -6,8 +6,10 @@ export const load = async ({ params, locals }) => {
 	const capa = await capas.findOne({_id: new ObjectId(params.capaId)});
 	const user = locals.user;
 
-	return {capa: JSON.parse(JSON.stringify(capa)),
-		user};
+	return {
+		capa: JSON.parse(JSON.stringify(capa)),
+		user
+	};
 } 
 
 export const actions = {

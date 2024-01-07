@@ -99,9 +99,9 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 									// check if it was assigned
 									if (action?.proposal?.assignment === undefined) {
 										pendingActions.push({
-											link: `${baseLink}/act/assign`,
+											link: `${baseLink}/act/${actionIndex}/assign`,
 											description: 'asignar responsable de accion',
-											//actionIndex,
+											actionIndex,
 											assigneeId: sectorManagerId
 										});
 									// check if accepted

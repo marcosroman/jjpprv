@@ -1,6 +1,7 @@
 <script>
-	import CapaView from '$lib/components/capa/CapaView.svelte';
 	import { onMount } from 'svelte';
+	import userNameString from '$lib/utils/userName';
+	import CapaView from '$lib/components/capa/CapaView.svelte';
 
 	export let data;
 
@@ -43,7 +44,7 @@
 					<select name={`assignee-user-${index}`} required>
 						<option value={user._id} selected>Yo</option>
 						{#each otherUsersInMySector as otherUser}
-							<option value={otherUser._id}>{otherUser.name} {otherUser.lastName}</option>
+							<option value={otherUser._id}>userNameString(otherUser)</option>
 						{/each}
 					</select>
 				</td>
