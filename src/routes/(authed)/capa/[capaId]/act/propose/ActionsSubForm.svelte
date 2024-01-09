@@ -1,19 +1,18 @@
 <script>
 	import { onMount } from 'svelte';
+	import userNameString from '$lib/utils/userName';
 
 	export let today;
 	export let user;
 	export let capa;
 
-		console.log(user);
-
-	let countActions = 1;
-	let actionsArray = [ {proposedSolution: "", commitmentDate: ""} ];
-
 	let users = null;
 	let otherUsersInMySector = null;
 
 	let capaIssueSectorId = capa.issue.detectedInSectorId;
+
+	let countActions = 1;
+	let actionsArray = [ {proposedSolution: "", commitmentDate: ""} ];
 
 	function addNewAction() {
 		actionsArray = [
@@ -52,11 +51,9 @@
 		<tr>
 			<td>{actionIndex+1}</td>
 			<td>
-				<input
-					type="text"
-					name={"proposed-solution-"+actionIndex}
+				<textarea name={"proposed-solution-"+actionIndex}
 					bind:value={action.solution} 
-					required>
+					required></textarea>
 			</td>
 			<td>
 				<input
@@ -66,28 +63,31 @@
 					min={today}
 					required>
 			</td>
-			{#if countActions>1}
-				<td>
-					<button name={"delete-"+actionIndex} on:click|preventDefault={() => deleteAction(actionIndex)}>-</button>
-				</td>
-			{/if}
 			<td>
 				<select name={`assignee-user-${actionIndex}`} required>
-        	<option value={user._id} selected>Yo</option>
-					{#if otherUsersInMySector}
+					{#if otherUsersInMySector && otherUsersInMySector.length>0}
+						<option selected disabled></option>
+						<option value={user._id}>Yo</option>
 						{#each otherUsersInMySector as otherUser}
-							<option value={otherUser._id}>userNameString(otherUser)</option>
+							<option value={otherUser._id}>{userNameString(otherUser)}</option>
 						{/each}
+						<option value={null}>(Decidir luego)</option>
+					{:else}
+						<option value={user._id} selected>Yo</option>
 					{/if}
-        	<option value={null}>(Decidir luego)</option>
 				</select>
 			</td>
 			<td>
 				<input type="text" name={`comments-${actionIndex}`}>
 			</td>
+			{#if countActions>1}
+				<td>
+					<button name={"delete-"+actionIndex} on:click|preventDefault={() => deleteAction(actionIndex)}>Eliminar</button>
+				</td>
+			{/if}
 		</tr>
 	{/each}
 </table>
 
-<button on:click|preventDefault={addNewAction}>+</button>
+<button on:click|preventDefault={addNewAction}>Agregar accion</button>
 

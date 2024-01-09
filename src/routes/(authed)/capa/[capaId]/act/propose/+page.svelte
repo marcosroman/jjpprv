@@ -24,5 +24,5 @@
 </form>
 
 <hr>
-<CapaView {capaId} {user}/>
+<CapaView {capaId}/>
 

@@ -19,6 +19,7 @@ export const actions = {
 
 		try {
 			const capaId = formData.get('id');
+			const proponentId = event.locals.user._id;
 		
 			let actions = [];
 			const countActions = formData.get('count-actions');
@@ -26,19 +27,30 @@ export const actions = {
 				let actionObject = {
 						proposal: {
 							proposalDate: new Date(),
-							proponentId: new ObjectId(event.locals.user._id),
+							proponentId: new ObjectId(proponentId),
 							proposedSolution: formData.get('proposed-solution-'+i),
 							commitmentDate: new Date(formData.get('commitment-date-'+i))
 						}
 				};
-				if (formData.get('asignee-user-'+i) !== null) {
+
+				// include assignment data if provided
+				// (and include auto-acceptance when proponent is the the assignee)
+				let assigneeId = formData.get('assignee-user-'+i);
+				if (assigneeId) {
 					actionObject.proposal.assignment = {
-						assigneeId: formData.get('asignee-user-'+i),
+						assigneeId,
 						assignmentDate: new Date(),
 						comments: formData.get('comments-'+i)
 					}
-				}
 
+					if (assigneeId === proponentId) {
+						actionObject.proposal.assignment.acceptance = {
+							isAccepted: true,
+							acceptanceDate: new Date(),
+							comments: ""
+						}
+					}
+				}
 				actions.push(actionObject);
 			}
 
@@ -52,13 +64,8 @@ export const actions = {
 				{ _id: new ObjectId(capaId) },
 				{ $set: setObject }
 			);
-
-			console.log(setObject);
-			console.log('response saved! ', capaId);
 		} catch (error) {
 			console.log(error);
 		}
-
-		throw redirect(303, "/");
 	}
 }
