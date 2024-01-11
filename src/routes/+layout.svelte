@@ -14,14 +14,18 @@
 
 <script>
 	import { onMount } from 'svelte';
-	import { redirect } from '@sveltejs/kit';
+	//import { redirect } from '@sveltejs/kit';
 	import { goto } from '$app/navigation';
+
 	import userNameString from '$lib/utils/userName';
+	import { selectedDate } from '$lib/utils/stores';
 
 	export let data;
 
+	console.log($selectedDate);
+
 	let currentUser = data.user; // (from cookie. can be null)
-	let dateTime = (new Date()).toISOString().split('Z')[0];
+	//let dateTime = (new Date()).toISOString().split('Z')[0];
 	let selectedUserId = currentUser?._id;
 	let users = null; // will contain users list
 
@@ -71,15 +75,23 @@
 		</label>
 
 		{#if currentUser}
-			<button on:click={()=>{logout();}}>Logout</button>
+			<button on:click={()=>{logout();}}>Cerrar sesion</button>
 		{/if}
 	{/if}
 
+	<!--
 	<label>Fecha-hora:
 		<input type='datetime-local' name="date-time" value={dateTime}>
 		<button on:click={()=>{dateTime = (new Date()).toISOString().split('Z')[0]}}>Ahora</button>
 	</label>
+	-->
 
+	<br>
+	<label>Fecha:
+		<input type='datetime-local' name="date-time" bind:value={$selectedDate}>
+		<!--<button>Ajustar fecha-hora</button>-->
+		<button on:click={()=>{$selectedDate = (new Date()).toISOString().split('Z')[0]}}>Volver al presente</button>
+	</label>
 
 	{#if currentUser}
 		<hr>

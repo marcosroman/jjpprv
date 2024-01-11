@@ -1,6 +1,7 @@
-// TODO: compare dates (in case some action's commitment date has expired)
-import users from '$lib/db/users';
 import { ObjectId } from 'mongodb';
+
+import capas from '$lib/db/capas';
+import users from '$lib/db/users';
 
 export async function pendingActionsForCAPA(capa, currentDate) {
 	let pendingActions = [];
@@ -164,6 +165,14 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 											assigneeId: qmsManagerId
 										});
 									}
+								} else {
+									// if (rescheduled) commitment date also passed
+									pendingActions.push({
+										link: `${baseLink}/act/${actionIndex}/review`,
+										description: 'dar seguimiento a accion (reagendamiento expirado)',
+										actionIndex,
+										assigneeId: qmsManagerId
+									});
 								}
 							}
 						}
@@ -213,3 +222,24 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 	}
 }
 
+export async function pendingActionsForUser(user, currentDate) {
+	const cursor = capas.find();
+	try {
+		const capasArray = await cursor.toArray();
+
+		// concat arrays
+		let pendingActions = capasArray
+			.map((capa) => pendingActionsForCAPA(capa, currentDate));
+
+		// clean up and filter, resulting in actions assigned to user only
+		pendingActions = (await Promise.all(pendingActions))
+			.filter((capa) => capa.length>0)
+			.reduce((a, c) => [...a, ...c], [])
+			.filter((action) => action.assigneeId === user._id);
+
+		return pendingActions;
+	} catch(error) {
+		console.error(error);
+		return {error};
+	}
+}
