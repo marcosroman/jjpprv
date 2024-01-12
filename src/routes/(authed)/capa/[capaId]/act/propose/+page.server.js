@@ -38,7 +38,7 @@ export const actions = {
 				let assigneeId = formData.get('assignee-user-'+i);
 				if (assigneeId) {
 					actionObject.proposal.assignment = {
-						assigneeId,
+						assigneeId: new ObjectId(assigneeId),
 						assignmentDate: new Date(),
 						comments: formData.get('comments-'+i)
 					}
