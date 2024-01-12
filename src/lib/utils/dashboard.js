@@ -140,22 +140,26 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 								} 
 							} else { // already rescheduled
 								// check if within date...
+								console.log('currentDate:',currentDate);
+								console.log('rescheduled commit date:', action.reschedule.rescheduledCommitmentDate);
+
 								if (currentDate <= action.reschedule.rescheduledCommitmentDate) {
+									console.log('in here')
 									// if so, check acceptance and then check evidence and then review
 									if (action.reschedule.assignment?.acceptance === undefined) {
 										pendingActions.push({
 											link: `${baseLink}/act/${actionIndex}/accept`,
 											description: 'aceptar accion (reagendada) asignada',
 											actionIndex,
-											assigneeId: String(action.proposal.assignment.assigneeId)
+											assigneeId: String(action.reschedule.assignment.assigneeId)
 										});
 									// check for evidence
 									} else if (action?.evidence === undefined) {
 										pendingActions.push({
 											link: `${baseLink}/act/${actionIndex}/evidence`,
-											description: 'agregar evidencia p/ accion',
+											description: 'agregar evidencia p/ accion (reagendada)',
 											actionIndex,
-											assigneeId: String(action.proposal.assignment.assigneeId)
+											assigneeId: String(action.reschedule.assignment.assigneeId)
 										});
 									} else { //review
 										pendingActions.push({
@@ -166,7 +170,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 										});
 									}
 								} else {
-									// if (rescheduled) commitment date also passed
+									// if rescheduled commitment date also passed
 									pendingActions.push({
 										link: `${baseLink}/act/${actionIndex}/review`,
 										description: 'dar seguimiento a accion (reagendamiento expirado)',
@@ -182,6 +186,9 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 				// always possible to assign capa evaluation...
 				// but minimum date (to set evaluation date) should be right after
 				// latest commitment date for actions, in case there's any
+				// TODO: fix this
+				const latestCommitmentDate = new Date(); // change to max of all commit dates
+
 				if (!capa?.evaluation?.assignment) {
 					pendingActions.push({
 						link: `${baseLink}/evaluate/assign`,
@@ -223,7 +230,8 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 }
 
 export async function pendingActionsForUser(user, currentDate) {
-	const cursor = capas.find();
+	const cursor = capas.find(); // TODO: filter out the finished ones
+
 	try {
 		const capasArray = await cursor.toArray();
 

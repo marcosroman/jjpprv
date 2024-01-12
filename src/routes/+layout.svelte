@@ -9,6 +9,10 @@
 	.done {
 		color: darkgreen;
 	}
+
+	.done-for-capa-id {
+		color: darkblue;
+	}
 </style>
 
 
@@ -105,9 +109,9 @@
 			<a class="done" href="/capa/act/assign">Asignar Responsable ante NC/OM (para NC solo si requiere ACs)</a>
 			<a class="done" href="/capa/act/accept">Aceptar Responsabilidad ante NC/OM (para NC solo si requiere ACs)</a>
 			<a class="done" href="/capa/act/evidence">Subir evidencia de acciones ante NC/OM (para NC solo si requiere ACs)</a>
-			<a href="/capa/act/reschedule">Reagendar accion (para NC solo si requiere ACs)</a>
-			<a href="/capa/act/reschedule/assign">Asignar accion reagendada (para NC solo si requiere ACs)</a>
-			<a href="/capa/act/reschedule/accept">Aceptar accion reagendada (para NC solo si requiere ACs)</a>
+			<a class="done-for-capa-id" href="/capa/act/reschedule">Reagendar accion (para NC solo si requiere ACs)</a>
+			<!--<a disabled href="/capa/act/reschedule/assign">Asignar accion reagendada (para NC solo si requiere ACs)</a>-->
+			<a class="done-for-capa-id" href="/capa/act/reschedule/accept">Aceptar accion reagendada (para NC solo si requiere ACs)</a>
 			<a class="done" href="/capa/act/review">Hacer seguimiento de Acciones (CSGC)</a>
 			<a class="done" href="/capa/evaluate/assign">Asignar Evaluador para NC/OM (CSGC)</a>
 			<a class="done" href="/capa/evaluate">Evaluar NC/OM</a>
