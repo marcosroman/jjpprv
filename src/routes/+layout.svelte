@@ -17,6 +17,7 @@
 
 
 <script>
+	import '$lib/style.css';
 	import { onMount } from 'svelte';
 	//import { redirect } from '@sveltejs/kit';
 	import { goto } from '$app/navigation';
