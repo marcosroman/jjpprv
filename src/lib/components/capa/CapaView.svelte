@@ -29,7 +29,7 @@
 </script>
 
 {#if capa}
-		<p>Id: {capa._id}</p>
+	<p>id: {capa._id}</p>
 	<table>
 		<tr><th>Registro de</th><td>{capaTypeDescription}</td></tr>
 		<tr><th>Version</th><td>{capa.version}</td></tr>
@@ -37,23 +37,12 @@
 		<tr><th>Creador</th><td>{userNameString(capa.issue.issuer)}</td></tr>
 		<tr><th>Sector de Origen</th><td>{capa.issue.detectedInSector.fullName}</td>
 		<tr><th>Detectado en</th><td>{capaIssueDetectedDuring}</td>
-		<tr><th>Descripcion de la {capaTypeDescription}</th><td>{capa.issue.description}</td></tr>
+		<tr><th>Descripcion de la {capaTypeDescription}</th><td><pre>{capa.issue.description}</pre></td></tr>
 	</table>
 
 	{#if capa.issue.evidence}
-		Evidencia:
+		<p>Evidencia:</p>
 		<EvidenceList isEditMode={false} capaId={capa._id} documentSection="issue"/>
-	{:else}
-		<p>(No hay evidencia para la NC/OM)</p>
-	{/if}
-
-	{#if capa.issue.isNonConformity}
-		{#if capa.response && capa.response.responderId}
-			<hr>
-			<tr><th>Acciones inmediatas para Controlar o Corregir</th><td>{capa.response.immediateActions.proposedSolution}</td></tr>
-			<tr><th>Consecuencias</th><td>{capa.response.possibleConsequences}</td></tr>
-			<hr>
-		{/if}
 	{/if}
 
 	{#if capa.correctiveActionsRequirement && capa.correctiveActionsRequirement.requirementDate}
@@ -73,44 +62,57 @@
 				<input type="radio" name="corrective-action-required" value="no" checked>
 			</label>
 		{/if}
-		<p>(Decidido por {userNameString(capa.correctiveActionsRequirement.requirer)} el {dateString(capa.correctiveActionsRequirement.requirementDate)})</p>
+		<!--<p>(Decidido por {userNameString(capa.correctiveActionsRequirement.requirer)} el {dateString(capa.correctiveActionsRequirement.requirementDate)})</p>-->
 	{/if}
 
 	{#if capa.issue.isNonConformity}
-		{#if capa.responseToNonConformity && capa.responseToNonConformity.responseDate}
+		{#if Object.keys(capa.responseToNonConformity).length>0}
 			<table>
-				<tr><th>Fecha de respuesta a NC:</th><td>{dateString(capa.responseToNonConformity.responseDate)}</td></tr>
-				<tr><th>Responde:</th><td>{userNameString(capa.responseToNonConformity.responder)}</td></tr>
-				<tr><th>Acciones inmediatas:</th><td>{capa.responseToNonConformity.immediateActions.proposedSolution}</td></tr>
-				<tr><th>Consecuencias:</th><td>{capa.responseToNonConformity.possibleConsequences}</td></tr>
-				<tr><th>Analisis de causas:</th><td>{capa.responseToNonConformity.possibleRootCauses}</td></tr>
+				<tr><th>Fecha de respuesta a NC:</th>
+					<td>{dateString(capa.responseToNonConformity.responseDate)}</td></tr>
+				<tr><th>Responde:</th>
+					<td>{userNameString(capa.responseToNonConformity.responder)}</td></tr>
+				<tr><th>Consecuencias:</th>
+					<td>{capa.responseToNonConformity.possibleConsequences}</td></tr>
+				<tr><th>Acciones inmediatas:</th>
+					<td>{capa.responseToNonConformity.immediateActions.proposedSolution}</td></tr>
+				<tr><th>Evidencia:</th>
+					{#if capa.responseToNonConformity.immediateActions.evidence}
+						<td>
+							<EvidenceList
+								isEditMode={false}
+								capaId={capa._id}
+								documentSection="responseToNonConformity.immediateActions"/>
+						</td>
+					{:else}
+						<td></td>
+					{/if}</tr>
 			</table>
-
-			{#if capa.responseToNonConformity.evidence}
-				<EvidenceList isEditMode={false} capaId={capa._id} documentSection="responseToNonConformity"/>
-			{:else}
-				<h2>no hay evidencia de accion inmediata ante la no-conformidad</h2>
-			{/if}
 		{/if}
 	{/if}
 
-	{#if capa.actions.length>0 && capa.actions[0].proposal.proposalDate}
-		<h2>Acciones</h2>
+	<!--{#if capa.actions.length>0 && capa.actions[0].proposal.proposalDate}-->
+	{#if capa.actions[0].proposal.proposalDate}
+		{#if capa.issue.isNonConformity && capa.correctiveActionsRequirement.isRequired}
+			<p>Analisis de causas: {capa.responseToNonConformity.possibleRootCauses}</p>
+		{/if}
+		<h2>Acciones propuestas para {capa.issue.isNonConformity ? "eliminar las causas" : "adoptar la Oportunidad de Mejora"}</h2>
 			<table>
-					<tr>
-						<th>Nro.</th>
-						<th>Acciones a tomar para {capa.issue.isNonConformity ? "eliminar las causas" : "adoptar la Oportunidad de Mejora"}</th>
-						<th>Fecha limite de compromiso</th>
-						<th>Responsable</th>
-						<th>Aceptado?</th>
-					</tr>
+				<tr>
+					<th>Nro.</th>
+					<th>Propuesta para {capa.issue.isNonConformity ? "eliminar las causas" : "adoptar la Oportunidad de Mejora"}</th>
+					<th>Fecha limite de compromiso</th>
+					<th>Responsable</th>
+					<th>Aceptado?</th>
+				</tr>
 				{#each capa.actions as action, index}	
 					<tr>
 						<td>{index+1}</td>
 						<td>{action.proposal.proposedSolution}</td>
 						<td>{dateString(action.proposal.commitmentDate)}</td>
-						<td>{action.proposal?.assignment?.assigneeId ? userNameString(action.proposal.assignment.assignee) : "(pendiente)"}</td>
-						<td>{action.proposal?.assignment?.acceptance?.isAccepted ? "Si" : "No" ?? "(pendiente)"}</td>
+						<td>{action.proposal?.assignment?.assigneeId ? userNameString(action.proposal.assignment.assignee) : ""}</td>
+						<td>{action.proposal?.assignment?.acceptance?.isAccepted !== undefined ?
+							(action.proposal?.assignment?.acceptance?.isAccepted ? "Si" : "No") : ""}</td>
 					</tr>
 				{/each}
 			</table>
@@ -119,6 +121,7 @@
 			<table>
 				<tr>
 					<th>Nro.</th>
+					<th>Evidencia</th>
 					<th>Cumplida?</th>
 					<th>Observaciones</th>
 					<th>Fecha de reprogramacion</th>
@@ -127,23 +130,34 @@
 				{#each capa.actions as action, index}	
 					<tr>
 						<td>{index+1}</td>
-						<td>{action?.review?.isAccomplished ? "Si" : "No"}</td>
-						<td>{action?.review?.comments ?? "(Sin comentarios)"}</td>
-						<td>{action?.reschedule?.rescheduleDate ? dateString(action.reschedule.rescheduleDate) : "(Sin reprogramacion)"}</td>
-						<td>{action?.review?.reviewerId ?? "(Pendiente)"}</td>
+						{#if action.evidence}
+							<td>
+								<EvidenceList
+									isEditMode={false}
+									capaId={capa._id}
+									documentSection="actions.{index}"/>
+							</td>
+						{:else}
+							<td></td>
+						{/if}
+						<td>{action?.review?.isAccomplished !== undefined ?
+							( action.review.isAccomplished ? "Si" : "No" ) : ""}</td>
+						<td>{action?.review?.comments ?? "---"}</td>
+						<td>{action?.reschedule?.rescheduleDate ? dateString(action.reschedule.rescheduleDate) : ""}</td>
+						<td>{action?.review?.reviewerId ? userNameString(action.review.reviewer) : ""}</td>
 					</tr>
 				{/each}
 			</table>
 	{/if}
 
+	{#if Object.keys(capa?.evaluation?.assignment)>0}
+		(Evaluacion asignada a {userNameString(capa.evaluation.assignment.evaluator)} por {userNameString(capa.evaluation.assignment.assigner)} el {dateString(capa.evaluation.assignment.assignationDate)})
+	{/if}
 	{#if capa?.evaluation && capa.evaluation.evaluationDate}
 		<h4>Evaluacion</h4>
-		{#if capa.evaluation?.assignment}
-			(Asignado a {userNameString(capa.evaluation.assignment.evaluator)} por {userNameString(capa.evaluation.assignment.assigner)} el {dateString(capa.evaluation.assignment.assignationDate)})
-		{/if}
 		{#if capa.evaluation?.evaluationDate}
 			<table>
-				<tr><th>Fecha de evaluacion</th><td>{userNameString(capa.evaluation.evaluationDate)}</td></tr>
+				<tr><th>Fecha de evaluacion</th><td>{dateString(capa.evaluation.evaluationDate)}</td></tr>
 				<tr><th>Considerada efectiva?</th><td>{capa.evaluation.isEffective ? "Si" : "No"}</td></tr>
 				<tr><th>Comentarios</th><td>{capa.evaluation.comments}</td></tr>
 			</table>
@@ -179,9 +193,9 @@
 	<!-- basic checklist: -->
 	{#if capa.issue.isNonConformity}
 		{#if capa.responseToNonConformity}
-			<p>reponse to nonconformity OK </p>
+			<p>response to nonconformity OK </p>
 		{:else}
-			<p>reponse to nonconformity NOT OK </p>
+			<p>response to nonconformity NOT OK </p>
 		{/if}
 		{#if capa.correctiveActionsRequirement}
 			<p>corrective action requirement OK</p>
@@ -194,12 +208,12 @@
 			<p>corrective action requirement NOT OK</p>
 		{/if}
 	{/if}
-	{#if capa.evaluation}
+	{#if capa.evaluation.evaluationDate}
 		<p>evaluation OK</p>
 	{:else}
 		<p>evaluation NOT OK</p>
 	{/if}
-	{#if capa.closure}
+	{#if capa.closure.closureDate}
 		<p>closure OK</p>
 	{:else}
 		<p>closure OK</p>

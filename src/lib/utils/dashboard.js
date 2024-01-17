@@ -48,17 +48,17 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 				}
 				// if it's non-conformity, check for response
 				if (capa.issue.isNonConformity) {
-					if (capa?.responseToNonConformity === undefined) {
+					if (capa?.responseToNonConformity?.responseDate === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/respond-nc`,
 							description: 'responder a no-conformidad',
 							assigneeId: sectorManagerId
 						});
-					// also check for evidence in response no non-conformity
+					// also check for evidence in response to non-conformity
 					} else if (capa.responseToNonConformity?.immediateActions?.evidence === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/respond-nc/evidence`,
-							description: 'agregar evidencia en respuesta a no-conformidad',
+							description: 'agregar evidencia de accion inmediata a no-conformidad',
 							assigneeId: sectorManagerId
 						});
 					}
@@ -71,6 +71,8 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 							assigneeId: qmsManagerId
 						});
 					// if they are required, check if actions already started
+					// TODO: if it's a non-conformity, check also that immediate actions are already done
+					// const immediateActionsDone = 
 					} else if(capa.correctiveActionsRequirement.isRequired && capa?.actions === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/act/propose`,

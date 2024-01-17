@@ -63,10 +63,10 @@ export async function GET({ params }) {
 
 		{ $lookup: {
       from: "users",
-      localField: "actions.proposal.review.reviewerId",
+      localField: "actions.review.reviewerId",
       foreignField: "_id",
-      as: "actions.proposal.review.reviewer"
-		}}, { $unwind: { path: "$actions.proposal.review.reviewer",
+      as: "actions.review.reviewer"
+		}}, { $unwind: { path: "$actions.review.reviewer",
 			preserveNullAndEmptyArrays: true } },
 
 		{ $group: {
