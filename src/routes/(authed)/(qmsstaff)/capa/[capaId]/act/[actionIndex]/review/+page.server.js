@@ -17,7 +17,7 @@ export const actions = {
 		const reviewObject = {
 			reviewerId: new ObjectId(event.locals.user._id),
 			isAccomplished: data.get('is-accomplished') === "true" ? true : false,
-			comments: data.get('coments')
+			comments: data.get('comments')
 		}
 
 		try {
