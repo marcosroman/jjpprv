@@ -2,3 +2,57 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-2xl;
+  }
+  h2 {
+    @apply text-xl;
+  }
+
+	/* Set the default font family and text color */
+	body {
+		font-family: sans-serif;
+		color: #333;
+	}
+
+	/* Center the page content */
+	.container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 100vh;
+	}
+
+	/* Stylish headings */
+	h1, h2, h3, h4, h5, h6 {
+		color: #2c3e50;
+	}
+
+	/* Stylish buttons */
+	button {
+		@apply px-4 py-2 font-semibold text-white bg-blue-500 rounded-md;
+	}
+
+	/* Stylish cards */
+	.card {
+		@apply bg-white border border-gray-300 rounded-md shadow-md p-4;
+	}
+
+	/* Stylish tables */
+	table {
+		@apply min-w-full divide-y divide-gray-200;
+	}
+
+	/* Center table content */
+	table td, table th {
+		text-align: center;
+	}
+
+	/* Stylish form inputs */
+	input {
+		@apply appearance-none border border-gray-300 rounded-md w-full py-2 px-3 leading-tight;
+	}
+}
+
