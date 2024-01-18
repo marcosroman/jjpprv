@@ -189,7 +189,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 				// but minimum date (to set evaluation date) should be right after
 				// latest commitment date for actions, in case there's any
 				// TODO: fix this
-				const latestCommitmentDate = new Date(); // change to max of all commit dates
+				// const latestCommitmentDate = new Date(); // change to max of all commit dates
 
 				if (!capa?.evaluation?.assignment) {
 					pendingActions.push({
@@ -197,13 +197,13 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 						description: 'asignar evaluacion',
 						assigneeId: qmsManagerId
 					});
-				} else if(!capa?.evaluationDate) {
+				} else if(capa?.evaluation?.evaluationDate === undefined) {
 					pendingActions.push({
 						link: `${baseLink}/evaluate`,
 						description: 'realizar evaluacion',
 						assigneeId: String(capa.evaluation.assignment.evaluatorId)
 					});
-				} else if (!capa?.closure) {
+				} else if (capa?.closure === undefined) {
 						pendingActions.push({
 							link: `${baseLink}/close`,
 							description: 'cerrar capa',

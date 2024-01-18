@@ -100,7 +100,7 @@
 			<table>
 				<tr>
 					<th>Nro.</th>
-					<th>Propuesta para {capa.issue.isNonConformity ? "eliminar las causas" : "adoptar la Oportunidad de Mejora"}</th>
+					<th>Accion</th>
 					<th>Fecha limite de compromiso</th>
 					<th>Responsable</th>
 					<th>Aceptado?</th>
@@ -142,30 +142,33 @@
 						{/if}
 						<td>{action?.review?.isAccomplished !== undefined ?
 							( action.review.isAccomplished ? "Si" : "No" ) : ""}</td>
-						<td>{action?.review?.comments ?? "---"}</td>
-						<td>{action?.reschedule?.rescheduleDate ? dateString(action.reschedule.rescheduleDate) : ""}</td>
+						<td>{action?.review?.comments === "" ? "---" : action?.review?.comments}</td>
+						{#if action?.review?.isAccomplished === undefined}
+							<td>{action?.reschedule?.rescheduleDate ? dateString(action.reschedule.rescheduleDate) : ""}</td>
+						{:else}
+							<td>{action?.reschedule?.rescheduleDate ? dateString(action.reschedule.rescheduleDate) : "---"}</td>
+						{/if}
 						<td>{action?.review?.reviewerId ? userNameString(action.review.reviewer) : ""}</td>
 					</tr>
 				{/each}
 			</table>
 	{/if}
 
-	{#if Object.keys(capa?.evaluation?.assignment)>0}
-		(Evaluacion asignada a {userNameString(capa.evaluation.assignment.evaluator)} por {userNameString(capa.evaluation.assignment.assigner)} el {dateString(capa.evaluation.assignment.assignationDate)})
-	{/if}
+	<!--(Evaluacion asignada a {userNameString(capa.evaluation.assignment.evaluator)} por {userNameString(capa.evaluation.assignment.assigner)} el {dateString(capa.evaluation.assignment.assignationDate)})-->
 	{#if capa?.evaluation && capa.evaluation.evaluationDate}
-		<h4>Evaluacion</h4>
+		<h2>Evaluacion</h2>
 		{#if capa.evaluation?.evaluationDate}
 			<table>
-				<tr><th>Fecha de evaluacion</th><td>{dateString(capa.evaluation.evaluationDate)}</td></tr>
-				<tr><th>Considerada efectiva?</th><td>{capa.evaluation.isEffective ? "Si" : "No"}</td></tr>
+				<tr><th>Evaluador</th><td>{userNameString(capa.evaluation.assignment.evaluator)}</td></tr>
+				<tr><th>Fecha</th><td>{dateString(capa.evaluation.evaluationDate)}</td></tr>
+				<!--<tr><th>Considerada efectiva?</th><td>{capa.evaluation.isEffective ? "Si" : "No"}</td></tr>-->
 				<tr><th>Comentarios</th><td>{capa.evaluation.comments}</td></tr>
 			</table>
 		{/if}
 	{/if}
 
 	{#if capa?.closure && Object.keys(capa.closure).length>0}
-		<h4>Cierre</h4>
+		<h2>Cierre</h2>
 		<table>
 			<tr>
 				<th>Es necesario actualizar los riesgos y oportunidades determinados durante la planificación?</th>
@@ -187,35 +190,5 @@
 		{#if capa.closure.additionalCAPA}
 			<p>NC/OM Adicional N.° (Coord. del SGC): {capa.closure.additionalCAPA}</p>
 		{/if}
-	{/if}
-
-	<hr>
-	<!-- basic checklist: -->
-	{#if capa.issue.isNonConformity}
-		{#if capa.responseToNonConformity}
-			<p>response to nonconformity OK </p>
-		{:else}
-			<p>response to nonconformity NOT OK </p>
-		{/if}
-		{#if capa.correctiveActionsRequirement}
-			<p>corrective action requirement OK</p>
-			{#if capa.correctiveActionsRequirement.isRequired}
-				<p>CA required</p>
-			{:else}
-				<p>CA not required</p>
-			{/if}
-		{:else}	
-			<p>corrective action requirement NOT OK</p>
-		{/if}
-	{/if}
-	{#if capa.evaluation.evaluationDate}
-		<p>evaluation OK</p>
-	{:else}
-		<p>evaluation NOT OK</p>
-	{/if}
-	{#if capa.closure.closureDate}
-		<p>closure OK</p>
-	{:else}
-		<p>closure OK</p>
 	{/if}
 {/if}
