@@ -61,7 +61,7 @@
 	}
 </script>
 
-<h2>jjpprv</h2>
+<h1>j<sub>a</sub><sup>2</sup>p<sub>o</sub><sup>2</sup>r<sub>a</sub>v<sub>e</sub></h1>
 <p>{$selectedDate}</p>
 
 {#if user}
