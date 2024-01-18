@@ -33,10 +33,12 @@
 	<input type="hidden" name="proponent-id" value={action.proposal.proponentId}>
 
 	<table>
+		<!--
 		<tr>
 			<th>Nro.</th>
-			<td>{actionIndex+1}</td>
+			<td>{Number(actionIndex+1}</td>
 		</tr>
+		-->
 		<tr>
 			<th>Solucion</th>
 			<td>{action.proposal.proposedSolution}</td>
@@ -52,7 +54,7 @@
 					<option value={user._id} selected>{userNameString(user)} (Yo)</option>
 					{#if otherUsersInMySector}
 						{#each otherUsersInMySector as otherUser}
-							<option value={otherUser._id}>userNameString(otherUser)</option>
+							<option value={otherUser._id}>{userNameString(otherUser)}</option>
 						{/each}
 					{/if}
 				</select>
@@ -60,7 +62,7 @@
 		</tr>
 		<tr>
 			<th>Comentarios</th>
-			<td><input type="text" name="comments"></td>
+			<td><textarea name="comments"></textarea></td>
 		</tr>
 	</table>
 

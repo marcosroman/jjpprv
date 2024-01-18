@@ -1,5 +1,6 @@
 <script>
 	import CapaView from '$lib/components/capa/CapaView.svelte';
+	import { dateString } from '$lib/utils/date';
 	export let data;
 
 	let capaId = data.capa._id;
@@ -14,20 +15,21 @@
 	<table>
 		<tr>
 			<th>Solucion</th>
-			<th>Fecha limite de compromiso</th>
-			<th>Responsable asignado</th>
-			<th>Comentarios</th>
+			<td>{capa.actions[actionIndex].proposal.proposedSolution}</td>
 		</tr>
 		<tr>
-			<td>{capa.actions[actionIndex].proposal.proposedSolution}</td>
-			<td>{capa.actions[actionIndex].proposal.commitmentDate}</td>
-			<td>{capa.actions[actionIndex].proposal.assignment.assigneeId}</td>
+			<th>Fecha limite de compromiso</th>
+			<td>{dateString(capa.actions[actionIndex].proposal.commitmentDate)}</td>
+		</tr>
+		<tr>
+			<th>Comentarios</th>
 			<td>{capa.actions[actionIndex].proposal.assignment.comments}</td>
+		</tr>
 	</table>
 
 	<textarea name="comments" placeholder="Comentarios"></textarea>
 
-	<input type="submit" value="Aceptar">
+	<input type="submit" value="Aceptar accion asignada">
 </form>
 
 <hr>
