@@ -20,19 +20,21 @@
 
 	/* Set the default font family and text color */
 	body {
+		@apply bg-indigo-100;
 		font-family: sans-serif;
 		color: #333;
 	}
 
 	/* Center the page content */
 	.container {
+		margin: 10px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		min-height: 100vh;
+		/*min-height: 100vh;*/
 	}
 
-	button {
+	button, input[type="submit"] {
 		@apply px-4 py-2 font-semibold text-white bg-gray-500 focus:outline-none;
 	}
 
@@ -63,7 +65,7 @@
 	}
 	*/
 
-	input[type="text"] {
+	input[type="text"], select, textarea {
 		@apply appearance-none border border-gray-300 rounded-md w-full py-2 px-3 leading-tight;
 	}
 
