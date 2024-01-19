@@ -5,11 +5,18 @@
 
 @layer base {
   h1 {
-    @apply text-2xl;
+    @apply text-3xl;
   }
   h2 {
+    @apply text-2xl;
+  }
+  h3 {
     @apply text-xl;
   }
+
+	h1, h2, h3, h4, h5, h6 {
+		color: #2c3e50;
+	}
 
 	/* Set the default font family and text color */
 	body {
@@ -25,14 +32,8 @@
 		min-height: 100vh;
 	}
 
-	/* Stylish headings */
-	h1, h2, h3, h4, h5, h6 {
-		color: #2c3e50;
-	}
-
-	/* Stylish buttons */
 	button {
-		@apply px-4 py-2 font-semibold text-white bg-blue-500 rounded-md;
+		@apply px-4 py-2 font-semibold text-white bg-gray-500 focus:outline-none;
 	}
 
 	/* Stylish cards */
@@ -40,19 +41,34 @@
 		@apply bg-white border border-gray-300 rounded-md shadow-md p-4;
 	}
 
-	/* Stylish tables */
 	table {
-		@apply min-w-full divide-y divide-gray-200;
+		/*@apply min-w-full divide-y divide-gray-200 border-collapse border-2;*/
+		@apply border-collapse border-2 border-gray-900;
 	}
 
-	/* Center table content */
+	.capa table {
+		@apply min-w-full;
+	}
+	.capa table th {
+		@apply bg-gray-300;
+	}
+
+	table td, table th {
+		@apply border-collapse border border-gray-800;
+	}
+
+	/*
 	table td, table th {
 		text-align: center;
 	}
+	*/
 
-	/* Stylish form inputs */
-	input {
+	input[type="text"] {
 		@apply appearance-none border border-gray-300 rounded-md w-full py-2 px-3 leading-tight;
+	}
+
+	nav a {
+		@apply p-5 font-bold;	
 	}
 }
 
