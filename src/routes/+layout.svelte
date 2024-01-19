@@ -43,38 +43,47 @@
 		selectedUserId = null;
 		goto('/');
 	}
+
+	let selectUserDateOn = false;
 </script>
 
+<nav >
+	<div class="flex">
+		<button class="text-xs" on:click={()=>{selectUserDateOn = !selectUserDateOn}}>
+				{selectUserDateOn ? 'x': 'o'}
+			</button>
+		{#if selectUserDateOn}
+			{#if users}
+				<label>Usuario:
+					<select name="user" bind:value={selectedUserId} on:change={login}>
+						<option value={null}></option>
+						{#if users.length>0}
+							{#each users as user}
+								<option value={user._id}>{userNameString(user)} ({user._id})</option>
+							{/each}
+						{:else}
+							<option disabled>No users were found</option>
+						{/if}
+					</select>
+				</label>
 
-<nav>
-	{#if users}
-		<label>Usuario:
-			<select name="user" bind:value={selectedUserId} on:change={login}>
-				<option value={null}></option>
-				{#if users.length>0}
-					{#each users as user}
-						<option value={user._id}>{userNameString(user)} ({user._id})</option>
-					{/each}
-				{:else}
-					<option disabled>No users were found</option>
+				{#if currentUser}
+					<button on:click={()=>{logout();}}>Cerrar sesion</button>
 				{/if}
-			</select>
-		</label>
-
-		{#if currentUser}
-			<button on:click={()=>{logout();}}>Cerrar sesion</button>
+			{/if}
+			<br>
+			<label>Fecha:
+				<input type='datetime-local' name="date-time" bind:value={$selectedDate}>
+				<button on:click={()=>{$selectedDate = (new Date()).toISOString().split('Z')[0]}}>Volver al presente</button>
+			</label>
+		{:else}
+			<p class="text-xs">{$selectedDate} - Conectado como {selectedUserId}</p>
 		{/if}
-	{/if}
-
-	<br>
-	<label>Fecha:
-		<input type='datetime-local' name="date-time" bind:value={$selectedDate}>
-		<button on:click={()=>{$selectedDate = (new Date()).toISOString().split('Z')[0]}}>Volver al presente</button>
-	</label>
+	</div>
 
 	{#if currentUser}
 		<hr>
-			<a href="/">Inicio</a>
+		<a class="text-lg" href="/">j<span><sub>a</sub><sup>2</sup></span>p<sub>o</sub><sup>2</sup>r<sub>a</sub>v<sub>e</sub></a>
 			<a href="/capa/new">Nueva NC/OM</a>
 			<a href="/capa/view">Ver NC/OM</a>
 			{#if currentUser.isQMSStaff}
