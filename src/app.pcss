@@ -23,19 +23,21 @@
 		@apply bg-indigo-100;
 		font-family: sans-serif;
 		color: #333;
+		margin: 16vh 0 0 0;
 	}
 
 	/* Center the page content */
 	.container {
-		margin: 10px;
+		/*margin: 10em;*/
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		min-width: 100%;
 		/*min-height: 100vh;*/
 	}
 
 	button, input[type="submit"] {
-		@apply px-4 py-2 font-semibold text-white bg-gray-500 focus:outline-none;
+		@apply px-4 py-2 font-semibold text-white bg-gray-500 focus:outline-none hover:bg-gray-400 active:bg-gray-900;
 	}
 
 	/* Stylish cards */
@@ -66,7 +68,15 @@
 	*/
 
 	input[type="text"], select, textarea {
-		@apply appearance-none border border-gray-300 rounded-md w-full py-2 px-3 leading-tight;
+		@apply appearance-none border border-gray-300 rounded-md py-2 px-3 leading-tight;
+		/*@apply appearance-none border border-gray-300 rounded-md w-full py-2 px-3 leading-tight;*/
+	}
+
+	nav	{
+		overflow: hidden;
+		position: fixed;
+		top: 0;
+		width: 100%;
 	}
 
 	nav a {

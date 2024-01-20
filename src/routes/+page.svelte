@@ -17,29 +17,6 @@
 	}
 
 	let currentDate = $selectedDate; // Initialize with the current value
-	/*
-
-  const unsubscribe = selectedDate.subscribe(async (value) => {
-		try {
-			const response = await fetch(`/api/capa/pending?currentDate=${value}`);
-			const body = await response.json();
-			pendingActions = body.pendingActions;
-		} catch(error) {
-			console.error(error);
-			pendingActions = [];
-		}
-		//pendingActions = pendingActionsForUser(user, new Date($selectedDate));
-
-    // This function will be called whenever $x changes
-		console.log('selected date changed to', $selectedDate);
-    currentDate = value; // Update the current value
-  });
-
-  onDestroy(() => {
-    // Unsubscribe when the component is destroyed to avoid memory leaks
-    unsubscribe();
-  });
-	*/
 
 	async function updatePendingActions() {
 		try {
@@ -61,21 +38,23 @@
 	}
 </script>
 
-{#if user}
-	{#if pendingActions}
-		{#if pendingActions.length>0}
-			<ul>
-				{#each pendingActions as action}
-					<li><a href={action.link}>{action.description}</a> ({action.capa.issue.description.substr(0,20)+"..."})</li>
-					{#if action.description === "agregar evidencia a nc/om"}
-						<button on:click|preventDefault={() => ommitIssueEvidence(action.capaId)}>Omitir</button>
-					{/if}
-				{/each}
-			</ul>
-		{:else}
-			<p class="text-center">Sin acciones pendientes.</p>
+<div class="flex flex-col container">
+	{#if user}
+		{#if pendingActions}
+			{#if pendingActions.length>0}
+				<ul class="list-disc">
+					{#each pendingActions as action}
+						<li><a href={action.link}>{action.description}</a> ({action.capa.issue.description.substr(0,30)+"..."})</li>
+						{#if action.description === "agregar evidencia a nc/om"}
+							<button on:click|preventDefault={() => ommitIssueEvidence(action.capaId)}>Omitir</button>
+						{/if}
+					{/each}
+				</ul>
+			{:else}
+				<p class="text-center">Sin acciones pendientes.</p>
+			{/if}
 		{/if}
+	{:else}
+		<p>Identifiquese</p>
 	{/if}
-{:else}
-	<p>Identifiquese</p>
-{/if}
+</div>

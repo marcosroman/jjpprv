@@ -47,49 +47,54 @@
 	let selectUserDateOn = false;
 </script>
 
-<nav >
+<nav>
 	<div class="flex">
 		<button class="text-xs" on:click={()=>{selectUserDateOn = !selectUserDateOn}}>
 				{selectUserDateOn ? 'x': 'o'}
 			</button>
 		{#if selectUserDateOn}
 			{#if users}
-				<label>Usuario:
-					<select name="user" bind:value={selectedUserId} on:change={login}>
-						<option value={null}></option>
-						{#if users.length>0}
-							{#each users as user}
-								<option value={user._id}>{userNameString(user)} ({user._id})</option>
-							{/each}
-						{:else}
-							<option disabled>No users were found</option>
-						{/if}
-					</select>
-				</label>
+				<div>
+					<label>Usuario:
+						<select name="user" bind:value={selectedUserId} on:change={login}>
+							<option value={null}></option>
+							{#if users.length>0}
+								{#each users as user}
+									<option value={user._id}>{userNameString(user)} ({user._id})</option>
+								{/each}
+							{:else}
+								<option disabled>No users were found</option>
+							{/if}
+						</select>
+					</label>
 
-				{#if currentUser}
-					<button on:click={()=>{logout();}}>Cerrar sesion</button>
-				{/if}
+					{#if currentUser}
+						<button on:click={()=>{logout();}}>Cerrar sesion</button>
+					{/if}
+				</div>
 			{/if}
-			<br>
-			<label>Fecha:
-				<input type='datetime-local' name="date-time" bind:value={$selectedDate}>
-				<button on:click={()=>{$selectedDate = (new Date()).toISOString().split('Z')[0]}}>Volver al presente</button>
-			</label>
+			<div>
+				<label>Fecha:
+					<input type='datetime-local' name="date-time" bind:value={$selectedDate}>
+					<button on:click={()=>{$selectedDate = (new Date()).toISOString().split('Z')[0]}}>Volver al presente</button>
+				</label>
+			</div>
 		{:else}
-			<p class="text-xs">{$selectedDate} - Conectado como {selectedUserId}</p>
+			<div class="bg-gray-900 text-white w-full flex justify-center">
+				<p class="text-xs">datetime = {$selectedDate}, userId = {selectedUserId}</p>
+			</div>
 		{/if}
 	</div>
 
 	{#if currentUser}
-		<hr>
-		<a class="text-lg" href="/">j<span><sub>a</sub><sup>2</sup></span>p<sub>o</sub><sup>2</sup>r<sub>a</sub>v<sub>e</sub></a>
+		<div class="bg-blue-600 text-gray-50 flex items-center">
+			<a class="text-2xl" href="/">j<span><sub>a</sub><sup>2</sup></span>p<sub>o</sub><sup>2</sup>r<sub>a</sub>v<sub>e</sub></a>
 			<a href="/capa/new">Nueva NC/OM</a>
-			<a href="/capa/view">Ver NC/OM</a>
+			<a href="/capa/view">Ver NC/OMs</a>
 			{#if currentUser.isQMSStaff}
-				<a href="/capa/view/all">Ver todas las NC/OM (CSGC)</a>
+				<a href="/capa/view/all">Ver Tabla del CSGC</a>
 			{/if}
-		<hr>
+		</div>
 	{/if}
 </nav>
 
