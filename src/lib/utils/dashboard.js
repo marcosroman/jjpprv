@@ -253,3 +253,40 @@ export async function pendingActionsForUser(user, currentDate) {
 		return {error};
 	}
 }
+
+export async function pendingActionsForUserGroupedByCapa(user, currentDate) {
+	try {
+		let pendingActions = await pendingActionsForUser(user, currentDate);
+
+		const groupedPendingActions = pendingActions.reduce((accumulator, currentObject) => {
+			const { capaId } = currentObject;
+
+			// check if exists, otherwise create entry
+			if (!accumulator[capaId]) {
+				accumulator[capaId] = [];
+			}
+
+			accumulator[capaId].push(currentObject);
+
+			return accumulator;
+		}, []);
+
+		let groupedPendingActionsArray = Object.values(groupedPendingActions);
+
+		let pendingActionsGroupedByCapa = groupedPendingActionsArray.map(a => {
+			return {
+				capa: a[0].capa,
+				pendingActions: a.map(o => {
+					return {
+						description: o.description,
+						link: o.link
+					}
+				})
+			}
+		});
+
+		return pendingActionsGroupedByCapa;
+	} catch(error) {
+		console.error(error);
+	}
+}

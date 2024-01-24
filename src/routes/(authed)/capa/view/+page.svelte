@@ -8,7 +8,10 @@
 	{#if capas.length>0 }
 		<ul class="list-disc">
 			{#each capas as capa}
-				<li><a href={`/capa/${capa._id}/view`}>{capa._id} ({capa.issue.description})</a></li>
+				<li>
+					<a href={`/capa/${capa._id}/view`}>{capa._id} ({capa.issue.description})
+					</a>
+				</li>
 			{/each}
 		</ul>
 	{:else}
