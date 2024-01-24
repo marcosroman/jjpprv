@@ -12,7 +12,6 @@
 	async function ommitIssueEvidence(capaId) {
 		try {
 			await fetch(`/api/capa/${capaId}/issue/evidence/ommit`);
-			//location.reload();
 			updatePendingActions();
 		} catch(error) {
 			console.error(error);
@@ -47,8 +46,8 @@
 			{#if pendingActionsPerCapa.length>0}
 				<ul>
 					{#each pendingActionsPerCapa as capaObject}
-						<li class="my-3">
-							<div class="border-solid border-black bg-lime-300 p-4">
+						<li class="my-6 py-4">
+							<div class="p-4 text-black" style={`background-color: #${capaObject.capa._id.slice(-7,-1)};`}>
 								<a href={`/capa/${capaObject.capa._id}/view`}>
 									<CapaMiniView capaId={capaObject.capa._id}/>
 								</a>
