@@ -4,9 +4,8 @@
 	import { selectedDate } from '$lib/utils/stores';
 	import CapaMiniView from '$lib/components/capa/CapaMiniView.svelte';
 
-	//import { pendingActionsForUser } from '$lib/utils/dashboard';
-
 	export let data;
+
 	let pendingActionsPerCapa = data.pendingActionsPerCapa;
 	let user = data.user;
 
@@ -26,10 +25,10 @@
 		try {
 			const response = await fetch(`/api/capa/pending?currentDate=${$selectedDate}`);
 			const body = await response.json();
-			pendingActions = body.pendingActions;
+			pendingActionsPerCapa = body.pendingActions;
 		} catch(error) {
 			console.error(error);
-			pendingActions = [];
+			pendingActionsPerCapa = [];
 		}
 	}
 
@@ -48,17 +47,28 @@
 			{#if pendingActionsPerCapa.length>0}
 				<ul>
 					{#each pendingActionsPerCapa as capaObject}
-						<li>
-							<div class="border-solid border-black bg-lime-300">
-								<CapaMiniView capaId={capaObject.capa._id}/>
+						<li class="my-3">
+							<div class="border-solid border-black bg-lime-300 p-4">
+								<a href={`/capa/${capaObject.capa._id}/view`}>
+									<CapaMiniView capaId={capaObject.capa._id}/>
+								</a>
 							</div>
 
-							<ol class="list-disc">
+							{#if capaObject.pendingActions.length>1}
+								<span class="font-bold">Acciones pendientes:</span>
+							{:else}
+								<span class="font-bold">Accion pendiente:</span>
+							{/if}
+							<ol>
 								{#each capaObject.pendingActions as action}
-									<li>
-										<a href={action.link} class="hover:text-zinc-400"><span class="font-bold">Accion pendiente:</span> {action.description}</a>
-										{#if action.description === "agregar evidencia a nc/om"}
-											<button on:click|preventDefault={() => ommitIssueEvidence(action.capaId)}>Omitir</button>
+									<li class="list-disc ml-6">
+										<a href={action.link} class="hover:text-zinc-400">
+											{action.description}</a>
+										<!-- adding evidence in issue section can be ommited -->
+										{#if /\/capa\/[0-9a-z]+\/new\/evidence/.test(action.link)}
+											<button on:click|preventDefault={
+												() => ommitIssueEvidence(capaObject.capa._id)}>
+												Omitir</button>
 										{/if}
 									</li>
 								{/each}
@@ -67,7 +77,7 @@
 					{/each}
 				</ul>
 			{:else}
-				<p class="text-center">Sin acciones pendientes.</p>
+				<p class="text-center">Sin acciones pendientes</p>
 			{/if}
 		{/if}
 	{:else}
