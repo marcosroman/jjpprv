@@ -29,11 +29,11 @@
 					<th>Detectado durante</th>
 					<th>Area de Origen</th>
 					<th>Descripcion</th>
-					<th>Fecha seguimiento</th>
-					<th>Fecha evaluacion</th>
+					<th>Fecha <wbr>seguimiento</th>
+					<th>Fecha <wbr>evaluacion</th>
 					<th>Estado</th>
-					<th>Cierre eficaz?</th>
-					<th>Actualizar riesgos/oportunidades?</th>
+					<th>Cierre <wbr>eficaz?</th>
+					<th>Actualizar <wbr>riesgos/oportunidades?</th>
 					<th>Introducir cambios al SGC?</th>
 					<th>Observaciones</th>
 				</tr>
