@@ -64,6 +64,7 @@ capas
                 }
                 evidence array[objectid(evidence)] // uploaded by assigned person or by creator
                 review: { // (follow up):
+                    reviewDate //date 
                     reviewerId // objectid(user), qms user
                     isAccomplished // bool
                     comments // string

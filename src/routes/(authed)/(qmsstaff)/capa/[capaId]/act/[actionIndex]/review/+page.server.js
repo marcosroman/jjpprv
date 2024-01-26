@@ -15,6 +15,7 @@ export const actions = {
 		const actionIndex = data.get('action-index');
 
 		const reviewObject = {
+			reviewDate: new Date(),
 			reviewerId: new ObjectId(event.locals.user._id),
 			isAccomplished: data.get('is-accomplished') === "true" ? true : false,
 			comments: data.get('comments')
