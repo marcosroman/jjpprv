@@ -1,15 +1,31 @@
 <script>
-	//import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
 	import { onMount } from 'svelte';
+	import { differenceInDays } from 'date-fns';
+
 	import { dateString } from '$lib/utils/date';
 	import userNameString from '$lib/utils/userName';
 	import duringProcessString from '$lib/utils/during';
 
 	export let capaId;
 
+	const immediateActionIcon = "⚡"; // 💥?
+	const evidenceIcon = "📄";
+	const correctiveActionRequirementIcon = "🔍";
+	const greenCircleIcon = "🟢";
+	const redCircleIcon = "🔴";
+	const yellowCircleIcon = "🟡";
+	const calendarIcon = "📆";
+	const assignmentIcon = "👉";
+	const acceptedIcon = "👍"; //"🫡";//'\u1fae1';//"🫡";//
+	const reviewIcon = "🧐";
+	const checkIcon = "✅";
+	const crossIcon = "❌";
+	const evaluationIcon = "👀";
+	const closureIcon = "🔒";
+
 	let capa = null;
 	let capaTypeDescription = null;
-	let capaIssueDetectedDuring = null;
+	let numberOfDaysSinceCreation = null;
 
 	onMount(async () => {
 		try {
@@ -22,7 +38,8 @@
 				capaTypeDescription = capa.issue.isNonConformity ?
 					"NC" :
 					"OM";
-				capaIssueDetectedDuring = duringProcessString(capa.issue.detectedDuring);
+
+				numberOfDaysSinceCreation = differenceInDays(new Date(), new Date(capa.issue.creationDate))
 			}
 		}
 	});
@@ -30,246 +47,138 @@
 
 {#if capa}
 	<div>
-		{capaTypeDescription} @ {capa.issue.detectedInSector.fullName} ({dateString(capa.issue.creationDate)})
- 		<!--{capa._id}-->
-		<hr>
-		Descripcion: {capa.issue.description}<br>
+		<div class="flex justify-between m-2">
+			<div class="font-bold">
+				{capaTypeDescription}
+			</div>
+			<div class="text-right">
+				{capa.issue.detectedInSector.fullName}
+			</div>
+		</div>
 
-		{#if capa?.issue?.isNonConformity}
-			es no conformidad<br>
-			{#if capa?.responseToNonConformity?.immediateActions}
-				ya hay respuesta a NC<br>
-				{#if capa?.responseToNonCOnformity?.immediateActions?.evidence}
-					ya hay evidencia a NC<br>
-				{:else}
-					evidencia pendiente<br>
-				{/if}
-			{:else}
-			{/if}
-		{/if}
-
-		<!--
-		{#if capa.correctiveActionsRequirement.isRequired}
-			(Requiere acciones correctivas)
-		{/if}
-		poner aca respuesta a acciones correctivas (si existe) [hay que marcar que hay respuseta (check) y que hay evidencia (check), nada mas]
-
-		{#if capa.actions}
-			<ol>
-			{#each capa.actions as action, index}	
-				<li>{action.proposal.proposedSolution}
-
-					{#if }
-
-					{action.proposal.commitmentDate}
-					(mostrar tachado el primero y mostrar el segundo si fue reprogramado)
-
-					{#if action.evidence}
-						evidencia ok
+		<div class="flex flex-row flex-wrap items-center justify-evenly">
+			{#if capa?.issue?.isNonConformity}
+				<div class="p-2 flex flex-col">
+					{#if capa?.responseToNonConformity?.immediateActions}
+						<div class="text-3xl">{immediateActionIcon}</div>
+					{:else}
+						<div class="text-3xl grayscale opacity-20">{immediateActionIcon}</div>
 					{/if}
-					{#if action?.review?.isAccomplished !== undefined ?
-						ver si es accomplished o en que estado esta
 
+					{#if capa?.responseToNonConformity?.immediateActions?.evidence}
+						<div class="text-3xl">{evidenceIcon}</div>
+					{:else}
+						<div class="text-3xl grayscale opacity-20">{evidenceIcon}</div>
+					{/if}
+				</div>
 
-				</li>
+				<div class="p-2 flex flex-col">
+					{#if capa?.correctiveActionsRequirement?.isRequired === undefined}
+						<div class="text-3xl grayscale opacity-20">{correctiveActionRequirementIcon}</div>
+							<div class="text-xl text-center">{yellowCircleIcon}</div>
+					{:else}
+						<div class="text-3xl">{correctiveActionRequirementIcon}</div>
+						{#if capa?.correctiveActionsRequirement?.isRequired}
+							<div class="text-xl text-center">{redCircleIcon}</div>
+						{:else}
+							<div class="text-xl text-center">{greenCircleIcon}</div>
+						{/if}
+					{/if}
+				</div>
+			{/if}
 
-									<td>{action?.review?.isAccomplished !== undefined ?
-										( action.review.isAccomplished ? "Si" : "No" ) : ""}</td>
-									<td>{action?.review?.comments === "" ? "---" : action?.review?.comments}</td>
-									{#if action?.review?.isAccomplished === undefined}
-										<td>{action?.reschedule?.rescheduleDate ? dateString(action.reschedule.rescheduleDate) : ""}</td>
-									{:else}
-										<td>{action?.reschedule?.rescheduleDate ? dateString(action.reschedule.rescheduleDate) : "---"}</td>
+			{#if capa.actions && capa.actions[0]?.proposal?.proposalDate}
+				<div class="p-2">
+					<table class="border-gray-500">
+						{#each capa.actions as action, index}	
+							<tr class="p-1 border-solid">
+								<th class="p-2">
+									{index+1}
+									{#if action?.review?.isAccomplished !== undefined}
+										{#if action.review.isAccomplished}
+											<div class="text-2xl p-1">{checkIcon}</div>
+										{:else}
+											<div class="text-2xl p-1">{crossIcon}</div>
+										{/if}
 									{/if}
-									<td>{action?.review?.reviewerId ? userNameString(action.review.reviewer) : ""}</td>
-								</tr>
-							{/each}
-				{/if}
-	
-		acciones... (como un tree)
-			...listar acciones, descripcion, estado
-		decir si fue evaluada
-		decir si fue cerrada o no (y, si fue cerrada, si fue efectiva o no)
+								</th>
 
+								<td class="flex flex-wrap flex-row border-none">
+									{#if action?.reschedule?.rescheduleDate}
+										<div class="text-2xl p-1 hue-rotate-15">{calendarIcon}</div>
+									{:else}
+										<div class="text-2xl p-1">{calendarIcon}</div>
+									{/if}
 
+									{#if action.proposal?.assignment?.assignmentDate}
+										<div class="text-2xl p-1">{assignmentIcon}</div>
+									{:else}
+										<div class="text-2xl p-1 grayscale opacity-20">{assignmentIcon}</div>
+									{/if}
+									{#if action.proposal?.assignment?.acceptance?.acceptanceDate}
+										<div class="text-2xl p-1">{acceptedIcon}</div>
+									{:else}
+										<div class="text-2xl p-1 grayscale opacity-20">{acceptedIcon}</div>
+									{/if}
+									{#if action?.evidence && action.evidence.length>0}
+										<div class="text-2xl p-1">{evidenceIcon}</div>
+									{:else}
+										<div class="text-2xl p-1 grayscale opacity-20">{evidenceIcon}</div>
+									{/if}
 
+									{#if action?.reschedule?.rescheduleDate}
+										<div class="text-2xl p-1 hue-rotate-90">{calendarIcon}</div>
+									{/if}
 
-
-
-
-
-			</ol>
-		{/if}
-	
-
-
-
-	<div class="capa p-10">
-		<div class="text-center py-5">
-			<h1>Registro de {capaTypeDescription}</h1>
-			<p class="text-xs">id {capa._id}</p>
-			<p class="text-sm">version {capa.version}</p>
-		</div>
-
-		<div class="issue py-3">
-			<table>
-				<tr><th>Fecha</th><td>{dateString(capa.issue.creationDate)}</td></tr>
-				<tr><th>Creador</th><td>{userNameString(capa.issue.issuer)}</td></tr>
-				<tr><th>Sector de Origen</th><td>{capa.issue.detectedInSector.fullName}</td>
-				<tr><th>Detectado en</th><td>{capaIssueDetectedDuring}</td>
-				<tr><th>Descripcion de la {capaTypeDescription}</th><td><pre>{capa.issue.description}</pre></td></tr>
-			</table>
-
-			{#if capa.issue.evidence}
-				<p>Evidencia:</p>
-				<EvidenceList isEditMode={false} capaId={capa._id} documentSection="issue"/>
-			{/if}
-		</div>
-
-		{#if capa.issue.isNonConformity}
-			{#if Object.keys(capa.responseToNonConformity).length>0}
-				<div class="py-3">
-					<table>
-						<tr><th>Fecha de respuesta a NC</th>
-							<td>{dateString(capa.responseToNonConformity.responseDate)}</td></tr>
-						<tr><th>Responde</th>
-							<td>{userNameString(capa.responseToNonConformity.responder)}</td></tr>
-						<tr><th>Consecuencias</th>
-							<td>{capa.responseToNonConformity.possibleConsequences}</td></tr>
-						<tr><th>Acciones inmediatas</th>
-							<td>{capa.responseToNonConformity.immediateActions.proposedSolution}</td></tr>
-						<tr><th>Evidencia:</th>
-							{#if capa.responseToNonConformity.immediateActions.evidence}
-								<td>
-									<EvidenceList
-										isEditMode={false}
-										capaId={capa._id}
-										documentSection="responseToNonConformity.immediateActions"/>
+									{#if action?.review?.isAccomplished !== undefined}
+										<div class="text-2xl p-1">{reviewIcon}</div>
+										<!--
+										{#if action.review.isAccomplished}
+											<div class="text-2xl p-1">{checkIcon}</div>
+										{:else}
+											<div class="text-2xl p-1">{crossIcon}</div>
+										{/if}
+										-->
+									{:else}
+										<div class="text-2xl p-1 grayscale opacity-20">{reviewIcon}</div>
+									{/if}
 								</td>
-							{:else}
-								<td></td>
-							{/if}</tr>
-					</table>
-				</div>
-			{/if}
-		{/if}
-
-		{#if capa.actions[0].proposal.proposalDate}
-			{#if capa.issue.isNonConformity && capa.correctiveActionsRequirement.isRequired}
-				<div class="py-3">
-					<table>
-						<tr>
-							<th>
-								Analisis de las causas
-							</th>
-							<td>{capa.responseToNonConformity.possibleRootCauses}</td>
-						</tr>
-					</table>
-				</div>
-			{/if}
-			<div class="actions py-3">
-				<div class="propuesta py-3">
-					<h2>Acciones propuestas para {capa.issue.isNonConformity ? "eliminar las causas" : "adoptar la Oportunidad de Mejora"}</h2>
-					<table>
-						<tr>
-							<th>Nro.</th>
-							<th>Accion</th>
-							<th>Fecha limite de compromiso</th>
-							<th>Responsable</th>
-							<th>Aceptado?</th>
-						</tr>
-						{#each capa.actions as action, index}	
-							<tr>
-								<td>{index+1}</td>
-								<td>{action.proposal.proposedSolution}</td>
-								<td>{dateString(action.proposal.commitmentDate)}</td>
-								<td>{action.proposal?.assignment?.assigneeId ? userNameString(action.proposal.assignment.assignee) : ""}</td>
-								<td>{action.proposal?.assignment?.acceptance?.isAccepted !== undefined ?
-									(action.proposal?.assignment?.acceptance?.isAccepted ? "Si" : "No") : ""}</td>
 							</tr>
 						{/each}
 					</table>
 				</div>
+			{/if}
 
-				<div class="seguimiento py-3">
-					<h3>Seguimiento de las acciones</h3>
-					<table>
-						<tr>
-							<th>Nro.</th>
-							<th>Evidencia</th>
-							<th>Cumplida?</th>
-							<th>Observaciones</th>
-							<th>Fecha de reprogramacion</th>
-							<th>Evaluador SGC</th>
-						</tr>
-						{#each capa.actions as action, index}	
-							<tr>
-								<td>{index+1}</td>
-								{#if action.evidence}
-									<td>
-										<EvidenceList
-											isEditMode={false}
-											capaId={capa._id}
-											documentSection="actions.{index}"/>
-									</td>
-								{:else}
-									<td></td>
-								{/if}
-								<td>{action?.review?.isAccomplished !== undefined ?
-									( action.review.isAccomplished ? "Si" : "No" ) : ""}</td>
-								<td>{action?.review?.comments === "" ? "---" : action?.review?.comments}</td>
-								{#if action?.review?.isAccomplished === undefined}
-									<td>{action?.reschedule?.rescheduleDate ? dateString(action.reschedule.rescheduleDate) : ""}</td>
-								{:else}
-									<td>{action?.reschedule?.rescheduleDate ? dateString(action.reschedule.rescheduleDate) : "---"}</td>
-								{/if}
-								<td>{action?.review?.reviewerId ? userNameString(action.review.reviewer) : ""}</td>
-							</tr>
-						{/each}
-					</table>
+			{#if capa?.evaluation && capa.evaluation.evaluationDate}
+				<div class="p-2 text-3xl">{evaluationIcon}</div>
+			{:else}
+				<div class="p-2 text-3xl grayscale opacity-20">{evaluationIcon}</div>
+			{/if}
+
+			{#if capa?.closure && Object.keys(capa.closure).length>0}
+				<div class="flex flex-col p-2">
+					<div class="text-3xl">{closureIcon}</div>
+					{#if capa.close.isClosedEffectively}
+						<div class="text-3xl">{checkIcon}</div>
+					{:else}
+						<div class="text-3xl">{crossIcon}</div>
+					{/if}
 				</div>
-			</div>
-		{/if}
+			{:else}
+				<div class="text-3xl grayscale opacity-20">{closureIcon}</div>
+			{/if}
+		</div>
 
-		{#if capa?.evaluation && capa.evaluation.evaluationDate}
-			<div class="py-3">
-				<h2>Evaluacion</h2>
-				{#if capa.evaluation?.evaluationDate}
-					<table>
-						<tr><th>Evaluador</th><td>{userNameString(capa.evaluation.assignment.evaluator)}</td></tr>
-						<tr><th>Fecha</th><td>{dateString(capa.evaluation.evaluationDate)}</td></tr>
-						<tr><th>Comentarios</th><td>{capa.evaluation.comments}</td></tr>
-					</table>
+		<div class="m-2 text-xs">
+			<p>{dateString(capa.issue.creationDate)}
+				{#if numberOfDaysSinceCreation === 0}
+					(hoy)
+				{:else}
+					(hace {numberOfDaysSinceCreation} {numberOfDaysSinceCreation ===1 ? "dia" : "dias"})
 				{/if}
-			</div>
-		{/if}
-
-		{#if capa?.closure && Object.keys(capa.closure).length>0}
-			<div class="py-3">
-				<h2>Cierre</h2>
-				<table>
-					<tr>
-						<th>Es necesario actualizar los riesgos y oportunidades determinados durante la planificación?</th>
-						<td>{capa.closure.isRisksUpdateRequired ? "Si" : "No"}</td>
-					</tr>
-					<tr>
-						<th>Es necesario hacer cambios al sistema de gestión de la calidad?</th>
-						<td>{capa.closure.isChangingQMSRequired ? "Si" : "No"}</td>
-					</tr>
-					<tr>
-						<th>Comentarios</th>
-						<td>{capa.closure.comments}</td>
-					</tr>
-					<tr>
-						<th>Cierre eficaz de la acción</th>
-						<td>{capa.closure.isClosedEffectively ? "Si" : "No"}</td>
-					</tr>
-				</table>
-				{#if capa.closure.additionalCAPA}
-					<p>NC/OM Adicional N.° (Coord. del SGC): {capa.closure.additionalCAPA}</p>
-				{/if}
-			</div>
-		{/if}
-		-->
+			</p>
+		</div>
 	</div>
+{:else}
+	<p>cargando...</p>
 {/if}
