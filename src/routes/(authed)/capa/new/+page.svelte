@@ -24,7 +24,6 @@
 	{#if isNC}
 		<label>Detectado durante
 			<select name="detected-during" required>
-				<option selected disabled></option>
 				{#each ['pr', 'ia', 'ea'] as p}
 					<option value={p}>{duringProcessString(p)}</option>
 				{/each}
