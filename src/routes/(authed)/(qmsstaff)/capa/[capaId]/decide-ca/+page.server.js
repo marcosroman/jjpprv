@@ -1,5 +1,6 @@
-import capas from '$lib/db/capas';
+import { redirect } from '@sveltejs/kit';
 import { ObjectId } from 'mongodb';
+import capas from '$lib/db/capas';
 
 export async function load ({ params }) {
 	const capaId = params.capaId;
@@ -20,8 +21,9 @@ export const actions = {
 		const capaId = data.get('capa-id');
 		const isRequired = data.get('is-ca-required') === 'true' ? true : false;
 
+		let result = null;
 		try {
-			const result = await capas.updateOne(
+			result = await capas.updateOne(
 				{ _id: new ObjectId(capaId) },
 				{ $set: {
 					correctiveActionsRequirement: {
@@ -32,6 +34,10 @@ export const actions = {
 				}});
 		} catch(error) {
 			console.error(error);
+		}
+
+		if (result) {
+			throw redirect(302, '/');
 		}
 	}
 }
