@@ -12,7 +12,7 @@
 
 	let evidenceDataArray = [];
 	let newEvidenceId = null;
-	let isEvidenceUploadActive = false;
+	let isEvidenceUploadActive = true;
 	let isEvidenceViewActive = false;
 	let evidenceIdToShow = null;
 
@@ -27,7 +27,7 @@
 		try {
 			evidenceDataArray = await updateAndGetEvidenceDataFromCAPA(
 				capaId, documentSection, newEvidenceId);
-			hideAddEvidence();
+			//hideAddEvidence();
 		} catch(error) {
 			alert(error);
 		}
@@ -47,38 +47,56 @@
 	onMount(async () => {
 		evidenceDataArray = await getEvidenceDataFromCAPA(capaId, documentSection);
 	});
+
+
+	function fileTypeString(fileType) {
+		const fileTypeCategory = fileType.split('/')[0];
+
+		if (fileTypeCategory === 'video') {
+			return 'Video';
+		} else if (fileTypeCategory === 'image') {
+			return 'Imagen';
+		} else {
+			return 'PDF';
+		}
+	}
 </script>
 
-{#if evidenceDataArray && evidenceDataArray.length > 0}
-	<table>
-		<tr><th>Nombre</th><th>Descripcion</th><th>Tipo</th></tr>
-		{#each evidenceDataArray as evidenceData}
-			<tr>
-				<td>{evidenceData.fileName}</td>
-				<td>{evidenceData.description}</td>
-				<td>{evidenceData.fileType}</td>
-				<button on:click|preventDefault={() =>
-					showViewEvidence(evidenceData._id)}>Ver</button>
-				{#if isEditMode}
-					<button on:click|preventDefault={() =>
-						deleteEvidence(evidenceData._id)}>Eliminar</button>
-				{/if}
-			</tr>
-		{/each}
-	</table>
-{:else}
-	<p>(Todavia no se agregó evidencia)</p>
-{/if}
 
-{#if isEditMode}
-	<button on:click|preventDefault={showAddEvidence}>Agregar evidencia</button>
-{/if}
+<div class="flex justify-center flex-col container">
+	{#if evidenceDataArray && evidenceDataArray.length > 0}
+		<table>
+			<tr class="bg-gray-400 table-row"><!--<th>Nombre</th>--><th>Descripcion</th><th>Tipo</th></tr>
+			{#each evidenceDataArray as evidenceData}
+				<tr>
+					<!--<td>{evidenceData.fileName}</td>-->
+					<td>{evidenceData.description}</td>
+					<td>{fileTypeString(evidenceData.fileType)}</td>
+					<button class="text-sm bg-gray-700" on:click|preventDefault={() =>
+						showViewEvidence(evidenceData._id)}>Ver</button>
+					{#if isEditMode}
+						<button class="text-sm bg-red-400" on:click|preventDefault={() =>
+							deleteEvidence(evidenceData._id)}>Eliminar</button>
+					{/if}
+				</tr>
+			{/each}
+		</table>
+	<!--
+	{:else}
+		<p>(Todavia no se agregó evidencia)</p>
+		-->
+	{/if}
 
-{#if isEvidenceViewActive}
-	<button on:click|preventDefault={() => hideViewEvidence()}>Cerrar</button>
-	<EvidenceDetail evidenceId={evidenceIdToShow}/>
-{/if}
+	{#if isEditMode && isEvidenceUploadActive && evidenceDataArray.length>0}
+		<button class="my-4" on:click|preventDefault={showAddEvidence}>Agregar evidencia</button>
+	{/if}
 
-{#if isEvidenceUploadActive}
-	<EvidenceUpload setNewEvidenceId={setNewEvidenceId}/>	
-{/if}
+	{#if isEvidenceViewActive}
+		<button on:click|preventDefault={() => hideViewEvidence()}>Cerrar</button>
+		<EvidenceDetail evidenceId={evidenceIdToShow}/>
+	{/if}
+
+	{#if isEvidenceUploadActive}
+		<EvidenceUpload setNewEvidenceId={setNewEvidenceId}/>	
+	{/if}
+</div>

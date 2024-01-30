@@ -7,7 +7,7 @@
 	let fileName;
 	let fileBuffer;
 	let fileType;
-	let description="testing";
+	let description;
 	let postData = {};
 
 	$: if (files) {
@@ -33,7 +33,8 @@
 	async function sendDataToServer() {
     try {
       const response = await fetch('/api/evidence/upload', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(postData)
       });
 
@@ -49,6 +50,9 @@
   }
 </script>
 
-<input bind:files type="file" accept=".pdf, image/*, video/*" name="uploaded-file" required>
-<textarea bind:value={description} name="description" placeholder="Descripcion" required></textarea>
-<button on:click={submitEvidence}>Subir</button>
+<div class="flex flex-col my-6 items-center">
+	<input class="my-4 mx-1" bind:files type="file" accept=".pdf, image/*, video/*" name="uploaded-file" required>
+		<!--<label for="decription" class="my-2">Descripcion</label>-->
+	<textarea class="h-36" bind:value={description} name="description" placeholder="Descripcion de la evidencia" required></textarea>
+	<button class="my-4" on:click={submitEvidence}>Subir</button>
+</div>
