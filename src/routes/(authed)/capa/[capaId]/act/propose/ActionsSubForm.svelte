@@ -37,10 +37,17 @@
 	});
 </script>
 
+<style>
+	td,th {
+		@apply p-2;
+	}
+</style>
+
 <input type="hidden" name="count-actions" value={countActions}>
 
-<table>
-	<tr>
+<label for="actions-table">Acciones propuestas</label>
+<table name="actions-table" class="my-2">
+	<tr class="bg-gray-400">
 		<th>Nro</th>
 		<th>Solucion</th>
 		<th>Fecha de compromiso</th>
@@ -48,7 +55,7 @@
 		<th>Comentarios</th>
 	</tr>
 	{#each actionsArray as action, actionIndex}
-		<tr>
+		<tr class="text-center">
 			<td>{actionIndex+1}</td>
 			<td>
 				<textarea name={"proposed-solution-"+actionIndex}
@@ -82,12 +89,12 @@
 			</td>
 			{#if countActions>1}
 				<td>
-					<button name={"delete-"+actionIndex} on:click|preventDefault={() => deleteAction(actionIndex)}>Eliminar</button>
+					<button class="bg-red-400" name={"delete-"+actionIndex} on:click|preventDefault={() => deleteAction(actionIndex)}>Eliminar</button>
 				</td>
 			{/if}
 		</tr>
 	{/each}
 </table>
 
-<button on:click|preventDefault={addNewAction}>Agregar accion</button>
+<button class="bg-gray-700" on:click|preventDefault={addNewAction}>Agregar accion</button>
 
