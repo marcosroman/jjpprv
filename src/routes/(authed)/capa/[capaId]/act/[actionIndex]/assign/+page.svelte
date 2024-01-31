@@ -27,18 +27,25 @@
 	});
 </script>
 
-<form method="POST">
+<style>
+	td, th {
+		@apply p-2;
+	}
+	th {
+		@apply bg-gray-400;
+	}
+</style>
+
+<form method="POST" class="container flex-col">
 	<input type="hidden" name="id" value={capaId}>
 	<input type="hidden" name="action-index" value={actionIndex}>
 	<input type="hidden" name="proponent-id" value={action.proposal.proponentId}>
 
 	<table>
-		<!--
 		<tr>
-			<th>Nro.</th>
-			<td>{Number(actionIndex+1}</td>
+			<th>Accion Nro.</th>
+			<td>{Number(actionIndex)+1}</td>
 		</tr>
-		-->
 		<tr>
 			<th>Solucion</th>
 			<td>{action.proposal.proposedSolution}</td>
@@ -66,7 +73,7 @@
 		</tr>
 	</table>
 
-	<input type="submit" value="Guardar">
+	<input class="my-6" type="submit" value="Guardar">
 </form>
 
 <hr>
