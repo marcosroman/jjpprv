@@ -1,6 +1,7 @@
-import capas from '$lib/db/capas';
 import { ObjectId } from 'mongodb';
-import { json } from '@sveltejs/kit';
+import { json, redirect } from '@sveltejs/kit';
+
+import capas from '$lib/db/capas';
 
 export const load = async ({params}) => {
 	// won't add anything related to rescheduling here...
@@ -21,8 +22,9 @@ export const actions = {
 			comments: data.get('comments')
 		}
 
+		let result = null;
 		try {
-			const result = capas.updateOne(
+			result = capas.updateOne(
 				{_id: new ObjectId(capaId)},
 				{$set: {
 					[`actions.${actionIndex}.review`]: reviewObject
@@ -30,6 +32,10 @@ export const actions = {
 			);
 		} catch(error) {
 			console.error(error);
+		}
+
+		if (result) {
+			throw redirect(302, '/');
 		}
 	}
 }
