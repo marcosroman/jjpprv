@@ -17,6 +17,7 @@ export const actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
 
+		let result = null;
 		try {
 			const capaId = formData.get('id');
 			const actionIndex = formData.get('action-index');
@@ -27,15 +28,17 @@ export const actions = {
 						comments: formData.get(`comments`)
 			}
 
-			const result = await capas.updateOne(
+			result = await capas.updateOne(
 				{ _id: new ObjectId(capaId) },
 				{ $set: {[`actions.${actionIndex}.proposal.assignment.acceptance`]: acceptanceUpdateObject} }
 			);
 			console.log('result:', result);
-	} catch (error) {
-		console.log(error);
-	}
+		} catch (error) {
+			console.log(error);
+		}
 
-	throw redirect(303, "/");
+		if (result) {
+			throw redirect(302, "/");
+		}
 	}
 }
