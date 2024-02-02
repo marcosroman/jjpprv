@@ -27,15 +27,6 @@
 	});
 </script>
 
-<style>
-	td, th {
-		@apply p-2;
-	}
-	th {
-		@apply bg-gray-400;
-	}
-</style>
-
 <form method="POST" class="container flex-col">
 	<input type="hidden" name="id" value={capaId}>
 	<input type="hidden" name="action-index" value={actionIndex}>

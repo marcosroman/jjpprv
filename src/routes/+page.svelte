@@ -38,47 +38,49 @@
 	}
 </script>
 
-<div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 mx-6">
 	{#if user}
 		{#if pendingActionsPerCapa}
 			{#if pendingActionsPerCapa.length>0}
-				{#each pendingActionsPerCapa as capaObject}
-					<div class="m-6 p-4">
-						<div class="p-4 text-black rounded-md" style={`background-color: #${capaObject.capa._id.slice(-7,-1)};`}>
-							<a href={`/capa/${capaObject.capa._id}/view`}>
-								<CapaMiniView capaId={capaObject.capa._id}/>
-							</a>
-						</div>
+				<div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 mx-6">
+					{#each pendingActionsPerCapa as capaObject}
+						<div class="m-6 p-4">
+							<div class="p-4 text-black rounded-md" style={`background-color: #${capaObject.capa._id.slice(-7,-1)};`}>
+								<a href={`/capa/${capaObject.capa._id}/view`}>
+									<CapaMiniView capaId={capaObject.capa._id}/>
+								</a>
+							</div>
 
-						<div class="m-3">
-							{#if capaObject.pendingActions.length>1}
-								<span class="font-bold">Acciones pendientes:</span>
-							{:else}
-								<span class="font-bold">Accion pendiente:</span>
-							{/if}
-							<ol>
-								{#each capaObject.pendingActions as action}
-									<li class="ml-6">
-										<a href={action.link} class="hover:text-zinc-400">
-											<span>📌</span>
-											{action.description}</a>
-										<!-- adding evidence in issue section can be ommited -->
-										{#if /\/capa\/[0-9a-z]+\/new\/evidence/.test(action.link)}
-											<button on:click|preventDefault={
-												() => ommitIssueEvidence(capaObject.capa._id)}>
-												Omitir</button>
-										{/if}
-									</li>
-								{/each}
-							</ol>
+							<div class="m-3">
+								{#if capaObject.pendingActions.length>1}
+									<span class="font-bold">Acciones pendientes:</span>
+								{:else}
+									<span class="font-bold">Accion pendiente:</span>
+								{/if}
+								<ol>
+									{#each capaObject.pendingActions as action}
+										<li class="ml-6">
+											<a href={action.link} class="hover:text-zinc-400">
+												<span>📌</span>
+												{action.description}</a>
+											<!-- adding evidence in issue section can be ommited
+													(check with regex if link has the form
+													'/capa/{(hex)id}/new/evidence') -->
+											{#if /\/capa\/[0-9a-f]+\/new\/evidence/.test(action.link)}
+												<button on:click|preventDefault={
+													() => ommitIssueEvidence(capaObject.capa._id)}>
+													Omitir</button>
+											{/if}
+										</li>
+									{/each}
+								</ol>
+							</div>
 						</div>
-					</div>
-				{/each}
+					{/each}
+				</div>
 			{:else}
-				<p class="text-center">Sin acciones pendientes</p>
+				<p class="text-center w-full">Sin acciones pendientes</p>
 			{/if}
 		{/if}
 	{:else}
 		<p>Identifiquese</p>
 	{/if}
-</div>

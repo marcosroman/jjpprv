@@ -45,7 +45,7 @@
 
 <input type="hidden" name="count-actions" value={countActions}>
 
-<label for="actions-table">Acciones propuestas</label>
+<label for="actions-table" class="flex-1 text-left w-fit">Acciones propuestas</label>
 <table name="actions-table" class="my-2">
 	<tr class="bg-gray-400">
 		<th>Nro</th>
@@ -88,7 +88,7 @@
 				<input type="text" name={`comments-${actionIndex}`}>
 			</td>
 			{#if countActions>1}
-				<td>
+				<td style="border-none">
 					<button class="bg-red-400" name={"delete-"+actionIndex} on:click|preventDefault={() => deleteAction(actionIndex)}>Eliminar</button>
 				</td>
 			{/if}

@@ -9,6 +9,7 @@
 	const documentSection = `actions.${actionIndex}`;
 </script>
 
-<p>{capaId}</p>
-<p>{documentSection}</p>
-<EvidenceList isEditMode={isEditMode} capaId={capaId} documentSection={documentSection}/>
+<EvidenceList
+	isEditMode={isEditMode}
+	capaId={capaId}
+	documentSection={documentSection}/>

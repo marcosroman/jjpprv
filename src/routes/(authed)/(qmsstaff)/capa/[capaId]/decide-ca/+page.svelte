@@ -7,7 +7,6 @@
 	let capaId = capa._id;
 </script>
 
-
 <CapaView {capaId}/>
 <hr>
 

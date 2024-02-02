@@ -15,10 +15,9 @@
 	<input type="hidden" name="id" value={capaId}>
 
 	{#if capa.issue.isNonConformity}
-		<div class="flex flex-col my-6">
-		<label for="possible-root-causes">Analisis de las causas (raices) de la no-conformidad
-		</label>
-			<textarea class="h-40" name="possible-root-causes" required placeholder="Causas"></textarea>
+		<div class="flex flex-col mb-10">
+			<label for="possible-root-causes my-8">Analisis de las causas<wbr> (raices) de la No-Conformidad</label>
+			<textarea class="h-36" name="possible-root-causes" required placeholder="Detalle "></textarea>
 		</div>
 	{/if}
 	
