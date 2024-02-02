@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+
 	import EvidenceUpload from './EvidenceUpload.svelte';
 	import EvidenceDetail from './EvidenceDetail.svelte';
 	import { getEvidenceDataFromCAPA, updateAndGetEvidenceDataFromCAPA,
@@ -16,12 +17,22 @@
 	let isEvidenceViewActive = false;
 	let evidenceIdToShow = null;
 
-	function showAddEvidence() { isEvidenceUploadActive = true; }
-	function hideAddEvidence() { isEvidenceUploadActive = false; }
-	function showViewEvidence(evidenceId) { isEvidenceViewActive = true; evidenceIdToShow = evidenceId;}
-	function hideViewEvidence(evidenceId) { isEvidenceViewActive = false; evidenceIdToShow = null;}
+	function showAddEvidence() {
+		isEvidenceUploadActive = true;
+	}
+	function hideAddEvidence() {
+		isEvidenceUploadActive = false;
+	}
+	function showViewEvidence(evidenceId) {
+		isEvidenceViewActive = true;
+		evidenceIdToShow = evidenceId;
+	}
+	function hideViewEvidence(evidenceId) {
+		isEvidenceViewActive = false;
+		evidenceIdToShow = null;
+	}
 	
-	// prop to EvidenceUpload component when isEditMmode === true :
+	// function sent as prop to EvidenceUpload component when isEditMmode === true :
 	async function setNewEvidenceId(insertedEvidenceId) {
 		newEvidenceId = insertedEvidenceId;
 		try {
@@ -45,9 +56,10 @@
 	}
 
 	onMount(async () => {
-		evidenceDataArray = await getEvidenceDataFromCAPA(capaId, documentSection);
+		try {
+			evidenceDataArray = await getEvidenceDataFromCAPA(capaId, documentSection);
+		} catch(error) { console.error(error); }
 	});
-
 
 	function fileTypeString(fileType) {
 		const fileTypeCategory = fileType.split('/')[0];
@@ -62,41 +74,43 @@
 	}
 </script>
 
+<style>
+	td, th {
+		@apply p-2;
+	}
+</style>
 
-<div class="flex justify-center flex-col container">
+<div class="flex justify-center flex-row flex-wrap justify-evenly container">
+	{#if isEvidenceUploadActive}
+		<EvidenceUpload setNewEvidenceId={setNewEvidenceId}/>	
+	{/if}
+
+	{#if isEvidenceViewActive}
+		<EvidenceDetail evidenceId={evidenceIdToShow} hideEvidenceDetail={hideViewEvidence} />
+	{/if}
+
 	{#if evidenceDataArray && evidenceDataArray.length > 0}
-		<table>
-			<tr class="bg-gray-400 table-row"><!--<th>Nombre</th>--><th>Descripcion</th><th>Tipo</th></tr>
+		<table class="table-fixed">
+			<tr class="bg-gray-400 table-row"><th>Descripcion</th><th>Tipo</th></tr>
 			{#each evidenceDataArray as evidenceData}
 				<tr>
-					<!--<td>{evidenceData.fileName}</td>-->
 					<td>{evidenceData.description}</td>
 					<td>{fileTypeString(evidenceData.fileType)}</td>
-					<button class="text-sm bg-gray-700" on:click|preventDefault={() =>
-						showViewEvidence(evidenceData._id)}>Ver</button>
+					<button class="text-sm bg-gray-700 px-1 mx-1" on:click|preventDefault={() =>
+						showViewEvidence(evidenceData._id)}>👁️</button>
 					{#if isEditMode}
-						<button class="text-sm bg-red-400" on:click|preventDefault={() =>
-							deleteEvidence(evidenceData._id)}>Eliminar</button>
+						<button class="text-sm bg-red-400 px-1 mx-1" on:click|preventDefault={() =>
+							deleteEvidence(evidenceData._id)}>❌</button>
 					{/if}
 				</tr>
 			{/each}
 		</table>
-	<!--
-	{:else}
-		<p>(Todavia no se agregó evidencia)</p>
-		-->
 	{/if}
 
+	<!--
 	{#if isEditMode && isEvidenceUploadActive && evidenceDataArray.length>0}
 		<button class="my-4" on:click|preventDefault={showAddEvidence}>Agregar evidencia</button>
 	{/if}
+	-->
 
-	{#if isEvidenceViewActive}
-		<button on:click|preventDefault={() => hideViewEvidence()}>Cerrar</button>
-		<EvidenceDetail evidenceId={evidenceIdToShow}/>
-	{/if}
-
-	{#if isEvidenceUploadActive}
-		<EvidenceUpload setNewEvidenceId={setNewEvidenceId}/>	
-	{/if}
 </div>

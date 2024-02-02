@@ -8,7 +8,10 @@
 	let fileBuffer;
 	let fileType;
 	let description;
+	let fileInput;
 	let postData = {};
+
+	let errorMessage;
 
 	$: if (files) {
 		let file = files[0]; 
@@ -27,7 +30,13 @@
 			sendDataToServer().then(() => {
 				console.log('submitted!');
 			});
-		} // TODO: else inform about missing fields
+		} else {
+			errorMessage = "";
+			if (!files) 
+				errorMessage += "Adjunte un archivo. ";
+			if (!description)
+				errorMessage += "Agregue una descripcion.";
+		}
 	}
 
 	async function sendDataToServer() {
@@ -45,14 +54,22 @@
 				   the evidence ids array can be updated */
 				setNewEvidenceId(await data.insertedId);
         console.log('Server response:', data);
+				// reset fields
+				description = '';
+				fileInput.value = '';
+				errorMessage = '';
       } else { console.error('Failed to send data to the server'); }
     } catch (error) { console.error('Error:', error); }
   }
 </script>
 
 <div class="flex flex-col my-6 items-center">
-	<input class="my-4 mx-1" bind:files type="file" accept=".pdf, image/*, video/*" name="uploaded-file" required>
-		<!--<label for="decription" class="my-2">Descripcion</label>-->
+	<input class="my-4 mx-1" bind:this={fileInput} bind:files type="file" accept=".pdf, image/*, video/*" name="uploaded-file" required>
 	<textarea class="h-36" bind:value={description} name="description" placeholder="Descripcion de la evidencia" required></textarea>
+	{#if errorMessage}
+		<p class="py-2 w-1/2 font-bold text-red-500">{errorMessage}</p>
+	{/if}
+
 	<button class="my-4" on:click={submitEvidence}>Subir</button>
 </div>
+
