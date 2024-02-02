@@ -17,6 +17,8 @@ export const actions = {
 	default: async (event) => {
 		const formData = await event.request.formData();
 
+		let result = null;
+
 		try {
 			const capaId = formData.get('id');
 			const proponentId = event.locals.user._id;
@@ -60,12 +62,16 @@ export const actions = {
 				setObject["responseToNonConformity.possibleRootCauses"] = possibleRootCauses;
 			}
 
-			await capas.updateOne(
+			result = await capas.updateOne(
 				{ _id: new ObjectId(capaId) },
 				{ $set: setObject }
 			);
 		} catch (error) {
 			console.log(error);
+		}
+
+		if (result) {
+			throw redirect(302, '/');
 		}
 	}
 }

@@ -1,5 +1,6 @@
-import capas from '$lib/db/capas';
+import { redirect } from '@sveltejs/kit';
 import { ObjectId } from 'mongodb';
+import capas from '$lib/db/capas';
 
 // get commit date, give form with new options... may include previous data
 // (action may not be changed, only commit date and assignee)... previous values will be given, can choose new ones --- 
@@ -62,12 +63,17 @@ export const actions = {
 		}
 		console.log(JSON.stringify(setObject));
 
+		let result = null;
 		try {
-			const result = await capas.updateOne({_id: new ObjectId(capaId)},
+			result = await capas.updateOne({_id: new ObjectId(capaId)},
 				{$set: setObject});
 			console.log(result);
 		} catch(error) {
 			console.error(error);
+		}
+
+		if (result) {
+			throw redirect(302, '/');
 		}
 	}
 }
