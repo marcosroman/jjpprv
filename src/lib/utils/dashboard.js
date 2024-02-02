@@ -233,60 +233,70 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 
 export async function pendingActionsForUser(user, currentDate) {
 	const cursor = capas.find(); // TODO: filter out the finished ones
+	let capasArray;
 
 	try {
-		const capasArray = await cursor.toArray();
-
-		// concat arrays
-		let pendingActions = capasArray
-			.map((capa) => pendingActionsForCAPA(capa, currentDate));
-
-		// clean up and filter, resulting in actions assigned to user only
-		pendingActions = (await Promise.all(pendingActions))
-			.filter((capa) => capa.length>0)
-			.reduce((a, c) => [...a, ...c], [])
-			.filter((action) => action.assigneeId === user._id);
-
-		return pendingActions;
+		capasArray = await cursor.toArray();
 	} catch(error) {
 		console.error(error);
-		return {error};
+		//return null;//;{error};
+	} finally {
+		if (capasArray) {
+			// concat arrays
+			let pendingActions = capasArray
+				.map((capa) => pendingActionsForCAPA(capa, currentDate));
+
+			// clean up and filter, resulting in actions assigned to user only
+			pendingActions = (await Promise.all(pendingActions))
+				.filter((capa) => capa.length>0)
+				.reduce((a, c) => [...a, ...c], [])
+				.filter((action) => action.assigneeId === user._id);
+
+			return pendingActions;
+		}
 	}
 }
 
 export async function pendingActionsForUserGroupedByCapa(user, currentDate) {
+	let pendingActions;
 	try {
-		let pendingActions = await pendingActionsForUser(user, currentDate);
-
-		const groupedPendingActions = pendingActions.reduce((accumulator, currentObject) => {
-			const { capaId } = currentObject;
-
-			// check if exists, otherwise create entry
-			if (!accumulator[capaId]) {
-				accumulator[capaId] = [];
-			}
-
-			accumulator[capaId].push(currentObject);
-
-			return accumulator;
-		}, []);
-
-		let groupedPendingActionsArray = Object.values(groupedPendingActions);
-
-		let pendingActionsGroupedByCapa = groupedPendingActionsArray.map(a => {
-			return {
-				capa: a[0].capa,
-				pendingActions: a.map(o => {
-					return {
-						description: o.description,
-						link: o.link
-					}
-				})
-			}
-		});
-
-		return pendingActionsGroupedByCapa;
+		pendingActions = await pendingActionsForUser(user, currentDate);
 	} catch(error) {
 		console.error(error);
+	} finally {
+		if (pendingActions) {
+			if (pendingActions.length === 0) {
+				return [];
+			} else {
+				const groupedPendingActions = pendingActions.reduce((accumulator, currentObject) => {
+					const { capaId } = currentObject;
+
+					// check if exists, otherwise create entry
+					if (!accumulator[capaId]) {
+						accumulator[capaId] = [];
+					}
+
+					accumulator[capaId].push(currentObject);
+
+					return accumulator;
+				}, []);
+
+				let groupedPendingActionsArray = Object.values(groupedPendingActions);
+
+				let pendingActionsGroupedByCapa = groupedPendingActionsArray.map(a => {
+					return {
+						capa: a[0].capa,
+						pendingActions: a.map(o => {
+							return {
+								description: o.description,
+								link: o.link
+							}
+						})
+					}
+				});
+
+				return pendingActionsGroupedByCapa;
+			}
+		}
 	}
 }
