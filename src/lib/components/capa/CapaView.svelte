@@ -42,7 +42,11 @@
 				<tr><th>Creador</th><td>{userNameString(capa.issue.issuer)}</td></tr>
 				<tr><th>Sector de Origen</th><td>{capa.issue.detectedInSector.fullName}</td>
 				<tr><th>Detectado en</th><td>{capaIssueDetectedDuring}</td>
-				<tr><th>Descripcion de la {capaTypeDescription}</th><td><pre>{capa.issue.description}</pre></td></tr>
+			</table>
+
+			<table class="my-3">
+				<tr><th>Descripcion de la {capaTypeDescription}</th></tr>
+				<tr><td><pre>{capa.issue.description}</pre></td></tr>
 			</table>
 
 			{#if capa.issue.evidence}
