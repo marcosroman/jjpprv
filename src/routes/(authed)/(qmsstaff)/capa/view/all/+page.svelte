@@ -12,8 +12,11 @@
 		margin: 0 2em 2em 2em;
 		overflow-x: scroll;
 	}
-	td, th {
-		@apply px-2;
+	td {
+		@apply py-1 px-2;
+	}
+	th {
+		@apply p-2 bg-gray-400;
 	}
 </style>
 
@@ -48,15 +51,30 @@
 						<td>{duringProcessString(capa.issue.detectedDuring)}</td>
 						<td>{capa.issue.detectedInSector.fullName}</td>
 						<td>{capa.issue.description}</td>
-						<td>(fecha seguimiento...)</td>
-						<td>{capa?.evaluation?.evaluationDate ?? ""}</td>
+						<td>
+							{#if capa?.actions}
+								<table class="border-none bg-none w-full">
+									{#each capa.actions as action, index}
+										<tr>
+											<th class="w-1/6">{index+1}</th>
+											<td>{action?.review?.reviewDate ?
+												dateString(action.review.reviewDate) : ""}</td>
+										</tr>
+									{/each}
+								</table>
+							{/if}
+						</td>
+						<td>{capa?.evaluation?.evaluationDate ?
+							dateString(capa.evaluation.evaluationDate) : ""}</td>
 						<td>{capa?.closure?.closureDate ? "Cerrado" : "Abierto"}</td>
 						<td>{capa?.closure?.closureDate ?
 							(capa?.closure?.isClosedEffectively ? "Si" : "No") : ""}</td>
 						<td>{capa?.closure?.closureDate ?
 							(capa?.closure?.isRisksUpdateRequiredActualizar ?
 							"Si" : "No") : ""}</td>
-						<td>{capa?.closure?.closureDate ? (capa?.closure?.isChangingQMSRequired ? "Si" : "No") : ""}</td>
+						<td>{capa?.closure?.closureDate ?
+							(capa?.closure?.isChangingQMSRequired ?
+								"Si" : "No") : ""}</td>
 						<td>{capa?.closure?.comments ?? ""}</td>
 					</tr>
 				{/each}

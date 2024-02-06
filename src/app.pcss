@@ -5,7 +5,7 @@
 
 @layer base {
 	:root {
-		--navbar-max-y: 30vh;
+		--navbar-max-y: 15vh;
 	}
 
   h1 {
@@ -25,9 +25,10 @@
 	/* Set the default font family and text color */
 	body {
 		@apply bg-indigo-100;
+		margin: 0;
 		font-family: sans-serif;
 		color: #333;
-		margin: var(--navbar-max-y) 0 0 0;
+		padding: calc(1.2*var(--navbar-max-y)) 0 0 0;
 	}
 
 	/* Center the page content */
@@ -37,7 +38,7 @@
 		justify-content: center;
 		align-items: center;
 		min-width: 100%;
-		margin: var(--navbar-max-y) 0 0 0;
+		/*margin: var(--navbar-max-y) 0 0 0;*/
 		/*min-height: 100vh;*/
 	}
 
@@ -82,6 +83,7 @@
 		position: fixed;
 		top: 0;
 		width: 100%;
+		height: var(--navbar-max-y);
 	}
 
 	nav a {
