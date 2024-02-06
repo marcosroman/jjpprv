@@ -30,7 +30,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 			if (!capa.closure.isClosedEffectively && capa.closure?.additionalCAPA == null) {
 				 pendingActions.push({
 					 link: `${baseLink}/close/addAdditionalCAPA`,
-					 description: 'agregar capa de seguimiento',
+					 description: 'Agregar NC/OM de seguimiento',
 					 assigneeId: qmsManagerId
 				});
 			}
@@ -42,7 +42,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 				if (capa.issue?.evidence === undefined) {
 					pendingActions.push({
 					  link: `${baseLink}/new/evidence`,
-						description: 'agregar evidencia a nc/om',
+						description: 'Agregar evidencia de NC/OM',
 						assigneeId: String(capa.issue.issuerId)
 					});
 				}
@@ -51,14 +51,14 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 					if (capa?.responseToNonConformity?.responseDate === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/respond-nc`,
-							description: 'responder a no-conformidad',
+							description: 'Responder a No-Conformidad',
 							assigneeId: sectorManagerId
 						});
 					// also check for evidence in response to non-conformity
 					} else if (capa.responseToNonConformity?.immediateActions?.evidence === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/respond-nc/evidence`,
-							description: 'agregar evidencia de accion inmediata a no-conformidad',
+							description: 'Agregar evidencia de accion inmediata ante No-Conformidad',
 							assigneeId: sectorManagerId
 						});
 					}
@@ -67,7 +67,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 					if (capa?.correctiveActionsRequirement === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/decide-ca`,
-							description: 'definir si requiere acciones correctivas',
+							description: 'Definir si requiere acciones correctivas',
 							assigneeId: qmsManagerId
 						});
 					// if they are required, check if actions already started
@@ -76,7 +76,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 					} else if(capa.correctiveActionsRequirement.isRequired && capa?.actions === undefined) {
 						pendingActions.push({
 					  	link: `${baseLink}/act/propose`,
-							description: 'analizar y proponer acciones para resolver no-conformidad',
+							description: 'Analizar y proponer acciones para resolver No-Conformidad',
 							assigneeId: sectorManagerId
 						});
 					}
@@ -84,7 +84,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 				} else if (!capa?.actions === undefined) {
 					pendingActions.push({
 					  link: `${baseLink}/act/propose`,
-						description: 'proponer acciones para aplicar accion de mejora',
+						description: 'Proponer acciones para aplicar la Accion de Mejora',
 						assigneeId: sectorManagerId
 					});
 				}
@@ -103,7 +103,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 									if (action?.proposal?.assignment === undefined) {
 										pendingActions.push({
 											link: `${baseLink}/act/${actionIndex}/assign`,
-											description: 'asignar responsable de accion',
+											description: `Asignar responsable de accion ${actionIndex+1}`,
 											actionIndex,
 											assigneeId: sectorManagerId
 										});
@@ -111,7 +111,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 									} else if (action.proposal.assignment?.acceptance === undefined) {
 										pendingActions.push({
 											link: `${baseLink}/act/${actionIndex}/accept`,
-											description: 'aceptar accion asignada',
+											description: `Aceptar accion (${actionIndex+1}) asignada`,
 											actionIndex,
 											assigneeId: String(action.proposal.assignment.assigneeId)
 										});
@@ -119,14 +119,14 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 									} else if (!action?.evidence) {
 										pendingActions.push({
 											link: `${baseLink}/act/${actionIndex}/evidence`,
-											description: 'agregar evidencia p/ accion',
+											description: `Agregar evidencia p/ accion ${actionIndex+1}`,
 											actionIndex,
 											assigneeId: String(action.proposal.assignment.assigneeId)
 										});
 									} else { // review
 										pendingActions.push({
 											link: `${baseLink}/act/${actionIndex}/review`,
-											description: 'dar seguimiento a accion',
+											description: `Dar seguimiento a accion ${actionIndex+1}`,
 											actionIndex,
 											assigneeId: qmsManagerId
 										});
@@ -135,7 +135,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 									// reschedule
 									pendingActions.push({
 										link: `${baseLink}/act/${actionIndex}/reschedule`,
-										description: 'reagendar accion (fecha de compromiso expirada)',
+										description: `Reagendar accion ${actionIndex+1}(fecha de compromiso expirada)`,
 										actionIndex,
 										assigneeId: sectorManagerId
 									});
@@ -151,7 +151,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 									if (action.reschedule.assignment?.acceptance === undefined) {
 										pendingActions.push({
 											link: `${baseLink}/act/${actionIndex}/accept`,
-											description: 'aceptar accion (reagendada) asignada',
+											description: `Aceptar accion  ${actionIndex+1} (reagendada) asignada`,
 											actionIndex,
 											assigneeId: String(action.reschedule.assignment.assigneeId)
 										});
@@ -159,14 +159,14 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 									} else if (action?.evidence === undefined) {
 										pendingActions.push({
 											link: `${baseLink}/act/${actionIndex}/evidence`,
-											description: 'agregar evidencia p/ accion (reagendada)',
+											description: `Agregar evidencia para accion ${actionIndex+1} (reagendada)`,
 											actionIndex,
 											assigneeId: String(action.reschedule.assignment.assigneeId)
 										});
 									} else { //review
 										pendingActions.push({
 											link: `${baseLink}/act/${actionIndex}/review`,
-											description: 'dar seguimiento a accion',
+											description: `Dar seguimiento a accion ${actionIndex+1}`,
 											actionIndex,
 											assigneeId: qmsManagerId
 										});
@@ -175,7 +175,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 									// if rescheduled commitment date also passed
 									pendingActions.push({
 										link: `${baseLink}/act/${actionIndex}/review`,
-										description: 'dar seguimiento a accion (reagendamiento expirado)',
+										description: `Dar seguimiento a accion ${actionIndex+1} (reagendamiento expirado)`,
 										actionIndex,
 										assigneeId: qmsManagerId
 									});
@@ -191,22 +191,32 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 				// TODO: fix this
 				// const latestCommitmentDate = new Date(); // change to max of all commit dates
 
+				//currentDate
+				//console.log(capa.actions.map((action) => [Math.max(new Date(action.proposal.commitmentDate),action?.reschedule?.rescheduledCommitmentDate ? new Date(action.reschedule.rescheduledCommitmentDate) : null)]));
+				/*
+				console.log(capa.actions.map((action) => Math.max.apply(null,
+					[new Date(action.proposal.commitmentDate),
+						action?.reschedule?.rescheduledCommitmentDate ?
+							new Date(action?.reschedule?.rescheduledCommitmentDate) :
+								undefined])));
+								*/
+
 				if (!capa?.evaluation?.assignment) {
 					pendingActions.push({
 						link: `${baseLink}/evaluate/assign`,
-						description: 'asignar evaluacion',
+						description: 'Asignar evaluacion',
 						assigneeId: qmsManagerId
 					});
 				} else if(capa?.evaluation?.evaluationDate === undefined) {
 					pendingActions.push({
 						link: `${baseLink}/evaluate`,
-						description: 'realizar evaluacion',
+						description: 'Realizar evaluacion',
 						assigneeId: String(capa.evaluation.assignment.evaluatorId)
 					});
 				} else if (capa?.closure === undefined) {
 						pendingActions.push({
 							link: `${baseLink}/close`,
-							description: 'cerrar capa',
+							description: 'Cerrar',
 							assigneeId: qmsManagerId
 						});
 				} 
