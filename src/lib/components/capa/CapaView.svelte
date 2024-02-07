@@ -56,7 +56,7 @@
 			</table>
 
 			{#if capa.issue.evidence}
-				<p>Evidencia:</p>
+				<p>Evidencia</p>
 				<EvidenceList isEditMode={false} capaId={capa._id} documentSection="issue"/>
 			{/if}
 		</div>
@@ -102,7 +102,7 @@
 							<td>{capa.responseToNonConformity.possibleConsequences}</td></tr>
 						<tr><th>Acciones inmediatas</th>
 							<td>{capa.responseToNonConformity.immediateActions.proposedSolution}</td></tr>
-						<tr><th>Evidencia:</th>
+						<tr><th>Evidencia</th>
 							{#if capa.responseToNonConformity.immediateActions.evidence}
 								<td>
 									<EvidenceList
