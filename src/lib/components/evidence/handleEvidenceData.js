@@ -94,16 +94,20 @@ export async function deleteEvidenceDataFromCAPA(
 	const subURL = sectionSubURL(documentSection);
 	const apiURL = `/api/capa/${capaId}/${subURL}/evidence/${evidenceIdToDelete}/delete`;
 
-	const response = await fetch(apiURL, {
-		method: 'DELETE',
-		headers: {"Content-Type": "application/json"},
-		body: JSON.stringify({evidenceIds})
-	});
+	try {
+		const response = await fetch(apiURL, {
+			method: 'DELETE',
+			headers: {"Content-Type": "application/json"},
+			body: JSON.stringify({evidenceIds})
+		});
 
-	if (response.ok) {
-		return getEvidenceDataFromCAPA(capaId, documentSection);
-	} else {
-		console.error('error deleting evidence');
+		if (response.ok) {
+			return getEvidenceDataFromCAPA(capaId, documentSection);
+		} else {
+			console.error('error deleting evidence');
+		}
+	} catch (error) {
+		console.error(error);
 	}
 }
 

@@ -19,7 +19,7 @@ export async function DELETE({request, params}) {
 				{[`${section}.evidence`]:
 					remainingEvidenceIds.map((id) => new ObjectId(id))}});
 
-		return json(result, {status: 402});
+		return json(result, {status: 200});
 	} catch(error) {
 		return json(error, {status: 400});
 	}
