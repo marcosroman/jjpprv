@@ -15,7 +15,9 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 						sectorId: new ObjectId(detectionSectorId),
 						isManager: true
 					}
-		}});
+				}
+			}
+		);
 		const sectorManagerId = String(sectorManager._id);
 
 		const qmsManager = await users.findOne({ isQMSStaff: true });
@@ -185,47 +187,69 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 					} 
 				}
 
-				// always possible to assign capa evaluation...
-				// but minimum date (to set evaluation date) should be right after
-				// latest commitment date for actions, in case there's any
-				// TODO: fix this
-				// const latestCommitmentDate = new Date(); // change to max of all commit dates
+				// from here on we check if the capa is ready to be reviewed and closed
+				let isReadyToClose;
 
-				//currentDate
-				//console.log(capa.actions.map((action) => [Math.max(new Date(action.proposal.commitmentDate),action?.reschedule?.rescheduledCommitmentDate ? new Date(action.reschedule.rescheduledCommitmentDate) : null)]));
-				/*
-				console.log(capa.actions.map((action) => Math.max.apply(null,
-					[new Date(action.proposal.commitmentDate),
-						action?.reschedule?.rescheduledCommitmentDate ?
-							new Date(action?.reschedule?.rescheduledCommitmentDate) :
-								undefined])));
-								*/
+				// min date for evaluation date should be right after
+				// latest commitment date for actions (if any actions)
+				// otherwise 
+				const isActionsRequired = (
+					(capa.issue.isNonconformity
+						&& capa?.correctiveActionsRequirement?.isRequired)
+					|| !capa.issue.isNonConformity
+				);
 
-				if (!capa?.evaluation?.assignment) {
-					pendingActions.push({
-						link: `${baseLink}/evaluate/assign`,
-						description: 'Asignar evaluacion',
-						assigneeId: qmsManagerId
-					});
-				} else if(capa?.evaluation?.evaluationDate === undefined) {
-					pendingActions.push({
-						link: `${baseLink}/evaluate`,
-						description: 'Realizar evaluacion',
-						assigneeId: String(capa.evaluation.assignment.evaluatorId)
-					});
-				} else if (capa?.closure === undefined) {
+				if (isActionsRequired) {
+					if (capa?.actions) {
+						const latestCommitmentDate = new Date(Math.max.apply(null,
+							capa.actions.map((action) => {
+								let dates = action?.reschedule?.rescheduledCommitmentDate
+									? action.reschedule.rescheduledCommitmentDate
+									: action.proposal.commitmentDate;
+								return dates
+							})));
+						console.log(latestCommitmentDate);
+						isReadyToClose = (currentDate > latestCommitmentDate);
+					} else {
+						isReadyToClose = false;
+					}
+				} else if (capa.issue.isNonConformity
+					&& capa?.correctiveActionsRequirement?.isRequired !== undefined
+					&& !capa.correctiveActionsRequirement.isRequired
+					&& capa?.responseToNonConformity?.immediateActions?.evidence
+					&& capa.responseToNonConformity.immediateActions.evidence.length>0) {
+					isReadyToClose = true;
+				} else {
+					isReadyToClose = false;
+				}
+				
+        if (isReadyToClose) { 
+					if (!capa?.evaluation?.assignment) {
+						pendingActions.push({
+							link: `${baseLink}/evaluate/assign`,
+							description: 'Asignar evaluacion',
+							assigneeId: qmsManagerId
+						});
+					} else if(capa?.evaluation?.evaluationDate === undefined) {
+						pendingActions.push({
+							link: `${baseLink}/evaluate`,
+							description: 'Realizar evaluacion',
+							assigneeId: String(capa.evaluation.assignment.evaluatorId)
+						});
+					} else if (capa?.closure === undefined) {
 						pendingActions.push({
 							link: `${baseLink}/close`,
 							description: 'Cerrar',
 							assigneeId: qmsManagerId
 						});
+					}
 				} 
 			} else {
 				console.error('issue?');
 			}
 		}
 
-		// add capaId to each pendingAction object
+		// add capa info to each pendingAction object
 		pendingActions = pendingActions.map((a) => {
 			return {
 				capa: JSON.parse(JSON.stringify(capa)),
@@ -237,7 +261,6 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 		return pendingActions;
 	} catch(error) {
 		console.error(error);
-		return {error};
 	}
 }
 
@@ -249,7 +272,6 @@ export async function pendingActionsForUser(user, currentDate) {
 		capasArray = await cursor.toArray();
 	} catch(error) {
 		console.error(error);
-		//return null;//;{error};
 	} finally {
 		if (capasArray) {
 			// concat arrays
@@ -269,6 +291,7 @@ export async function pendingActionsForUser(user, currentDate) {
 
 export async function pendingActionsForUserGroupedByCapa(user, currentDate) {
 	let pendingActions;
+
 	try {
 		pendingActions = await pendingActionsForUser(user, currentDate);
 	} catch(error) {
