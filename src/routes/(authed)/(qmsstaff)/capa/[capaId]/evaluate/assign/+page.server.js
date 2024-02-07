@@ -1,6 +1,6 @@
 import capas from '$lib/db/capas';
 import { ObjectId } from 'mongodb';
-import { json } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 export async function load({params, locals}) {
 	return {...params, user: locals.user};
@@ -14,8 +14,9 @@ export const actions = {
 		const assignerId = event.locals.user._id;
 		const evaluatorId = data.get('evaluator-id');
 
+		let result;
 		try {
-			await capas.updateOne({_id: new ObjectId(capaId)},
+			result = await capas.updateOne({_id: new ObjectId(capaId)},
 				{ $set: {
 					evaluation: {
 						assignment: {
@@ -25,11 +26,12 @@ export const actions = {
 						}
 					}
 				}});
-
-			return json({status: 200});
 		} catch(error) {
 			console.error(error);
-			return json({status: 400});
+		}
+
+		if (result) {
+			throw redirect(302,'/');
 		}
 	}
 }

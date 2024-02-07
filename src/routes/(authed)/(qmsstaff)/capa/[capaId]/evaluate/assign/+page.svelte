@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import CapaView from '$lib/components/capa/CapaView.svelte';
+	import userNameString from '$lib/utils/userName';
 
 	export let data;
 
@@ -18,10 +19,7 @@
 			const resCapa = await fetch(`/api/capa/${capaId}/view`);
 			capa = await resCapa.json();
 		} finally {
-			console.log('huh?')
 			if(capa && users) {
-				console.log('finally!')
-				// define forbidden users 
 				let forbiddenUsers = [
 					capa?.issue?.issuerId,
 					capa?.responseToNonConformity?.responderId,
@@ -44,18 +42,19 @@
 	});
 </script>
 
-<form method="POST">
+<form method="POST" class="container flex-col">
 	<input type="hidden" name="capa-id" value={capaId}>
 
-	<label>Responsable asignado para la evaluacion:
-		<select name="evaluator-id">
-			{#each allowedUsers as u}
-				<option value={u._id}>{u.firstName} {u.lastName}</option>
-			{/each}
-		</select>
+	<label for="evaluator-id">Responsable asignado para la evaluacion:
 	</label>
+	<select class="my-4" name="evaluator-id" required>
+		<option selected disabled></option>
+		{#each allowedUsers as u}
+			<option value={u._id}>{userNameString(u)}</option>
+		{/each}
+	</select>
 
-	<input type="submit" value="Guardar">
+	<input class="my-8" type="submit" value="Guardar">
 </form>
 
 <hr>
