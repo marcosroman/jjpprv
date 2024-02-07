@@ -8,4 +8,6 @@
 	const documentSection = "responseToNonConformity.immediateActions";
 </script>
 
-<EvidenceList {capaId} {documentSection} isEditMode={true}/>
+<div class="flex flex-row flex-wrap mx-15 justify-evenly">
+<EvidenceList {capaId} {documentSection} isEditMode={true} allowEvidenceUpload={true}/>
+</div>

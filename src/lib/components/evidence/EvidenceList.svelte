@@ -10,10 +10,11 @@
 	export let isEditMode = false; // true shows 'add evidence'/'delete' buttons
 	export let capaId; 
 	export let documentSection;
+	export let allowEvidenceUpload = false;
 
 	let evidenceDataArray = [];
 	let newEvidenceId = null;
-	let isEvidenceUploadActive = true;
+	let isEvidenceUploadActive = allowEvidenceUpload;
 	let isEvidenceViewActive = false;
 	let evidenceIdToShow = null;
 
@@ -81,6 +82,9 @@
 </style>
 
 <div class="flex justify-center flex-row flex-wrap justify-evenly container">
+<!--
+<div>
+-->
 	{#if isEvidenceUploadActive}
 		<EvidenceUpload setNewEvidenceId={setNewEvidenceId}/>	
 	{/if}
@@ -90,27 +94,32 @@
 	{/if}
 
 	{#if evidenceDataArray && evidenceDataArray.length > 0}
-		<table class="table-fixed">
-			<tr class="bg-gray-400 table-row"><th>Descripcion</th><th>Tipo</th></tr>
+		<!-- w-full used to have data table columns aligned in CapaView -->
+		<table class={allowEvidenceUpload ? "w-1/3 m-4 h-fit" : "w-full"}>
+			<tr>
+				<th class="w-3/5 bg-gray-400">Descripcion</th>
+				<th class="w-1/4 bg-gray-400">Tipo</th>
+				<th class="bg-none opacity-0 border-none"></th>
+			</tr>
 			{#each evidenceDataArray as evidenceData}
 				<tr>
 					<td>{evidenceData.description}</td>
-					<td>{fileTypeString(evidenceData.fileType)}</td>
-					<button class="text-sm bg-gray-700 px-1 mx-1" on:click|preventDefault={() =>
-						showViewEvidence(evidenceData._id)}>👁️</button>
-					{#if isEditMode}
-						<button class="text-sm bg-red-400 px-1 mx-1" on:click|preventDefault={() =>
-							deleteEvidence(evidenceData._id)}>❌</button>
-					{/if}
+					<td class="text-center">{fileTypeString(evidenceData.fileType)}</td>
+					<td class="flex flex-row justify-center border-none">
+						<button class="text-sm bg-gray-700 px-1 mx-1" on:click|preventDefault={() =>
+							showViewEvidence(evidenceData._id)}>👁️</button>
+						{#if isEditMode}
+							<button class="text-sm bg-red-400 px-1 mx-1" on:click|preventDefault={() =>
+								deleteEvidence(evidenceData._id)}>❌</button>
+						{/if}
+					</td>
 				</tr>
 			{/each}
 		</table>
 	{/if}
 
-	<!--
-	{#if isEditMode && isEvidenceUploadActive && evidenceDataArray.length>0}
+	<!--{#if isEditMode && isEvidenceUploadActive && evidenceDataArray.length>0}
 		<button class="my-4" on:click|preventDefault={showAddEvidence}>Agregar evidencia</button>
-	{/if}
-	-->
+	{/if}-->
 
 </div>
