@@ -28,6 +28,12 @@
 	});
 </script>
 
+<style>
+	tr, td {
+		@apply p-2;
+	}
+</style>
+
 {#if capa}
 	<div class="capa p-10">
 		<div class="text-center py-5">
