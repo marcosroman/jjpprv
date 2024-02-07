@@ -6,6 +6,8 @@
 	import userNameString from '$lib/utils/userName';
 	import duringProcessString from '$lib/utils/during';
 
+	import loadingAnimation from '$lib/assets/loading.gif';
+
 	export let capaId;
 
 	const immediateActionIcon = "⚡"; // 💥?
@@ -180,5 +182,7 @@
 		</div>
 	</div>
 {:else}
-	<p>cargando...</p>
+	<div class="flex justify-center">
+		<img class="w-1/6" src={loadingAnimation}>
+	</div>
 {/if}
