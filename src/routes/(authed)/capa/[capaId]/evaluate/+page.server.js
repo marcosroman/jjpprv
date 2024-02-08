@@ -1,6 +1,6 @@
 import capas from '$lib/db/capas';
 import { ObjectId } from 'mongodb';
-import { json } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 export async function load({params}) {
 	const capaId = params.capaId;
@@ -19,19 +19,21 @@ export const actions = {
 		const isEffective = data.get('is-effective') === "true" ? true : false;
 		const comments = data.get('comments');
 
+		let result;
 		try {
-			const result = await capas.updateOne({_id: new ObjectId(capaId)},
+			result = await capas.updateOne({_id: new ObjectId(capaId)},
 				{$set: {
 					"evaluation.evaluationDate": evaluationDate,
 					"evaluation.comments": comments,
 					"evaluation.isEffective": isEffective
 				}}
 			);
-
-			//return json({status: 200});
 		} catch(error) {
 			console.error(error);
-			//return json(error, {status: 400});
+		}
+
+		if (result) {
+			throw redirect(302, '/');
 		}
 	}
 }
