@@ -239,7 +239,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 					} else if (capa?.closure === undefined) {
 						pendingActions.push({
 							link: `${baseLink}/close`,
-							description: 'Cerrar',
+							description: `Cerrar ${capa.issue.isNonConformity ? "No-Conformidad" : "Accion de Mejora"}`,
 							assigneeId: qmsManagerId
 						});
 					}
