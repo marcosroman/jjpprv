@@ -183,6 +183,6 @@
 	</div>
 {:else}
 	<div class="flex justify-center">
-		<img class="w-1/6" src={loadingAnimation}>
+		<img class="w-1/6" src={loadingAnimation} alt="loading...">
 	</div>
 {/if}
