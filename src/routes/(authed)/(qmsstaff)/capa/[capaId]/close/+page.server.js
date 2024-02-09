@@ -1,6 +1,6 @@
 import capas from '$lib/db/capas';
 import { ObjectId } from 'mongodb';
-import { json } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 export async function load({params}) {
 	const capaId = params.capaId;
@@ -23,11 +23,16 @@ export const actions = {
 			isClosedEffectively: data.get('is-closed-effectively')  === "true" ? true: false
 		};
 
+		let result;
 		try {
-			await capas.updateOne({_id: new ObjectId(capaId)},
+			result = await capas.updateOne({_id: new ObjectId(capaId)},
 				{$set: {closure: closureObject}});
 		} catch(error) {
 			console.error(error);
+		}
+
+		if (result) {
+			throw redirect(302, '/');
 		}
 	}
 }
