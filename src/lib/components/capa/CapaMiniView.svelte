@@ -160,7 +160,7 @@
 			{#if capa?.closure && Object.keys(capa.closure).length>0}
 				<div class="flex flex-col p-2">
 					<div class="text-3xl">{closureIcon}</div>
-					{#if capa.close.isClosedEffectively}
+					{#if capa.closure.isClosedEffectively}
 						<div class="text-3xl">{checkIcon}</div>
 					{:else}
 						<div class="text-3xl">{crossIcon}</div>
