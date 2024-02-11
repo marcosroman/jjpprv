@@ -29,9 +29,9 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 		// if capa was already closed
 		if (capa?.closure?.isClosedEffectively !== undefined) {
 			// check if it wasnt effective: must have additional capa
-			if (!capa.closure.isClosedEffectively && capa.closure?.additionalCAPA == null) {
+			if (!capa.closure.isClosedEffectively && capa.closure?.additionalCAPA === undefined) {
 				 pendingActions.push({
-					 link: `${baseLink}/close/addAdditionalCAPA`,
+					 link: `${baseLink}/link-followup`,
 					 description: 'Agregar NC/OM de seguimiento',
 					 assigneeId: qmsManagerId
 				});
@@ -265,28 +265,42 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 }
 
 export async function pendingActionsForUser(user, currentDate) {
-	const cursor = capas.find(); // TODO: filter out the finished ones
 	let capasArray;
+	const cursor = capas.find({
+		$or: {
+			"closure.isClosedEffectively": {$exists: false},
+			$or: {
+				"closure.isClosedEffectively": {$eq: true},
+				$and: {
+					"closure.isClosedEffectively": {$eq: false},
+					"closure.additionalCAPA": {$exists: true},
+				}
+			}
+		}
+	});
 
 	try {
 		capasArray = await cursor.toArray();
 	} catch(error) {
 		console.error(error);
-	} finally {
-		if (capasArray) {
-			// concat arrays
-			let pendingActions = capasArray
-				.map((capa) => pendingActionsForCAPA(capa, currentDate));
-
-			// clean up and filter, resulting in actions assigned to user only
-			pendingActions = (await Promise.all(pendingActions))
-				.filter((capa) => capa.length>0)
-				.reduce((a, c) => [...a, ...c], [])
-				.filter((action) => action.assigneeId === user._id);
-
-			return pendingActions;
-		}
 	}
+
+	if (capasArray) {
+		// concat arrays
+		let pendingActions = capasArray
+			.map((capa) => pendingActionsForCAPA(capa, currentDate));
+
+		// clean up and filter, resulting in actions assigned to user only
+		pendingActions = (await Promise.all(pendingActions))
+			.filter((capa) => capa.length>0)
+			.reduce((a, c) => [...a, ...c], [])
+			.filter((action) => action.assigneeId === user._id);
+
+		return pendingActions;
+	} else {
+		return [];
+	}
+
 }
 
 export async function pendingActionsForUserGroupedByCapa(user, currentDate) {
@@ -296,40 +310,40 @@ export async function pendingActionsForUserGroupedByCapa(user, currentDate) {
 		pendingActions = await pendingActionsForUser(user, currentDate);
 	} catch(error) {
 		console.error(error);
-	} finally {
-		if (pendingActions) {
-			if (pendingActions.length === 0) {
-				return [];
-			} else {
-				const groupedPendingActions = pendingActions.reduce((accumulator, currentObject) => {
-					const { capaId } = currentObject;
+	}
 
-					// check if exists, otherwise create entry
-					if (!accumulator[capaId]) {
-						accumulator[capaId] = [];
-					}
+	if (pendingActions) {
+		if (pendingActions.length === 0) {
+			return [];
+		} else {
+			const groupedPendingActions = pendingActions.reduce((accumulator, currentObject) => {
+				const { capaId } = currentObject;
 
-					accumulator[capaId].push(currentObject);
+				// check if exists, otherwise create entry
+				if (!accumulator[capaId]) {
+					accumulator[capaId] = [];
+				}
 
-					return accumulator;
-				}, []);
+				accumulator[capaId].push(currentObject);
 
-				let groupedPendingActionsArray = Object.values(groupedPendingActions);
+				return accumulator;
+			}, []);
 
-				let pendingActionsGroupedByCapa = groupedPendingActionsArray.map(a => {
-					return {
-						capa: a[0].capa,
-						pendingActions: a.map(o => {
-							return {
-								description: o.description,
-								link: o.link
-							}
-						})
-					}
-				});
+			let groupedPendingActionsArray = Object.values(groupedPendingActions);
 
-				return pendingActionsGroupedByCapa;
-			}
+			let pendingActionsGroupedByCapa = groupedPendingActionsArray.map(a => {
+				return {
+					capa: a[0].capa,
+					pendingActions: a.map(o => {
+						return {
+							description: o.description,
+							link: o.link
+						}
+					})
+				}
+			});
+
+			return pendingActionsGroupedByCapa;
 		}
 	}
 }
