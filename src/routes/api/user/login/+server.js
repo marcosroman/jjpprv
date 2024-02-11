@@ -1,8 +1,10 @@
 import users from '$lib/db/users';
 import { json } from '@sveltejs/kit';
-import { sign } from 'jsonwebtoken';
+import pkg from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
 import { SECRET_KEY } from '$env/static/private';
+
+const { sign } = pkg;
 
 export async function POST({ request, cookies }) {
 	const body = await request.json();
