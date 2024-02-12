@@ -8,7 +8,7 @@
 	const documentSection = "issue";
 </script>
 
-<EvidenceList {capaId} {documentSection} isEditMode={true} />
+<EvidenceList {capaId} {documentSection} isEditMode={true} allowEvidenceUpload={true}/>
 
 <hr>
 <CapaView {capaId}/>
