@@ -266,18 +266,19 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 
 export async function pendingActionsForUser(user, currentDate) {
 	let capasArray;
-	const cursor = capas.find({
-		$or: {
-			"closure.isClosedEffectively": {$exists: false},
-			$or: {
-				"closure.isClosedEffectively": {$eq: true},
-				$and: {
-					"closure.isClosedEffectively": {$eq: false},
-					"closure.additionalCAPA": {$exists: true},
-				}
-			}
+
+	const cursor = capas.find(
+		{$or: [
+			{"closure.isClosedEffectively": {$exists: false}},
+			{$or: [
+					{"closure.isClosedEffectively": {$eq: true}},
+					{$and: [
+						{"closure.isClosedEffectively": {$eq: false}},
+						{"closure.additionalCAPA": {$exists: true}},
+					]}
+			]}]
 		}
-	});
+	);
 
 	try {
 		capasArray = await cursor.toArray();
@@ -300,7 +301,6 @@ export async function pendingActionsForUser(user, currentDate) {
 	} else {
 		return [];
 	}
-
 }
 
 export async function pendingActionsForUserGroupedByCapa(user, currentDate) {
