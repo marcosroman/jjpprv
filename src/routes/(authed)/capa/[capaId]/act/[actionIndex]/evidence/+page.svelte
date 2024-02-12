@@ -12,4 +12,6 @@
 <EvidenceList
 	isEditMode={isEditMode}
 	capaId={capaId}
-	documentSection={documentSection}/>
+	documentSection={documentSection}
+	allowEvidenceUpload
+/>
