@@ -83,7 +83,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 						});
 					}
 				// if it's not a nonconformity, check if actions already started
-				} else if (!capa?.actions === undefined) {
+				} else if (capa?.actions === undefined) {
 					pendingActions.push({
 					  link: `${baseLink}/act/propose`,
 						description: 'Proponer acciones para aplicar la Accion de Mejora',
@@ -316,18 +316,19 @@ export async function pendingActionsForUserGroupedByCapa(user, currentDate) {
 		if (pendingActions.length === 0) {
 			return [];
 		} else {
-			const groupedPendingActions = pendingActions.reduce((accumulator, currentObject) => {
-				const { capaId } = currentObject;
+			const groupedPendingActions = pendingActions.reduce(
+				(accumulator, currentObject) => {
+					const { capaId } = currentObject;
 
-				// check if exists, otherwise create entry
-				if (!accumulator[capaId]) {
-					accumulator[capaId] = [];
-				}
+					// check if exists, otherwise create entry
+					if (!accumulator[capaId]) {
+						accumulator[capaId] = [];
+					}
 
-				accumulator[capaId].push(currentObject);
+					accumulator[capaId].push(currentObject);
 
-				return accumulator;
-			}, []);
+					return accumulator;
+				}, []);
 
 			let groupedPendingActionsArray = Object.values(groupedPendingActions);
 
