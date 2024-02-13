@@ -11,7 +11,7 @@
 	let capaTypeDescription = null;
 	let capaIssueDetectedDuring = null;
 
-	onMount(async () => {
+	async function fetchCAPA() {
 		try {
 			const response = await fetch(`/api/capa/${capaId}/view`);
 			capa = await response.json();
@@ -25,6 +25,15 @@
 				capaIssueDetectedDuring = duringProcessString(capa.issue.detectedDuring);
 			}
 		}
+	}
+
+	$: { 
+		capaId = capaId;
+		fetchCAPA();
+	}
+
+	onMount(async () => {
+		fetchCAPA();
 	});
 </script>
 
@@ -231,10 +240,17 @@
 						<th>Cierre eficaz de la acción</th>
 						<td>{capa.closure.isClosedEffectively ? "Si" : "No"}</td>
 					</tr>
+					{#if capa.closure.additionalCAPA}
+						<tr>
+							<th>{capaTypeDescription} Adicional</th>
+							<td>
+								<a on:click={() => {capaId = capa.closure.additionalCAPA}} href={`/capa/${capa.closure.additionalCAPA}/view`}>
+									{capa.closure.additionalCAPA}
+								</a>
+							</td>
+						</tr>
+					{/if}
 				</table>
-				{#if capa.closure.additionalCAPA}
-					<p>NC/OM Adicional N.° (Coord. del SGC): {capa.closure.additionalCAPA}</p>
-				{/if}
 			</div>
 		{/if}
 	</div>

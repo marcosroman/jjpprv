@@ -24,6 +24,7 @@
 	const crossIcon = "❌";
 	const evaluationIcon = "👀";
 	const closureIcon = "🔒";
+	const redoIcon = "🔂";
 
 	let capa = null;
 	let capaTypeDescription = null;
@@ -164,6 +165,11 @@
 						<div class="text-3xl">{checkIcon}</div>
 					{:else}
 						<div class="text-3xl">{crossIcon}</div>
+						{#if capa.closure?.additionalCAPA}
+							<div class="text-3xl">{redoIcon}</div>
+						{:else}
+							<div class="text-3x1 grayscale opacity-20">{redoIcon}</div>
+						{/if}
 					{/if}
 				</div>
 			{:else}
