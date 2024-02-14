@@ -44,7 +44,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 				if (capa.issue?.evidence === undefined) {
 					pendingActions.push({
 					  link: `${baseLink}/new/evidence`,
-						description: 'Agregar evidencia de NC/OM',
+						description: `Agregar evidencia ${capa.issue.isNonConformity ? "de No-Conformidad" : "para motivar Accion de Mejora" }`,
 						assigneeId: String(capa.issue.issuerId)
 					});
 				}
@@ -194,7 +194,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 				// latest commitment date for actions (if any actions)
 				// otherwise 
 				const isActionsRequired = (
-					(capa.issue.isNonconformity
+					(capa.issue.isNonConformity
 						&& capa?.correctiveActionsRequirement?.isRequired)
 					|| !capa.issue.isNonConformity
 				);
