@@ -77,7 +77,7 @@
 	{/if}
 
 	{#if isFetchingEvidenceData}
-		<img class="my-4 w-10" src={loadingAnimation}>
+		<img alt="loading..." class="my-4 w-10" src={loadingAnimation}>
 	{:else}
 		<button class="my-4" on:click={submitEvidence}>Subir</button>
 	{/if}
