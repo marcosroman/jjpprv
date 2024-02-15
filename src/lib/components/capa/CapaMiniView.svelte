@@ -78,7 +78,7 @@
 			<div class="flex my-4 mx-2 w-full justify-center">
 				<div class="flex flex-col w-3/4 align-center justify-center">
 					<div class="w-3/4 text-center text-xs place-self-center"><span class="font-bold">id</span> {capa._id}</div>
-					<div class="w-3/4 m-2 p-4 border-black border-solid rounded border-1 bg-gray-100 place-self-center">{capa.issue.description}</div>
+					<div class="w-3/4 m-2 p-4 border-black border-solid rounded border-1 bg-gray-100 place-self-center overflow-auto max-h-[10em]">{capa.issue.description}</div>
 				</div>
 			</div>
 		{/if}
