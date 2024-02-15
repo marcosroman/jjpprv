@@ -41,13 +41,14 @@
 	{#if user}
 		{#if pendingActionsPerCapa}
 			{#if pendingActionsPerCapa.length>0}
-				<div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 mx-6">
+				<div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 mx-6">
 					{#each pendingActionsPerCapa as capaObject}
 						<div class="m-6 p-4">
-							<div class="p-4 text-black rounded-md" style={`background-color: #${capaObject.capa._id.slice(-7,-1)};`}>
-								<a href={`/capa/${capaObject.capa._id}/view`}>
-									<CapaMiniView capaId={capaObject.capa._id}/>
-								</a>
+							<div class="p-4 text-black rounded-md">
+								<!--style={`background-color: #${capaObject.capa._id.slice(-7,-1)};`}>-->
+								<!--<a href={`/capa/${capaObject.capa._id}/view`}>-->
+								<CapaMiniView capaId={capaObject.capa._id}/>
+								<!--</a>-->
 							</div>
 
 							<div class="m-3">

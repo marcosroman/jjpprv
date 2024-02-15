@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { differenceInDays } from 'date-fns';
+	import { goto } from '$app/navigation';
 
 	import { dateString } from '$lib/utils/date';
 	import userNameString from '$lib/utils/userName';
@@ -26,6 +27,11 @@
 	const closureIcon = "🔒";
 	const redoIcon = "🔂";
 
+	let isDetailShown = false;
+	function toggleDetail() {
+		isDetailShown = !isDetailShown;
+	}
+
 	let capa = null;
 	let capaTypeDescription = null;
 	let numberOfDaysSinceCreation = null;
@@ -42,22 +48,40 @@
 					"NC" :
 					"OM";
 
-				numberOfDaysSinceCreation = differenceInDays(new Date(), new Date(capa.issue.creationDate))
+				numberOfDaysSinceCreation = differenceInDays(new Date(),
+					new Date(capa.issue.creationDate));
 			}
 		}
 	});
+
+	let loadingCapaDetail = false; // to show spinner once show-detail button clicked
 </script>
 
-{#if capa}
-	<div>
+{#if capa && !loadingCapaDetail}
+	<div class="p-4 text-black rounded-md"
+		style={`background-color: #${capa._id.slice(-7,-1)};`}>
 		<div class="flex justify-between m-2">
-			<div class="font-bold">
-				{capaTypeDescription}
+			<div>
+				<span class="font-bold">{capaTypeDescription}</span>
+				({capa.issue.detectedInSector.fullName})
 			</div>
-			<div class="text-right">
-				{capa.issue.detectedInSector.fullName}
+			<div class="self-align-right">
+				<!-- show-detail -->
+				<button class="bg-transparent border-none font-bold text-center text-xl"
+					on:click|preventDefault={() => {loadingCapaDetail = true; goto(`/capa/${capa._id}/view`);}}>
+					👁️
+				</button>
 			</div>
 		</div>
+
+		{#if isDetailShown}
+			<div class="flex my-4 mx-2 w-full justify-center">
+				<div class="flex flex-col w-3/4 align-center justify-center">
+					<div class="w-3/4 text-center text-xs place-self-center"><span class="font-bold">id</span> {capa._id}</div>
+					<div class="w-3/4 m-2 p-4 border-black border-solid rounded border-1 bg-gray-100 place-self-center">{capa.issue.description}</div>
+				</div>
+			</div>
+		{/if}
 
 		<div class="flex flex-row flex-wrap items-center justify-evenly">
 			{#if capa?.issue?.isNonConformity}
@@ -177,14 +201,27 @@
 			{/if}
 		</div>
 
-		<div class="m-2 text-xs">
-			<p>{dateString(capa.issue.creationDate)}
-				{#if numberOfDaysSinceCreation === 0}
-					(hoy)
-				{:else}
-					(hace {numberOfDaysSinceCreation} {numberOfDaysSinceCreation ===1 ? "dia" : "dias"})
-				{/if}
-			</p>
+		<div class="flex justify-between m-2">
+			<div class="flex flex-col-reverse">
+				<p class="text-xs pr-2">
+					{dateString(capa.issue.creationDate)}
+					{#if numberOfDaysSinceCreation === 0}
+						(hoy)
+					{:else}
+						(hace {numberOfDaysSinceCreation} {numberOfDaysSinceCreation ===1 ? "dia" : "dias"})
+					{/if}
+				</p>
+			</div>
+			<div class="self-align-right">
+				<button class="bg-transparent border-none font-bold text-center text-xl"
+					on:click={toggleDetail}>
+					{#if isDetailShown}
+						🔼
+					{:else}
+						🔽
+					{/if}
+					</button>
+			</div>
 		</div>
 	</div>
 {:else}
