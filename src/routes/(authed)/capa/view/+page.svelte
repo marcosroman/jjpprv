@@ -18,6 +18,6 @@
 			{/each}
 		</div>
 	{:else}
-		<p>Nada</p>
+		<p>No existen NC/OMs</p>
 	{/if}
 </div>
