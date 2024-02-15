@@ -42,15 +42,15 @@
 			capa = await response.json();
 		} catch(error) {
 			console.error(error);
-		} finally {
-			if (capa) {
-				capaTypeDescription = capa.issue.isNonConformity ?
-					"NC" :
-					"OM";
+		}
 
-				numberOfDaysSinceCreation = differenceInDays(new Date(),
-					new Date(capa.issue.creationDate));
-			}
+		if (capa) {
+			capaTypeDescription = capa.issue.isNonConformity ?
+				"NC" :
+				"OM";
+
+			numberOfDaysSinceCreation = differenceInDays(new Date(),
+				new Date(capa.issue.creationDate));
 		}
 	});
 
@@ -58,12 +58,12 @@
 </script>
 
 {#if capa && !loadingCapaDetail}
-	<div class="p-4 text-black rounded-md"
+	<div class="p-4 text-black rounded-md shadow-xl"
 		style={`background-color: #${capa._id.slice(-7,-1)};`}>
 		<div class="flex justify-between m-2">
 			<div>
 				<span class="font-bold">{capaTypeDescription}</span>
-				({capa.issue.detectedInSector.fullName})
+				<wbr>({capa.issue.detectedInSector.fullName})
 			</div>
 			<div class="self-align-right">
 				<!-- show-detail -->
