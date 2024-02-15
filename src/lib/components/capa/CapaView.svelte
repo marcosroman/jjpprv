@@ -17,13 +17,13 @@
 			capa = await response.json();
 		} catch(error) {
 			console.error(error);
-		} finally {
-			if (capa) {
-				capaTypeDescription = capa.issue.isNonConformity ?
-					"No-Conformidad" :
-					"Oportunidad de mejora";
-				capaIssueDetectedDuring = duringProcessString(capa.issue.detectedDuring);
-			}
+		}
+
+		if (capa) {
+			capaTypeDescription = capa.issue.isNonConformity ?
+				"No-Conformidad" :
+				"Oportunidad de mejora";
+			capaIssueDetectedDuring = duringProcessString(capa.issue.detectedDuring);
 		}
 	}
 
@@ -61,7 +61,7 @@
 
 			<table class="my-3">
 				<tr><th>Descripcion de la {capaTypeDescription}</th></tr>
-				<tr><td><pre>{capa.issue.description}</pre></td></tr>
+				<tr><td><pre class="whitespace-pre-wrap">{capa.issue.description}</pre></td></tr>
 			</table>
 
 			{#if capa.issue.evidence}
@@ -191,7 +191,7 @@
 								{/if}
 								<td>{action?.review?.isAccomplished !== undefined ?
 									( action.review.isAccomplished ? "Si" : "No" ) : ""}</td>
-								<td>{action?.review?.comments === "" ? "---" : action?.review?.comments}</td>
+								<td>{action?.review?.comments === undefined ? "" : action?.review?.comments}</td>
 								{#if action?.review?.isAccomplished === undefined}
 									<td>{action?.reschedule?.rescheduleDate ? dateString(action.reschedule.rescheduleDate) : ""}</td>
 								{:else}
@@ -255,3 +255,4 @@
 		{/if}
 	</div>
 {/if}
+
