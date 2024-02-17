@@ -38,7 +38,7 @@
 </script>
 
 <style>
-	td,th {
+	td, th {
 		@apply p-2;
 	}
 </style>
@@ -47,12 +47,15 @@
 
 <label for="actions-table" class="flex-1 text-left w-fit">Acciones propuestas</label>
 <table name="actions-table" class="my-2">
-	<tr class="bg-gray-400">
-		<th>Nro</th>
-		<th>Solucion</th>
-		<th>Fecha de compromiso</th>
-		<th>Responsable asignado</th>
-		<th>Comentarios</th>
+	<tr>
+		<th class="bg-gray-400">Nro</th>
+		<th class="bg-gray-400">Accion</th>
+		<th class="bg-gray-400">Fecha de compromiso</th>
+		<th class="bg-gray-400">Responsable asignado</th>
+		<th class="bg-gray-400">Comentarios</th>
+		{#if countActions>1}
+			<th class="bg-none opacity-0 border-none"></th>
+		{/if}
 	</tr>
 	{#each actionsArray as action, actionIndex}
 		<tr class="text-center">
@@ -88,8 +91,12 @@
 				<input type="text" name={`comments-${actionIndex}`}>
 			</td>
 			{#if countActions>1}
-				<td style="border-none">
-					<button class="bg-red-400" name={"delete-"+actionIndex} on:click|preventDefault={() => deleteAction(actionIndex)}>Eliminar</button>
+				<td style="border-none flex flex-row justify-center align-center">
+					<button class="text-sm bg-red-400 px-1 mx-1"
+						name={"delete-"+actionIndex}
+						on:click|preventDefault={() => deleteAction(actionIndex)}>
+						❌
+					</button>
 				</td>
 			{/if}
 		</tr>
