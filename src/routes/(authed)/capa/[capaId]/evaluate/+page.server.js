@@ -1,14 +1,13 @@
-import capas from '$lib/db/capas';
 import { ObjectId } from 'mongodb';
 import { redirect } from '@sveltejs/kit';
+import capas from '$lib/db/capas';
 
-export async function load({params}) {
+export async function load({ params }) {
 	const capaId = params.capaId;
-	const capaIdObject = new ObjectId(capaId);
 
-	const capa = await capas.findOne({_id: capaIdObject});
+	const capa = await capas.findOne({_id: new ObjectId(capaId)});
 
-	return {capa: JSON.parse(JSON.stringify(capa))};
+	return {capaId, isNC: capa.issue.isNonConformity};
 }
 
 export const actions = {
@@ -21,13 +20,13 @@ export const actions = {
 
 		let result;
 		try {
-			result = await capas.updateOne({_id: new ObjectId(capaId)},
-				{$set: {
+			result = await capas.updateOne({_id: new ObjectId(capaId)}, {
+				$set: {
 					"evaluation.evaluationDate": evaluationDate,
 					"evaluation.comments": comments,
 					"evaluation.isEffective": isEffective
-				}}
-			);
+				}
+			});
 		} catch(error) {
 			console.error(error);
 		}

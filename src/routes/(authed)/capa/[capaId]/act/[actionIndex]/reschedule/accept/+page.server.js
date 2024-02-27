@@ -9,8 +9,9 @@ export async function load({ params, locals }) {
 
 	return {
 		user: locals.user,
-		capa: JSON.parse(JSON.stringify(capa)),
-		actionIndex
+		capaId,
+		actionIndex,
+		action: JSON.parse(JSON.stringify(capa.actions[actionIndex]))
 	}
 }
 

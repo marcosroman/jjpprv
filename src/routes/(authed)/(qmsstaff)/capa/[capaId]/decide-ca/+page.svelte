@@ -1,31 +1,12 @@
 <script>
-	import CapaView from '$lib/components/capa/CapaView.svelte';
+	import FormWithCapaView from '$lib/components/forms/FormWithCapaView.svelte';
+	import Form from './Form.svelte';
 
 	export let data;
 
-	let capa = data.capa;
-	let capaId = capa._id;
+	const capaId = data.capaId;
+	const formProps = { capaId };
 </script>
 
-<CapaView {capaId}/>
-<hr>
-
-<form method='POST' class="flex align-center flex-col">
-	<input type="hidden" name="capa-id" value={capaId}>
-
-	<p class="text-center">¿Requiere acciones correctivas?</p>
-	<div class="flex flex-row justify-evenly my-4">
-		<label>Sí
-			<input type="radio" name="is-ca-required" value="true" required>
-		</label>
-		
-		<label>No
-			<input type="radio" name="is-ca-required" value="false" required>
-		</label>
-	</div>
-
-	<div class="flex flex-row justify-center my-10">
-		<input type="submit" value="Guardar">
-	</div>
-</form>
+<FormWithCapaView {Form} {formProps}/>
 

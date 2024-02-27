@@ -1,12 +1,16 @@
 <script>
 	import { onMount } from 'svelte';
-	import CapaView from '$lib/components/capa/CapaView.svelte';
-	import userNameString from '$lib/utils/userName';
+
+	import Form from './Form.svelte';
+	import FormWithCapaView from '$lib/components/forms/FormWithCapaView.svelte';
 
 	export let data;
 
 	const capaId = data.capaId;
 	const user = data.user;
+
+	let formProps = { capaId };
+
 	let capa = null;
 	let users = null;
 	let allowedUsers = [];
@@ -37,26 +41,13 @@
 				allowedUsers = users.filter(
 					(u) => u._id != user._id && !forbiddenUsers.includes(u)
 				);
+
+				formProps = { capaId, allowedUsers };
 			}
 		}
 	});
 </script>
 
-<form method="POST" class="container flex-col">
-	<input type="hidden" name="capa-id" value={capaId}>
+<!--<FormWithCapaView {Form} {formProps}/>-->
 
-	<label for="evaluator-id">Responsable asignado para la evaluacion:
-	</label>
-	<select class="my-4" name="evaluator-id" required>
-		<option selected disabled></option>
-		{#each allowedUsers as u}
-			<option value={u._id}>{userNameString(u)}</option>
-		{/each}
-	</select>
-
-	<input class="my-8" type="submit" value="Guardar">
-</form>
-
-<hr>
-
-<CapaView {capaId}/>
+<svelte:component this={FormWithCapaView} {Form} {formProps}/>

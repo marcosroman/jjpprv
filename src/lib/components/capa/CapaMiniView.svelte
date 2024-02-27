@@ -67,7 +67,7 @@
 			</div>
 			<div class="self-align-right">
 				<!-- show-detail -->
-				<button class="bg-transparent border-none font-bold text-center text-xl"
+				<button class="py-0 px-1 ml-2 drop-shadow-lg bg-transparent border border-white font-bold text-center text-xl"
 					on:click|preventDefault={() => {loadingCapaDetail = true; goto(`/capa/${capa._id}/view`);}}>
 					👁️
 				</button>
@@ -76,9 +76,9 @@
 
 		{#if isDetailShown}
 			<div class="flex my-4 mx-2 w-full justify-center">
-				<div class="flex flex-col w-3/4 align-center justify-center">
-					<div class="w-3/4 text-center text-xs place-self-center"><span class="font-bold">id</span> {capa._id}</div>
-					<div class="w-3/4 m-2 p-4 border-black border-solid rounded border-1 bg-gray-100 place-self-center overflow-auto max-h-[10em]">{capa.issue.description}</div>
+				<div class="flex flex-col w-full align-center justify-center">
+					<div class="w-3/4 text-center text-xs place-self-center"><span class="font-bold">id</span> <span class="break-words">{capa._id}</span></div>
+					<div class="w-5/6 m-2 p-4 border-black border-solid rounded border-1 bg-gray-100 place-self-center overflow-auto max-h-[10em]">{capa.issue.description}</div>
 				</div>
 			</div>
 		{/if}
@@ -213,7 +213,7 @@
 				</p>
 			</div>
 			<div class="self-align-right">
-				<button class="bg-transparent border-none font-bold text-center text-xl"
+				<button class="py-0 px-1 ml-2 drop-shadow-lg bg-transparent border border-white font-bold text-center text-xl"
 					on:click={toggleDetail}>
 					{#if isDetailShown}
 						🔼

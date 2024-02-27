@@ -4,6 +4,7 @@
 	import { dateString } from '$lib/utils/date';
 	import userNameString from '$lib/utils/userName';
 	import duringProcessString from '$lib/utils/during';
+	import loadingAnimation from '$lib/assets/loading.gif'
 
 	export let capaId;
 
@@ -27,14 +28,19 @@
 		}
 	}
 
-	$: { 
-		capaId = capaId;
-		fetchCAPA();
-	}
-
 	onMount(async () => {
 		fetchCAPA();
 	});
+
+	/*
+	(this was used to make the goto work, but it caused problems)
+	$: { 
+		if(capaId) {
+			capaId = capaId;
+			fetchCAPA();
+		}
+	}
+	*/
 </script>
 
 <style>
@@ -44,40 +50,42 @@
 </style>
 
 {#if capa}
-	<div class="capa p-10">
+	<div class="capa p-10 h-full overflow-scroll">
 		<div class="text-center py-5">
 			<h1>Registro de {capaTypeDescription}</h1>
 			<p class="text-xs">id {capa._id}</p>
 			<p class="text-sm">version {capa.version}</p>
 		</div>
 
-		<div class="issue py-3">
-			<table>
-				<tr><th>Fecha</th><td>{dateString(capa.issue.creationDate)}</td></tr>
-				<tr><th>Creador</th><td>{userNameString(capa.issue.issuer)}</td></tr>
-				<tr><th>Sector de Origen</th><td>{capa.issue.detectedInSector.fullName}</td>
-				<tr><th>Detectado en</th><td>{capaIssueDetectedDuring}</td>
+		<div class="py-3 flex justify-center">
+			<table class="w-full md:w-1/3 overflow-scroll">
+				<tr><th>Fecha</th><td class="overflow-scroll">{dateString(capa.issue.creationDate)}</td></tr>
+				<tr><th>Creador</th><td class="overflow-scroll">{userNameString(capa.issue.issuer)}</td></tr>
+				<tr><th>Sector de Origen</th><td class="overflow-scroll">{capa.issue.detectedInSector.fullName}</td>
+				<tr><th>Detectado en</th><td class="overflow-scroll">{capaIssueDetectedDuring}</td>
 			</table>
+		</div>
 
+		<div class="py-3">
 			<table class="my-3">
 				<tr><th>Descripcion de la {capaTypeDescription}</th></tr>
 				<tr><td><pre class="whitespace-pre-wrap">{capa.issue.description}</pre></td></tr>
 			</table>
 
 			{#if capa.issue.evidence}
-				<p>Evidencia</p>
-				<EvidenceList isEditMode={false} capaId={capa._id} documentSection="issue"/>
+				<div class="w-full overflow-auto ">
+					<p>Evidencia</p>
+					<EvidenceList isEditMode={false} capaId={capa._id} documentSection="issue"/>
+				</div>
 			{/if}
 		</div>
 
 		{#if capa.correctiveActionsRequirement && capa.correctiveActionsRequirement.requirementDate}
 			<div class="py-3">
-				<table><tr>
-					<th>
-					Corresponde una Accion Correctiva?
-					</th>
-				</tr><tr>
-					<td class="text-center">
+				<table>
+					<tr><th>Corresponde una Accion Correctiva?</th></tr>
+					<tr>
+						<td class="text-center">
 						{#if capa.correctiveActionsRequirement.isRequired}
 							<label>Si
 								<input type="radio" name="corrective-action-required" value="yes" checked disabled>
@@ -93,14 +101,14 @@
 								<input type="radio" name="corrective-action-required" value="no" checked>
 							</label>
 						{/if}
-					</td>
-				</tr></table>
+						</td>
+					</tr>
+				</table>
 			</div>
-			<!--<p>(Decidido por {userNameString(capa.correctiveActionsRequirement.requirer)} el {dateString(capa.correctiveActionsRequirement.requirementDate)})</p>-->
 		{/if}
 
 		{#if capa.issue.isNonConformity}
-			{#if Object.keys(capa.responseToNonConformity).length>0}
+			{#if Object.keys(capa.responseToNonConformity).length > 1}
 				<div class="py-3">
 					<table>
 						<tr><th>Fecha de respuesta a NC</th>
@@ -127,7 +135,6 @@
 			{/if}
 		{/if}
 
-		<!--{#if capa.actions.length>0 && capa.actions[0].proposal.proposalDate}-->
 		{#if capa.actions[0].proposal.proposalDate}
 			{#if capa.issue.isNonConformity && capa.correctiveActionsRequirement.isRequired}
 				<div class="py-3">
@@ -136,14 +143,16 @@
 							<th>
 								Analisis de las causas
 							</th>
-							<td>{capa.responseToNonConformity.possibleRootCauses}</td>
+						</tr>
+						<tr>
+							<td><pre class="whitespace-pre-wrap">{capa.responseToNonConformity.possibleRootCauses}</pre></td>
 						</tr>
 					</table>
 				</div>
 			{/if}
 			<div class="actions py-3">
-				<div class="propuesta py-3">
-					<h2>Acciones propuestas para {capa.issue.isNonConformity ? "eliminar las causas" : "adoptar la Oportunidad de Mejora"}</h2>
+				<h2>Acciones propuestas para {capa.issue.isNonConformity ? "eliminar las causas" : "adoptar la Oportunidad de Mejora"}</h2>
+				<div class="propuesta py-3 overflow-x-scroll">
 					<table>
 						<tr>
 							<th>Nro.</th>
@@ -165,8 +174,8 @@
 					</table>
 				</div>
 
-				<div class="seguimiento py-3">
-					<h3>Seguimiento de las acciones</h3>
+				<h3>Seguimiento de las acciones</h3>
+				<div class="seguimiento py-3 overflow-x-scroll">
 					<table>
 						<tr>
 							<th>Nro.</th>
@@ -205,7 +214,6 @@
 			</div>
 		{/if}
 
-		<!--(Evaluacion asignada a {userNameString(capa.evaluation.assignment.evaluator)} por {userNameString(capa.evaluation.assignment.assigner)} el {dateString(capa.evaluation.assignment.assignationDate)})-->
 		{#if capa?.evaluation && capa.evaluation.evaluationDate}
 			<div class="py-3">
 				<h2>Evaluacion</h2>
@@ -213,7 +221,6 @@
 					<table>
 						<tr><th>Evaluador</th><td>{userNameString(capa.evaluation.assignment.evaluator)}</td></tr>
 						<tr><th>Fecha</th><td>{dateString(capa.evaluation.evaluationDate)}</td></tr>
-						<!--<tr><th>Considerada efectiva?</th><td>{capa.evaluation.isEffective ? "Si" : "No"}</td></tr>-->
 						<tr><th>Comentarios</th><td>{capa.evaluation.comments}</td></tr>
 					</table>
 				{/if}
@@ -253,6 +260,10 @@
 				</table>
 			</div>
 		{/if}
+	</div>
+{:else}
+	<div class="h-1/6 h-max-1/6 flex flex-row justify-center">
+		<img class="w-1/3" src={loadingAnimation} alt="Loading..."/>
 	</div>
 {/if}
 

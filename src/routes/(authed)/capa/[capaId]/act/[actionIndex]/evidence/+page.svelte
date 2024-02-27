@@ -1,17 +1,19 @@
 <script>
-	import EvidenceList from '$lib/components/evidence/EvidenceList.svelte';
+	import EvidenceFormWithCapaView
+		from '$lib/components/forms/EvidenceFormWithCapaView.svelte';
 
 	export let data;
 
-	const isEditMode = true;
 	const capaId = data.capaId;
-	const actionIndex = data.actionIndex;
 	const documentSection = `actions.${actionIndex}`;
+	const isEditMode = true;
+	const allowEvidenceUpload = true;
+	const actionIndex = data.actionIndex;
+
+	const evidenceFormProps = {
+		capaId, documentSection, isEditMode,
+		allowEvidenceUpload, actionIndex
+	};
 </script>
 
-<EvidenceList
-	isEditMode={isEditMode}
-	capaId={capaId}
-	documentSection={documentSection}
-	allowEvidenceUpload
-/>
+<EvidenceFormWithCapaView {evidenceFormProps}/>

@@ -16,8 +16,8 @@ export const actions = {
 
 		let result;
 		try {
-			result = await capas.updateOne({_id: new ObjectId(capaId)},
-				{ $set: {
+			result = await capas.updateOne({_id: new ObjectId(capaId)}, {
+				$set: {
 					evaluation: {
 						assignment: {
 							assignerId: new ObjectId(assignerId),
@@ -25,7 +25,8 @@ export const actions = {
 							assignationDate: new Date()
 						}
 					}
-				}});
+				}
+			});
 		} catch(error) {
 			console.error(error);
 		}

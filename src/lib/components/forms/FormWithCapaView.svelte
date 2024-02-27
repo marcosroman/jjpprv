@@ -2,9 +2,10 @@
 	import CapaView from '$lib/components/capa/CapaView.svelte';
 
 	export let Form;
-	export let capaId;
+	export let formProps;
 
 	let isCapaViewShown = true;
+	let capaId = formProps.capaId;
 </script>
 
 <div class="w-full md:h-screen h-max">
@@ -32,7 +33,7 @@
 			{/if}
 
 			<div class={"w-3/4 m-6 md:w-1/3"+" h-1/3 overflow-auto md:h-5/6"}>
-				<Form {capaId}/>
+				<Form {...formProps}/>
 			</div>
 		</div>
 	</div>

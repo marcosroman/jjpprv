@@ -5,14 +5,7 @@ import capas from '$lib/db/capas';
 export async function load ({ params }) {
 	const capaId = params.capaId;
 
-	try {
-		const capa = await capas.findOne(
-			{ _id: new ObjectId(capaId)});
-
-		return JSON.parse(JSON.stringify({capa}));
-	} catch(error) {
-		console.error(error);
-	}
+	return { capaId };
 }
 
 export const actions = {
