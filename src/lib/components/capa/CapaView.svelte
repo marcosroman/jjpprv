@@ -23,7 +23,7 @@
 		if (capa) {
 			capaTypeDescription = capa.issue.isNonConformity ?
 				"No-Conformidad" :
-				"Oportunidad de mejora";
+				"Oportunidad de Mejora";
 			capaIssueDetectedDuring = duringProcessString(capa.issue.detectedDuring);
 		}
 	}
@@ -72,7 +72,7 @@
 				<tr><td><pre class="whitespace-pre-wrap">{capa.issue.description}</pre></td></tr>
 			</table>
 
-			{#if capa.issue.evidence}
+			{#if capa.issue.evidence && capa.issue.evidence.length>0}
 				<div class="w-full overflow-auto ">
 					<p>Evidencia</p>
 					<EvidenceList isEditMode={false} capaId={capa._id} documentSection="issue"/>

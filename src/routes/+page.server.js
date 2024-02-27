@@ -11,6 +11,7 @@ export async function load({ locals }) {
 				locals.user, new Date(get(selectedDate)));
 				*/
 
+			console.log("---------SELECTED DATE IS", get(selectedDate));
 			const pendingActionsPerCapa = await pendingActionsForUserGroupedByCapa(
 				locals.user, new Date(get(selectedDate)));
 

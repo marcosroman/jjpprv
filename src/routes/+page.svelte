@@ -20,9 +20,11 @@
 
 	async function updatePendingActions() {
 		try {
+			console.log('trying fetch', `/api/capa/pending?currentDate=${$selectedDate}`);
 			const response = await fetch(`/api/capa/pending?currentDate=${$selectedDate}`);
 			const body = await response.json();
 			pendingActionsPerCapa = body.pendingActions;
+			console.log('updated!: ', pendingActionsPerCapa);
 		} catch(error) {
 			console.error(error);
 			pendingActionsPerCapa = [];
@@ -45,10 +47,7 @@
 					{#each pendingActionsPerCapa as capaObject}
 						<div class="m-6 p-4">
 							<div class="p-4 text-black rounded-md">
-								<!--style={`background-color: #${capaObject.capa._id.slice(-7,-1)};`}>-->
-								<!--<a href={`/capa/${capaObject.capa._id}/view`}>-->
 								<CapaMiniView capaId={capaObject.capa._id}/>
-								<!--</a>-->
 							</div>
 
 							<div class="m-3">

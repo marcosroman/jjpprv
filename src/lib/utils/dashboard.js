@@ -200,6 +200,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 				);
 
 				if (isActionsRequired) {
+					console.log('actions required for', capa._id);
 					if (capa?.actions) {
 						const latestCommitmentDate = new Date(Math.max.apply(null,
 							capa.actions.map((action) => {
@@ -208,21 +209,25 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 									: action.proposal.commitmentDate;
 								return dates
 							})));
-						console.log(latestCommitmentDate);
+						console.log('latestCommitDate', latestCommitmentDate);
+						console.log('currentDate', currentDate);
 						isReadyToClose = (currentDate > latestCommitmentDate);
 					} else {
 						isReadyToClose = false;
 					}
-				} else if (capa.issue.isNonConformity
+				} else if (
+					capa.issue.isNonConformity
 					&& capa?.correctiveActionsRequirement?.isRequired !== undefined
 					&& !capa.correctiveActionsRequirement.isRequired
 					&& capa?.responseToNonConformity?.immediateActions?.evidence
 					&& capa.responseToNonConformity.immediateActions.evidence.length>0) {
 					isReadyToClose = true;
 				} else {
+					console.log('ELSE');
 					isReadyToClose = false;
 				}
 				
+				console.log('isReadyToClose =',isReadyToClose,' for ', capa._id);
         if (isReadyToClose) { 
 					if (!capa?.evaluation?.assignment) {
 						pendingActions.push({
@@ -258,6 +263,7 @@ export async function pendingActionsForCAPA(capa, currentDate) {
 			};
 		});
 
+		console.log(pendingActions);
 		return pendingActions;
 	} catch(error) {
 		console.error(error);
@@ -292,11 +298,15 @@ export async function pendingActionsForUser(user, currentDate) {
 			.map((capa) => pendingActionsForCAPA(capa, currentDate));
 
 		// clean up and filter, resulting in actions assigned to user only
+		//console.log(await Promi)
+		//
+		//console.log(await Promise.all(pendingActions));
 		pendingActions = (await Promise.all(pendingActions))
 			.filter((capa) => capa.length>0)
 			.reduce((a, c) => [...a, ...c], [])
 			.filter((action) => action.assigneeId === user._id);
 
+		console.log('pendingActions:',pendingActions);
 		return pendingActions;
 	} else {
 		return [];

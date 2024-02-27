@@ -1,9 +1,12 @@
 import { json } from '@sveltejs/kit';
 import { pendingActionsForUserGroupedByCapa } from '$lib/utils/dashboard';
 
-export async function GET({ params, locals }) {
+export async function GET({ locals, url }) {
+	const currentDate = url.searchParams.get('currentDate');
+
 	try {
-		let pendingActions = await pendingActionsForUserGroupedByCapa(locals.user, new Date(params.currentDate));
+		let pendingActions = await pendingActionsForUserGroupedByCapa(
+			locals.user, new Date(currentDate));
 
 		return json({pendingActions}, { status: 200 });
 	} catch(error) {

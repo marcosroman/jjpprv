@@ -1,7 +1,6 @@
 <script>
 	import '../app.pcss';
 	import { onMount, onDestroy } from 'svelte';
-	//import { redirect } from '@sveltejs/kit';
 	import { goto } from '$app/navigation';
 
 	import userNameString from '$lib/utils/userName';
@@ -13,7 +12,7 @@
 	let selectedUserId = currentUser?._id;
 	let users = null; // will contain users list
 
-	let isOnline=false;
+	let isOnline = false;
 	
   function updateOnlineStatus() {
     isOnline = navigator.onLine;
@@ -65,7 +64,7 @@
 <nav>
 	<div class="flex">
 		<button class="text-xs"
-			on:click={()=>{selectUserDateOn = !selectUserDateOn}}>
+			on:click={() => {selectUserDateOn = !selectUserDateOn;}}>
 			{selectUserDateOn ? 'x': 'o'}
 		</button>
 		{#if selectUserDateOn}
@@ -106,7 +105,9 @@
 
 	{#if currentUser}
 		<div class={`${isOnline !== undefined ? ((isOnline===true) ? "bg-blue-600" : "bg-gray-600") : ""} text-gray-50 flex items-center`}>
-			<a class="text-2xl" href="/">j<span><sub>a</sub><sup>2</sup></span>p<sub>o</sub><sup>2</sup>r<sub>a</sub>v<sub>e</sub></a>
+			<a class="text-2xl" href="/">
+				j<span><sub>a</sub><sup>2</sup></span>p<sub>o</sub><sup>2</sup>r<sub>a</sub>v<sub>e</sub>
+			</a>
 			<a href="/capa/new">Nueva NC/OM</a>
 			<a href="/capa/view">Ver NC/OMs</a>
 			{#if currentUser.isQMSStaff}
