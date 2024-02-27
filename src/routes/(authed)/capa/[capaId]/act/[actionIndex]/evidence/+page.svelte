@@ -5,14 +5,13 @@
 	export let data;
 
 	const capaId = data.capaId;
-	const documentSection = `actions.${actionIndex}`;
+	const documentSection = `actions.${data.actionIndex}`;
 	const isEditMode = true;
 	const allowEvidenceUpload = true;
-	const actionIndex = data.actionIndex;
 
 	const evidenceFormProps = {
 		capaId, documentSection, isEditMode,
-		allowEvidenceUpload, actionIndex
+		allowEvidenceUpload
 	};
 </script>
 
