@@ -1,12 +1,11 @@
 import { start_mongo } from '$lib/db/mongo';
 import { SECRET_KEY } from '$env/static/private';
-import { handlePageLoad } from '$lib/db/mongo';
-import pkg from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 start_mongo();
 
 export async function handle({ event, resolve }) {
-	const { verify } = pkg;
+	const { verify } = jwt;
 
 	const userToken = event.cookies.get('userToken');
 
