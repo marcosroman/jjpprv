@@ -14,5 +14,5 @@ export async function POST({ request, cookies }) {
 	cookies.set('userToken', userToken, {path:'/', secure: false});
 	// TODO: remove secure: false after setting https!
 
-	return json({user}, {status: 200});
+	return json(user, {status: 200});
 }

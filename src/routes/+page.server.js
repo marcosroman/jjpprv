@@ -1,17 +1,10 @@
 import { get } from 'svelte/store';
-import capas from '$lib/db/capas';
-import { pendingActionsForUser, pendingActionsForUserGroupedByCapa } from '$lib/utils/dashboard';
+import { pendingActionsForUserGroupedByCapa } from '$lib/utils/dashboard';
 import { selectedDate } from '$lib/utils/stores';
 
 export async function load({ locals }) {
 	if (locals.user) {
 		try {
-			/*
-			const pendingActions = await pendingActionsForUser(
-				locals.user, new Date(get(selectedDate)));
-				*/
-
-			console.log("---------SELECTED DATE IS", get(selectedDate));
 			const pendingActionsPerCapa = await pendingActionsForUserGroupedByCapa(
 				locals.user, new Date(get(selectedDate)));
 
@@ -24,6 +17,6 @@ export async function load({ locals }) {
 			return { error }
 		}
 	} else {
-		return { pendingActions: null };
+		return { pendingActionsPerCapa: null };
 	}
 }

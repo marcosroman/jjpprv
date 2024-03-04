@@ -45,10 +45,8 @@
 				body: JSON.stringify({ userId: selectedUserId })
 			});
 			currentUser = await response.json();
-			location.reload();
-		} else {
-			logout();
-		}
+			location.reload(); // ok for now
+		} else logout();
 	}
 
 	async function logout() {
@@ -56,6 +54,7 @@
 		currentUser = null;
 		selectedUserId = null;
 		goto('/');
+		location.reload(); // ok for now
 	}
 
 	let selectUserDateOn = false;
@@ -72,7 +71,7 @@
 				<div>
 					<label>Usuario:
 						<select name="user" bind:value={selectedUserId} on:change={login}>
-							<option value={null}></option>
+							<option value={null} disabled></option>
 							{#if users.length>0}
 								{#each users as user}
 									<option value={user._id}>
