@@ -16,9 +16,9 @@
 		</label>
 	</div>
 
-	<textarea class="w-3/5 place-self-center my-6 h-36" name="comments" placeholder="Comentarios"></textarea>
+	<textarea class="w-3/5 place-self-center my-3 h-36" name="comments" placeholder="Comentarios"></textarea>
 
-	<div class="flex flex-row justify-center my-10">
+	<div class="flex flex-row justify-center mt-4">
 		<input type="submit" value="Guardar">
 	</div>
 </form>

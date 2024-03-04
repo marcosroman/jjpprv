@@ -37,16 +37,11 @@
 	});
 </script>
 
-<style>
-	td, th {
-		@apply p-2;
-	}
-</style>
-
 <input type="hidden" name="count-actions" value={countActions}>
 
 <label for="actions-table" class="flex-1 text-left w-fit">Acciones propuestas</label>
 <table name="actions-table" class="my-2">
+	<!--
 	<tr>
 		<th class="bg-gray-400">Nro</th>
 		<th class="bg-gray-400">Accion</th>
@@ -57,39 +52,17 @@
 			<th class="bg-none opacity-0 border-none"></th>
 		{/if}
 	</tr>
+	-->
+	<thead>
+		<tr>
+			<th>Nro.</th><th>Propuesta</th>
+		</tr>
+	</thead>
+	<tbody class="overflow-scroll">
 	{#each actionsArray as action, actionIndex}
-		<tr class="text-center">
-			<td>{actionIndex+1}</td>
+		<tr>
 			<td>
-				<textarea name={"proposed-solution-"+actionIndex}
-					bind:value={action.solution} 
-					required></textarea>
-			</td>
-			<td>
-				<input
-					type="date"
-					name={"commitment-date-"+actionIndex}
-					bind:value={action.commitmentDate}
-					min={today}
-					required>
-			</td>
-			<td>
-				<select name={`assignee-user-${actionIndex}`} required>
-					{#if otherUsersInMySector && otherUsersInMySector.length>0}
-						<option selected disabled></option>
-						<option value={user._id}>Yo</option>
-						{#each otherUsersInMySector as otherUser}
-							<option value={otherUser._id}>{userNameString(otherUser)}</option>
-						{/each}
-						<option value={null}>(Decidir luego)</option>
-					{:else}
-						<option value={user._id} selected>Yo</option>
-					{/if}
-				</select>
-			</td>
-			<td>
-				<input type="text" name={`comments-${actionIndex}`}>
-			</td>
+			{actionIndex+1}
 			{#if countActions>1}
 				<td style="border-none flex flex-row justify-center align-center">
 					<button class="text-sm bg-red-400 px-1 mx-1"
@@ -99,9 +72,61 @@
 					</button>
 				</td>
 			{/if}
+			</td>
+			<td>
+			<table>
+				<tr>
+					<th>Accion</th>
+					<td><textarea name={"proposed-solution-"+actionIndex}
+						bind:value={action.solution} 
+						required></textarea></td>
+				</tr>
+				<tr>
+					<th>Fecha de <wbr>compromiso</th>
+					<td><input
+						type="date"
+						name={"commitment-date-"+actionIndex}
+						bind:value={action.commitmentDate}
+						min={today}
+						required></td>
+				</tr>
+				<tr>
+					<th>Responsable <wbr>asignado</th>
+					<td>
+						<select name={`assignee-user-${actionIndex}`} required>
+							{#if otherUsersInMySector && otherUsersInMySector.length>0}
+								<option selected disabled></option>
+								<option value={user._id}>Yo</option>
+								{#each otherUsersInMySector as otherUser}
+									<option value={otherUser._id}>{userNameString(otherUser)}</option>
+								{/each}
+								<option value={null}>(Decidir luego)</option>
+							{:else}
+								<option value={user._id} selected>Yo</option>
+							{/if}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>Comentarios</th>
+					<td>
+						<input type="text" name={`comments-${actionIndex}`}>
+					</td>
+				</tr>
+			</table>
+			
+			</td>
 		</tr>
 	{/each}
+	</tbody>
 </table>
 
 <button class="bg-gray-700" on:click|preventDefault={addNewAction}>Agregar accion</button>
+
+<style>
+	td, th {
+		@apply p-2;
+	}
+</style>
+
 
