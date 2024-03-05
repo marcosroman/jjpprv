@@ -2,6 +2,8 @@ import capas from '$lib/db/capas';
 import { ObjectId } from 'mongodb'; 
 import { redirect } from '@sveltejs/kit';
 
+import { utcToZonedTime } from 'date-fns-tz';
+
 export const load = async ({ params, locals }) => {
 	const capa = await capas.findOne({_id: new ObjectId(params.capaId)});
 	const now = new Date();
@@ -31,7 +33,7 @@ export const actions = {
 							proposalDate: new Date(),
 							proponentId: new ObjectId(proponentId),
 							proposedSolution: formData.get('proposed-solution-'+i),
-							commitmentDate: new Date(formData.get('commitment-date-'+i))
+							commitmentDate: utcToZonedTime(formData.get('commitment-date-'+i), 'America/Asuncion')
 						}
 				};
 

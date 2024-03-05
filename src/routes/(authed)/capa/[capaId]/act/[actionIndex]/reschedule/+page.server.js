@@ -2,6 +2,8 @@ import { redirect } from '@sveltejs/kit';
 import { ObjectId } from 'mongodb';
 import capas from '$lib/db/capas';
 
+import { utcToZonedTime } from 'date-fns-tz';
+
 // get commit date, give form with new options... may include previous data
 // (action may not be changed, only commit date and assignee)... previous values will be given, can choose new ones --- 
 export async function load({ params, locals }) {
@@ -34,7 +36,7 @@ export const actions = {
 				[`actions.${actionIndex}.reschedule`]: {
 					rescheduleDate: new Date(),
 					reschedulerId: new ObjectId(event.locals.user._id),
-					rescheduledCommitmentDate: new Date(rescheduledCommitmentDate),
+					rescheduledCommitmentDate: utcToZonedTime(rescheduledCommitmentDate, 'America/Asuncion'),
 					assignment: {
 						assigneeId: new ObjectId(assigneeId),
 						assignmentDate: new Date(),
@@ -52,7 +54,7 @@ export const actions = {
 				[`actions.${actionIndex}.reschedule`]: {
 					rescheduleDate: new Date(),
 					reschedulerId: new ObjectId(event.locals.user._id),
-					rescheduledCommitmentDate: new Date(rescheduledCommitmentDate),
+					rescheduledCommitmentDate: utcToZonedTime(rescheduledCommitmentDate, 'America/Asuncion'),
 					assignment: {
 						assigneeId: new ObjectId(assigneeId),
 						assignmentDate: new Date(),
