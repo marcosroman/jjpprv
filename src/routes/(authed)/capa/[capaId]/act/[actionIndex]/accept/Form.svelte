@@ -1,5 +1,5 @@
 <script>
-	import dateString from '$lib/utils/date';
+	import { dateString } from '$lib/utils/date';
 	export let capaId, actionIndex, action;
 </script>
 
@@ -36,6 +36,3 @@
 
 	<input class="my-6" type="submit" value="Aceptar accion asignada">
 </form>
-
-<hr>
-<CapaView {capaId}/>
