@@ -4,10 +4,12 @@
 	import { goto } from '$app/navigation';
 
 	import userNameString from '$lib/utils/userName';
-	import { selectedDate } from '$lib/utils/stores';
+	import { selectedDate, isTableViewSelected } from '$lib/utils/stores';
 
 	export let data;
 
+	let isConnectedToDB = data.isConnected;
+	
 	let currentUser = data.user; // (from cookie. can be null)
 	let selectedUserId = currentUser?._id;
 	let users = null; // will contain users list
@@ -18,10 +20,18 @@
     isOnline = navigator.onLine;
   }
 
+	const tableViewIcon = "&#x25A4;";
+	const gridViewIcon = "&#x25A6;";
+
 	onMount(async () => {
 		// get users list
-		const res = await fetch('/api/user')
-		users = await res.json();
+		try {
+			const res = await fetch('/api/user')
+			users = await res.json();
+		} catch(error) {
+			console.error(error);
+			//alert(JSON.stringify(error));
+		}
 
 		isOnline = navigator.onLine;
 		// Listen for online/offline events
@@ -88,6 +98,8 @@
 						<button on:click={()=>{logout();}}>Cerrar sesion</button>
 					{/if}
 				</div>
+			{:else}
+				<p class="p-10 font-bold">Conectando a la base de datos...</p>
 			{/if}
 			<div>
 				<label>Fecha:
@@ -97,21 +109,29 @@
 			</div>
 		{:else}
 			<div class="bg-gray-900 text-white w-full flex justify-center">
-				<p class="text-xs">datetime = {$selectedDate}, userId = {selectedUserId}, connected={isOnline}</p>
+				<p class="text-xs">datetime = {$selectedDate}, userId = {selectedUserId}, connected={isOnline}, isConnectedToDB = {isConnectedToDB}</p>
 			</div>
 		{/if}
 	</div>
 
 	{#if currentUser}
-		<div class={`${isOnline !== undefined ? ((isOnline===true) ? "bg-blue-600" : "bg-gray-600") : ""} text-gray-50 flex items-center`}>
-			<a class="text-2xl" href="/">
-				j<span><sub>a</sub><sup>2</sup></span>p<sub>o</sub><sup>2</sup>r<sub>a</sub>v<sub>e</sub>
-			</a>
-			<a href="/capa/new">Nueva NC/OM</a>
-			<a href="/capa/view">Ver NC/OMs</a>
-			{#if currentUser.isQMSStaff}
-				<a href="/capa/view/all">Ver Tabla del CSGC</a>
-			{/if}
+		<div class={`${isOnline !== undefined ? ((isOnline===true) ? "bg-blue-600" : "bg-gray-600") : ""} text-gray-50 flex justify-stretch overflow-auto`}>
+			<div class="flex items-center">
+				<a class="text-2xl max-[300px]:hidden" href="/">
+					j<span><sub>a</sub><sup>2</sup></span>p<sub>o</sub><sup>2</sup>r<sub>a</sub>v<sub>e</sub>
+				</a>
+				<a href="/capa/new">Nueva NC/OM</a>
+				<a href="/capa/view">Ver NC/OMs</a>
+				{#if currentUser.isQMSStaff}
+					<a href="/capa/view/all">Ver Tabla del CSGC</a>
+				{/if}
+			</div>
+			<div class="hover:text-black my-auto ml-auto mr-[2em] border-gray-50 border"
+				on:click={() => {$isTableViewSelected = !$isTableViewSelected}}
+				aria-hidden={true}>
+				<!--on:keydown={null} on:keyup={null} on:keypress={null}-->
+				<p class="cursor-default hover:text-black text-2xl">{@html $isTableViewSelected ? gridViewIcon : tableViewIcon }</p>
+			</div>
 		</div>
 	{/if}
 </nav>
