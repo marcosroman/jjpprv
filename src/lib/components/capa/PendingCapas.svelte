@@ -28,7 +28,7 @@
 						<CapaMiniView capaId={capaObject.capa._id}/>
 					</div>
 					<div class="m-3">
-						<PendingActionsPerCapa {capaObject} {updatePendingActions}/>
+						<PendingActionsPerCapa {capaObject} {updatePendingActions} {isTableViewSelected}/>
 					</div>
 				</div>
 			{/each}
@@ -43,7 +43,7 @@
 							<CapaMiniView capaId={capaObject.capa._id}/>
 						</td>
 						<td class="p-6 align-top">
-							<PendingActionsPerCapa {capaObject} {updatePendingActions}/>
+							<PendingActionsPerCapa {capaObject} {updatePendingActions} {isTableViewSelected}/>
 						</td>
 					</tr>
 				{/each}

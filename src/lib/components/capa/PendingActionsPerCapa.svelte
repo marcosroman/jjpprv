@@ -1,5 +1,5 @@
 <script>
-	export let capaObject, updatePendingActions;
+	export let capaObject, updatePendingActions, isTableViewSelected;
 
 	async function ommitIssueEvidence(capaId) {
 		try {
@@ -11,10 +11,12 @@
 	}
 </script>
 
-{#if capaObject.pendingActions.length>1}
-	<span class="font-bold">Acciones pendientes:</span>
-{:else}
-	<span class="font-bold">Accion pendiente:</span>
+{#if !isTableViewSelected}
+	{#if capaObject.pendingActions.length>1}
+		<span class="font-bold">Acciones pendientes:</span>
+	{:else}
+		<span class="font-bold">Accion pendiente:</span>
+	{/if}
 {/if}
 
 <ul>

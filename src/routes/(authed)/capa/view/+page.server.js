@@ -3,10 +3,10 @@ import capas from '$lib/db/capas';
 export async function load() {
 	try {
 		const cursor = capas.find({});
-		const capasAll = await cursor.toArray();
+		const capasArray = await cursor.toArray();
 		await cursor.close();
 
-		return {capasAll:
-			JSON.parse(JSON.stringify(capasAll))};
+		return {capas:
+			JSON.parse(JSON.stringify(capasArray))};
 	} catch(error) { console.error(error); }
 }
