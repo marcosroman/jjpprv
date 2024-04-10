@@ -1,0 +1,3 @@
+const toPOJO = (o) => JSON.parse(JSON.stringify(o));
+
+export default toPOJO;

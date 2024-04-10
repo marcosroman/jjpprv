@@ -1,5 +1,6 @@
 import sectors from '$lib/db/sectors';
 import capas from '$lib/db/capas';
+import toPOJO from '$lib/utils/toPOJO';
 import { ObjectId } from 'mongodb';
 import { redirect } from '@sveltejs/kit';
 
@@ -8,7 +9,7 @@ export async function load() {
 	const sectorsArray = await cursor.toArray();
 	await cursor.close();
 
-	return { sectors: JSON.parse(JSON.stringify(sectorsArray)) }
+	return { sectors: toPOJO(sectorsArray) };
 }
 
 export const actions = {
