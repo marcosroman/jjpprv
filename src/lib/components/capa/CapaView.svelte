@@ -43,22 +43,18 @@
 	*/
 </script>
 
-<style>
-	tr, td {
-		@apply p-2;
-	}
-</style>
-
 {#if capa}
 	<div class="capa p-10 h-full overflow-scroll">
 		<div class="text-center py-5">
 			<h1>Registro de {capaTypeDescription}</h1>
+			<!--
 			<p class="text-xs">id {capa._id}</p>
 			<p class="text-sm">version {capa.version}</p>
+			-->
 		</div>
 
 		<div class="py-3 flex justify-center">
-			<table class="w-full md:w-1/3 overflow-scroll">
+			<table class="w-full md:w-2/3 overflow-scroll">
 				<tr><th>Fecha</th><td class="overflow-scroll">{dateString(capa.issue.creationDate)}</td></tr>
 				<tr><th>Creador</th><td class="overflow-scroll">{userNameString(capa.issue.issuer)}</td></tr>
 				<tr><th>Sector de Origen</th><td class="overflow-scroll">{capa.issue.detectedInSector.fullName}</td>
@@ -66,23 +62,25 @@
 			</table>
 		</div>
 
-		<div class="py-3">
-			<table class="my-3">
+		<div class="py-3 flex justify-center">
+			<table class="my-3 w-full md:w-2/3">
 				<tr><th>Descripcion de la {capaTypeDescription}</th></tr>
 				<tr><td><pre class="whitespace-pre-wrap">{capa.issue.description}</pre></td></tr>
 			</table>
+		</div>
 
-			{#if capa.issue.evidence && capa.issue.evidence.length>0}
-				<div class="w-full overflow-auto ">
+		{#if capa.issue.evidence && capa.issue.evidence.length>0}
+			<div class="py-1 flex justify-center">
+				<div class="w-full md:w-2/3 overflow-auto ">
 					<p>Evidencia</p>
 					<EvidenceList isEditMode={false} capaId={capa._id} documentSection="issue"/>
 				</div>
-			{/if}
-		</div>
+			</div>
+		{/if}
 
 		{#if capa.correctiveActionsRequirement && capa.correctiveActionsRequirement.requirementDate}
-			<div class="py-3">
-				<table>
+			<div class="my-3 py-3 flex justify-center">
+				<table class="w-full md:w-1/3">
 					<tr><th>Corresponde una Accion Correctiva?</th></tr>
 					<tr>
 						<td class="text-center">
@@ -109,8 +107,8 @@
 
 		{#if capa.issue.isNonConformity}
 			{#if Object.keys(capa.responseToNonConformity).length > 1}
-				<div class="py-3">
-					<table>
+				<div class="py-3 flex justify-center">
+					<table class="w-full md:w-3/4">
 						<tr><th>Fecha de respuesta a NC</th>
 							<td>{dateString(capa.responseToNonConformity.responseDate)}</td></tr>
 						<tr><th>Responde</th>
@@ -137,8 +135,8 @@
 
 		{#if capa.actions[0].proposal.proposalDate}
 			{#if capa.issue.isNonConformity && capa.correctiveActionsRequirement.isRequired}
-				<div class="py-3">
-					<table>
+				<div class="py-3 flex justify-center">
+					<table class="w-full md:w-1/2">
 						<tr>
 							<th>
 								Analisis de las causas
@@ -150,7 +148,7 @@
 					</table>
 				</div>
 			{/if}
-			<div class="actions py-3">
+			<div class="actions py-3 my-4">
 				<h2>Acciones propuestas para {capa.issue.isNonConformity ? "eliminar las causas" : "adoptar la Oportunidad de Mejora"}</h2>
 				<div class="propuesta py-3 overflow-x-scroll">
 					<table>
@@ -176,7 +174,7 @@
 
 				<h3>Seguimiento de las acciones</h3>
 				<div class="seguimiento py-3 overflow-x-scroll">
-					<table>
+					<table class="w-full">
 						<tr>
 							<th>Nro.</th>
 							<th>Evidencia</th>
@@ -218,7 +216,7 @@
 			<div class="py-3">
 				<h2>Evaluacion</h2>
 				{#if capa.evaluation?.evaluationDate}
-					<table>
+					<table class="w-full">
 						<tr><th>Evaluador</th><td>{userNameString(capa.evaluation.assignment.evaluator)}</td></tr>
 						<tr><th>Fecha</th><td>{dateString(capa.evaluation.evaluationDate)}</td></tr>
 						<tr><th>Comentarios</th><td>{capa.evaluation.comments}</td></tr>
@@ -230,7 +228,7 @@
 		{#if capa?.closure && Object.keys(capa.closure).length>0}
 			<div class="py-3">
 				<h2>Cierre</h2>
-				<table>
+				<table class="w-full">
 					<tr>
 						<th>Es necesario actualizar los riesgos y oportunidades determinados durante la planificación?</th>
 						<td>{capa.closure.isRisksUpdateRequired ? "Si" : "No"}</td>
@@ -267,3 +265,8 @@
 	</div>
 {/if}
 
+<style>
+	tr, td {
+		@apply p-2;
+	}
+</style>
