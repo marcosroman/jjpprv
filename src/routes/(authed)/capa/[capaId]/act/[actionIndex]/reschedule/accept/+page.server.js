@@ -1,3 +1,4 @@
+import toPOJO from '$lib/utils/toPOJO';
 import capas from '$lib/db/capas';
 import { ObjectId } from 'mongodb';
 
@@ -11,7 +12,7 @@ export async function load({ params, locals }) {
 		user: locals.user,
 		capaId,
 		actionIndex,
-		action: JSON.parse(JSON.stringify(capa.actions[actionIndex]))
+		action: toPOJO(capa.actions[actionIndex])
 	}
 }
 

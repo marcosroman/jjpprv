@@ -1,3 +1,4 @@
+import toPOJO from '$lib/utils/toPOJO';
 import capas from '$lib/db/capas';
 
 export const load = async () => {
@@ -11,5 +12,5 @@ export const load = async () => {
 	await cursor.close();
 
 	return {capasPendingResponseToNC:
-		JSON.parse(JSON.stringify(capasPendingResponseToNC))}
+		toPOJO(capasPendingResponseToNC)}
 }

@@ -1,3 +1,4 @@
+import toPOJO from '$lib/utils/toPOJO';
 import capas from '$lib/db/capas';
 
 export const load = async () => {
@@ -16,5 +17,5 @@ export const load = async () => {
 	cursor.close();
 
 	return {capasWithActionsAssignedAndAcceptedWithEvidencePendingReview:
-		JSON.parse(JSON.stringify(capasWithActionsAssignedAndAcceptedWithEvidencePendingReview))};
+		toPOJO(capasWithActionsAssignedAndAcceptedWithEvidencePendingReview)};
 }

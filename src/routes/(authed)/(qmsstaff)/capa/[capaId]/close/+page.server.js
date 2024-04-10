@@ -1,3 +1,4 @@
+import toPOJO from '$lib/utils/toPOJO';
 import capas from '$lib/db/capas';
 import { ObjectId } from 'mongodb';
 import { redirect } from '@sveltejs/kit';
@@ -6,7 +7,7 @@ export async function load({params}) {
 	const capaId = params.capaId;
 	const capa = await capas.findOne({_id: new ObjectId(capaId)});
 
-	return {capa: JSON.parse(JSON.stringify(capa))};
+	return {capa: toPOJO(capa)};
 }
 
 export const actions = {

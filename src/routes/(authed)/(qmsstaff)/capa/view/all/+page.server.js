@@ -1,3 +1,4 @@
+import toPOJO from '$lib/utils/toPOJO';
 import capas from '$lib/db/capas';
 
 export async function load() {
@@ -102,7 +103,7 @@ export async function load() {
 
 		const capasArray = await cursor.toArray();
 
-		return {capasArray: JSON.parse(JSON.stringify(capasArray)) }
+		return {capasArray: toPOJO(capasArray) }
 	} catch(error) {
 		console.error(error);
 	}

@@ -1,3 +1,4 @@
+import toPOJO from '$lib/utils/toPOJO';
 //import capas from '$lib/db/capas';
 //import { ObjectId } from 'mongodb';
 
@@ -8,6 +9,6 @@ export async function load({params}) {
 	return {capaId};
 		/*
 		capa:
-		JSON.parse(JSON.stringify(capa))};
+		toPOJO(capa)};
 		*/
 }

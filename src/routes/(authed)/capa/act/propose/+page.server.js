@@ -1,3 +1,4 @@
+import toPOJO from '$lib/utils/toPOJO';
 import capas from '$lib/db/capas';
 
 export const load = async () => {
@@ -25,5 +26,5 @@ export const load = async () => {
 	cursor.close();
 
 	return {capasRequiringActionsAndWithoutProposal:
-		JSON.parse(JSON.stringify(capasRequiringActionsAndWithoutProposal))};
+		toPOJO(capasRequiringActionsAndWithoutProposal)};
 }
