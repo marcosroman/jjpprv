@@ -1,7 +1,10 @@
 <script>
 	import '../app.pcss';
+
 	import { onMount, onDestroy } from 'svelte';
 	import { goto } from '$app/navigation';
+
+	import logo from '$lib/assets/logo.svg';
 
 	import userNameString from '$lib/utils/userName';
 	import { selectedDate, isTableViewSelected } from '$lib/utils/stores';
@@ -118,7 +121,10 @@
 		<div class={`${isOnline !== undefined ? ((isOnline===true) ? "bg-blue-600" : "bg-gray-600") : ""} text-gray-50 flex justify-stretch overflow-auto`}>
 			<div class="flex items-center">
 				<a class="text-2xl max-[300px]:hidden" href="/">
-					j<span><sub>a</sub><sup>2</sup></span>p<sub>o</sub><sup>2</sup>r<sub>a</sub>v<sub>e</sub>
+					<div class="bg-gray-100 p-3 rounded-xl border-solid border-2 border-zinc-700">
+						<img src={logo} alt='ja2po2rave'/>
+					</div>
+					<!--j<span><sub>a</sub><sup>2</sup></span>p<sub>o</sub><sup>2</sup>r<sub>a</sub>v<sub>e</sub>-->
 				</a>
 				<a href="/capa/new">Nueva NC/OM</a>
 				<a href="/capa/view">Ver NC/OMs</a>
